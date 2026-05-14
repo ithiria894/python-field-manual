@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nicole's Python Field Manual</title>
+<title>Python Field Manual</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; background: #0d1117; color: #e6edf3; padding: 20px; line-height: 1.3; }
@@ -31,10 +31,11 @@ td { padding: 8px; border: 1px solid #30363d; }
 .gotcha { background: #1c0e0e; border: 1px solid #f85149; border-radius: 6px; padding: 10px; margin: 8px 0; }
 .tip { background: #0e1c0e; border: 1px solid #3fb950; border-radius: 6px; padding: 10px; margin: 8px 0; }
 .legend { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin: 16px 0; font-size: 13px; }
-nav { position: fixed; top: 0; right: 0; background: #161b22; border-left: 1px solid #30363d; border-bottom: 1px solid #30363d; padding: 12px; border-radius: 0 0 0 8px; z-index: 100; font-size: 12px; }
-nav a { color: #58a6ff; text-decoration: none; display: block; padding: 3px 0; }
+nav { position: fixed; top: 0; left: 0; width: 90px; height: 100vh; background: #161b22; border-right: 1px solid #30363d; padding: 10px 6px; z-index: 100; font-size: 11px; overflow-y: auto; }
+nav a { color: #58a6ff; text-decoration: none; display: block; padding: 4px 2px; }
 nav a:hover { color: #79c0ff; }
-@media (max-width: 768px) { nav { display: none; } body { padding: 10px; } }
+body { margin-left: 96px; }
+@media (max-width: 768px) { nav { display: none; } body { margin-left: 0; padding: 10px; } }
 </style>
 </head>
 <body>
@@ -52,7 +53,7 @@ nav a:hover { color: #79c0ff; }
 <a href="#quick">Quick Ref</a>
 </nav>
 
-<h1>Nicole's Python Field Manual</h1>
+<h1>Python Field Manual</h1>
 
 <div class="legend">
 <span class="sk">黃底</span> = skeleton，直接抄，唔使改<br>
@@ -103,19 +104,24 @@ nav a:hover { color: #79c0ff; }
 <h3>transfer / 雙 entity 操作（完整 example）</h3>
 <pre><code><span class="sk">def</span> <span class="ch">transfer</span><span class="sk">(self, timestamp,</span> <span class="ch">source_id, target_id, amount</span><span class="sk">):</span>
     <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>              <span class="cm"># L3 加</span>
+
     <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span> <span class="sk">or</span> <span class="ch">target_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">:</span>  <span class="cm"># L1</span>
         <span class="sk">return None</span>                                  <span class="cm"># L1</span>
     <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">==</span> <span class="ch">target_id</span><span class="sk">:</span>                    <span class="cm"># L1</span>
         <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+
     <span class="sk">s_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">source_id</span><span class="sk">]</span>              <span class="cm"># L1</span>
     <span class="sk">t_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">target_id</span><span class="sk">]</span>              <span class="cm"># L1</span>
     <span class="sk">if s_acc[</span><span class="ch">"balance"</span><span class="sk">] &lt;</span> <span class="ch">amount</span><span class="sk">:</span>                 <span class="cm"># L1</span>
         <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+
     <span class="ch">s_acc["balance"] -= amount</span>                    <span class="cm"># L1</span>
     <span class="ch">s_acc["outgoing"] += amount</span>                   <span class="cm"># L2 加</span>
     <span class="ch">s_acc["history"].append((timestamp, s_acc["balance"]))</span>  <span class="cm"># L4 加</span>
+
     <span class="ch">t_acc["balance"] += amount</span>                    <span class="cm"># L1</span>
     <span class="ch">t_acc["history"].append((timestamp, t_acc["balance"]))</span>  <span class="cm"># L4 加</span>
+
     <span class="sk">return</span> <span class="ch">s_acc["balance"]</span>                       <span class="cm"># L1</span></code></pre>
 
 <div class="tip">
@@ -333,9 +339,6 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 <tr><td>限制數量</td><td><code>sem = asyncio.Semaphore(n); async with sem:</code></td></tr>
 </table>
 
-<div style="margin-top:40px; padding:16px; background:#161b22; border-radius:8px; text-align:center; color:#8b949e; font-size:13px;">
-Built by Nicole · <a href="https://github.com/ithiria894" style="color:#58a6ff;">github.com/ithiria894</a>
-</div>
 
 <style>
 .line-wrap { position: relative; display: inline; }
@@ -352,7 +355,8 @@ document.querySelectorAll('pre').forEach(pre => {
     btn.textContent = 'Copy All';
     btn.onclick = () => {
         const code = pre.querySelector('code') || pre;
-        navigator.clipboard.writeText(code.textContent);
+        const clean = code.textContent.split('\n').map(l => l.replace(/#\s*(L\d|←|----).*/g, '').trimEnd()).join('\n');
+        navigator.clipboard.writeText(clean);
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = 'Copy All', 1500);
     };
@@ -368,7 +372,7 @@ document.querySelectorAll('pre code').forEach(code => {
         // Extract plain text for clipboard
         const temp = document.createElement('span');
         temp.innerHTML = line;
-        const plainText = temp.textContent.replace(/# ←.*$/, '').replace(/# ----.*$/, '').trimEnd();
+        const plainText = temp.textContent.replace(/#\s*(L\d|←|----).*/g, '').trimEnd();
         if (plainText.trim() === '') return line;
         const escaped = plainText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         return `<span class="line-wrap"><button class="line-copy" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button>${line}</span>`;

@@ -412,5 +412,90 @@ document.querySelectorAll('pre code').forEach(code => {
 });
 </script>
 
+<!-- TIMER BAR -->
+<div id="timer-bar" style="position:fixed;bottom:0;left:96px;right:0;height:36px;background:#0d1117;border-top:1px solid #30363d;z-index:200;display:flex;align-items:center;font-size:12px;">
+  <button id="timer-btn" onclick="toggleTimer()" style="background:#238636;color:white;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;margin:0 8px;font-size:12px;">▶ Start</button>
+  <span id="timer-display" style="color:#e6edf3;margin-right:8px;min-width:50px;">90:00</span>
+  <div style="flex:1;height:20px;background:#161b22;border-radius:4px;overflow:hidden;position:relative;margin-right:8px;">
+    <!-- Level segments -->
+    <div style="position:absolute;left:0;width:11.1%;height:100%;background:#238636;opacity:0.3;border-right:1px solid #30363d;" title="L1 10min"></div>
+    <div style="position:absolute;left:11.1%;width:11.1%;height:100%;background:#1f6feb;opacity:0.3;border-right:1px solid #30363d;" title="L2 10min"></div>
+    <div style="position:absolute;left:22.2%;width:16.7%;height:100%;background:#8957e5;opacity:0.3;border-right:1px solid #30363d;" title="L3 15min"></div>
+    <div style="position:absolute;left:38.9%;width:22.2%;height:100%;background:#da3633;opacity:0.3;border-right:1px solid #30363d;" title="L4 20min"></div>
+    <div style="position:absolute;left:61.1%;width:19.4%;height:100%;background:#f78166;opacity:0.3;border-right:1px solid #30363d;" title="L5 17.5min"></div>
+    <div style="position:absolute;left:80.5%;width:19.5%;height:100%;background:#f78166;opacity:0.3;" title="L6 17.5min"></div>
+    <!-- Labels -->
+    <span style="position:absolute;left:2%;top:2px;color:#e6edf3;font-size:10px;font-weight:bold;">L1</span>
+    <span style="position:absolute;left:13%;top:2px;color:#e6edf3;font-size:10px;font-weight:bold;">L2</span>
+    <span style="position:absolute;left:28%;top:2px;color:#e6edf3;font-size:10px;font-weight:bold;">L3</span>
+    <span style="position:absolute;left:46%;top:2px;color:#e6edf3;font-size:10px;font-weight:bold;">L4</span>
+    <span style="position:absolute;left:68%;top:2px;color:#e6edf3;font-size:10px;font-weight:bold;">L5</span>
+    <span style="position:absolute;left:88%;top:2px;color:#e6edf3;font-size:10px;font-weight:bold;">L6</span>
+    <!-- Progress indicator -->
+    <div id="timer-progress" style="position:absolute;left:0;top:0;height:100%;width:0%;background:rgba(255,255,255,0.15);transition:width 1s linear;"></div>
+    <div id="timer-needle" style="position:absolute;left:0;top:0;height:100%;width:2px;background:#f0c040;transition:left 1s linear;"></div>
+  </div>
+  <span id="timer-level" style="color:#f0c040;margin-right:8px;min-width:80px;">Ready</span>
+</div>
+<div style="height:44px;"></div>
+
+<script>
+let timerInterval = null;
+let startTime = null;
+const TOTAL = 90 * 60;
+const levels = [
+  {name:'L1', end:10*60, color:'#238636'},
+  {name:'L2', end:20*60, color:'#1f6feb'},
+  {name:'L3', end:35*60, color:'#8957e5'},
+  {name:'L4', end:55*60, color:'#da3633'},
+  {name:'L5', end:72.5*60, color:'#f78166'},
+  {name:'L6', end:90*60, color:'#f78166'},
+];
+
+function toggleTimer() {
+  const btn = document.getElementById('timer-btn');
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    btn.textContent = '▶ Resume';
+    btn.style.background = '#238636';
+  } else {
+    if (!startTime) startTime = Date.now();
+    btn.textContent = '⏸ Pause';
+    btn.style.background = '#da3633';
+    timerInterval = setInterval(updateTimer, 1000);
+  }
+}
+
+function updateTimer() {
+  const elapsed = (Date.now() - startTime) / 1000;
+  const remaining = Math.max(0, TOTAL - elapsed);
+  const min = Math.floor(remaining / 60);
+  const sec = Math.floor(remaining % 60);
+  document.getElementById('timer-display').textContent = `${min}:${sec.toString().padStart(2,'0')}`;
+
+  const pct = Math.min(100, (elapsed / TOTAL) * 100);
+  document.getElementById('timer-progress').style.width = pct + '%';
+  document.getElementById('timer-needle').style.left = pct + '%';
+
+  let currentLevel = 'DONE';
+  for (const l of levels) {
+    if (elapsed < l.end) { currentLevel = l.name; break; }
+  }
+
+  const levelEl = document.getElementById('timer-level');
+  if (remaining <= 0) {
+    levelEl.textContent = 'TIME UP';
+    levelEl.style.color = '#f85149';
+    clearInterval(timerInterval);
+  } else if (remaining <= 300) {
+    levelEl.textContent = currentLevel + ' ⚠️ 5min left';
+    levelEl.style.color = '#f85149';
+  } else {
+    levelEl.textContent = 'Should be on: ' + currentLevel;
+  }
+}
+</script>
+
 </body>
 </html>

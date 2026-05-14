@@ -334,9 +334,9 @@ Built by Nicole · <a href="https://github.com/ithiria894" style="color:#58a6ff;
 </div>
 
 <style>
-.line-wrap { position: relative; display: block; padding-left: 28px; }
-.line-wrap:hover { background: rgba(255,255,255,0.03); }
-.line-copy { position: absolute; left: 0; top: 0; background: #30363d; color: #8b949e; border: none; padding: 1px 6px; border-radius: 3px; cursor: pointer; font-size: 10px; opacity: 0; transition: opacity 0.15s; }
+.line-wrap { position: relative; display: inline; }
+.line-wrap:hover { background: rgba(255,255,255,0.05); }
+.line-copy { background: #30363d; color: #8b949e; border: none; padding: 0px 4px; border-radius: 3px; cursor: pointer; font-size: 9px; opacity: 0; transition: opacity 0.15s; margin-right: 4px; }
 .line-wrap:hover .line-copy { opacity: 1; }
 .line-copy:hover { background: #484f58; color: #e6edf3; }
 </style>
@@ -367,7 +367,7 @@ document.querySelectorAll('pre code').forEach(code => {
         const plainText = temp.textContent.replace(/# ←.*$/, '').replace(/# ----.*$/, '').trimEnd();
         if (plainText.trim() === '') return line;
         const escaped = plainText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-        return `<span class="line-wrap">${line}<button class="line-copy" onclick="navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button></span>`;
+        return `<span class="line-wrap"><button class="line-copy" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button>${line}</span>`;
     });
     code.innerHTML = newLines.join('\n');
 });

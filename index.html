@@ -21,7 +21,7 @@ code { font-family: inherit; font-size: 13px; color: #e6edf3; }
 .num { color: #79c0ff; }
 .warn { color: #f85149; font-weight: bold; }
 .ok { color: #3fb950; font-weight: bold; }
-.sk { background: rgba(187, 128, 9, 0.2); padding: 1px 2px; border-radius: 2px; }
+.sk { background: rgba(187, 128, 9, 0.2); padding: 1px 2px; border-radius: 2px; color: #e6edf3; }
 .ch { color: #8b949e; font-style: italic; }
 table { width: 100%; border-collapse: collapse; margin: 8px 0 16px 0; font-size: 13px; }
 th { background: #161b22; color: #58a6ff; text-align: left; padding: 8px; border: 1px solid #30363d; }
@@ -342,6 +342,29 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 .line-copy:hover { background: #484f58; color: #e6edf3; }
 </style>
 <script>
+// Auto syntax highlight inside .sk spans
+document.querySelectorAll('.sk').forEach(sk => {
+    let h = sk.innerHTML;
+    // Don't re-process if already has kw/fn spans inside
+    if (h.includes('class="kw"') || h.includes('class="fn"')) return;
+    // Keywords
+    const kws = ['class','def','if','elif','else','return','not','in','or','and','for','while','import','from','async','await','with','del','pass','break','continue','try','except','finally','raise','as','yield','lambda','global','nonlocal','assert','is'];
+    kws.forEach(k => {
+        h = h.replace(new RegExp('\\b(' + k + ')\\b', 'g'), '<span class="kw">$1</span>');
+    });
+    // Built-in constants
+    h = h.replace(/\b(True|False|None|self)\b/g, '<span class="num">$1</span>');
+    // Numbers
+    h = h.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+    // Strings (double and single quoted)
+    h = h.replace(/"([^"]*)"/g, '<span class="str">"$1"</span>');
+    // Function names after def
+    h = h.replace(/(<span class="kw">def<\/span>) (\w+)/g, '$1 <span class="fn">$2</span>');
+    // Class names after class
+    h = h.replace(/(<span class="kw">class<\/span>) (\w+)/g, '$1 <span class="fn">$2</span>');
+    sk.innerHTML = h;
+});
+
 // Block-level copy button
 document.querySelectorAll('pre').forEach(pre => {
     const btn = document.createElement('button');

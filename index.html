@@ -35,7 +35,12 @@ nav { position: fixed; top: 0; left: 0; width: 90px; height: 100vh; background: 
 nav a { color: #58a6ff; text-decoration: none; display: block; padding: 4px 2px; }
 nav a:hover { color: #79c0ff; }
 body { margin-left: 96px; }
-@media (max-width: 768px) { nav { display: none; } body { margin-left: 0; padding: 10px; } }
+.split { display: flex; gap: 12px; }
+.split-left { flex: 1; min-width: 0; }
+.split-right { flex: 1; min-width: 0; }
+.split-right pre { background: #1c2333; border-color: #2d4a7a; }
+.split-right .label { color: #58a6ff; font-size: 11px; margin-bottom: 4px; font-weight: bold; }
+@media (max-width: 768px) { nav { display: none; } body { margin-left: 0; padding: 10px; } .split { flex-direction: column; } }
 </style>
 </head>
 <body>
@@ -70,70 +75,145 @@ body { margin-left: 96px; }
 <!-- ============ LEVEL 1 ============ -->
 <h2 id="l1">L1 — CRUD</h2>
 
-<h3>__init__（完整 example — 標明每行邊個 level 加）</h3>
+<h3>__init__（完整 example）</h3>
+<div class="split">
+<div class="split-left">
 <pre><code><span class="sk">class</span> <span class="ch">BankSystem</span><span class="sk">:</span>
     <span class="sk">def __init__(self):</span>
-        <span class="sk">self.</span><span class="ch">accounts</span><span class="sk"> = {}</span>                          <span class="cm"># L1 主要 data store</span>
-        <span class="ch">self.payment_counter = 0</span>                    <span class="cm"># L3 加</span>
-        <span class="ch">self.payment = {}</span>                            <span class="cm"># L3 加</span>
-        <span class="ch">self.merged_accounts = {}</span>                    <span class="cm"># L4 加</span>
+        <span class="sk">self.</span><span class="ch">accounts</span><span class="sk"> = {}</span>                  <span class="cm"># L1</span>
+        <span class="ch">self.payment_counter = 0</span>        <span class="cm"># L3 加</span>
+        <span class="ch">self.payment = {}</span>                <span class="cm"># L3 加</span>
+        <span class="ch">self.merged_accounts = {}</span>        <span class="cm"># L4 加</span>
         <span class="sk">self.account_locks = defaultdict(asyncio.Lock)</span> <span class="cm"># L5 加</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">self.accounts 實際樣子：</div>
+<pre><code>{
+  "alice": {
+    "balance": 500,
+    "outgoing": 100,
+    "history": [(1,0), (3,500)]
+  },
+  "bob": {
+    "balance": 200,
+    "outgoing": 0,
+    "history": [(2,0), (4,200)]
+  }
+}</code></pre>
+<div class="label">點攞 data：</div>
+<pre><code>self.accounts["alice"]
+→ {"balance":500, "outgoing":100, ...}
 
-<h3>create（完整 example）</h3>
+self.accounts["alice"]["balance"]
+→ 500
+
+acc = self.accounts["alice"]
+acc["balance"] += 100
+→ alice 嘅 balance 變 600</code></pre>
+</div>
+</div>
+
+<h3>create + deposit（完整 example）</h3>
+<div class="split">
+<div class="split-left">
 <pre><code><span class="sk">def</span> <span class="ch">create_account</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id</span><span class="sk">):</span>
-    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>             <span class="cm"># L3 加（L1 冇呢行）</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>     <span class="cm"># L3 加</span>
 
-    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">in self.</span><span class="ch">accounts</span><span class="sk">:</span>                <span class="cm"># L1</span>
-        <span class="sk">return False</span>                                 <span class="cm"># L1</span>
+    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">in self.</span><span class="ch">accounts</span><span class="sk">:</span>
+        <span class="sk">return False</span>
 
     <span class="sk">self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">] = {</span>
-        <span class="ch">"balance": 0,</span>                                <span class="cm"># L1</span>
-        <span class="ch">"outgoing": 0,</span>                               <span class="cm"># L2 加（tracking 用）</span>
-        <span class="ch">"history": [(timestamp, 0)]</span>                  <span class="cm"># L4 加（歷史查詢用）</span>
+        <span class="ch">"balance": 0,</span>                    <span class="cm"># L1</span>
+        <span class="ch">"outgoing": 0,</span>                   <span class="cm"># L2 加</span>
+        <span class="ch">"history": [(timestamp, 0)]</span>      <span class="cm"># L4 加</span>
     <span class="sk">}</span>
 
-    <span class="sk">return True</span>                                      <span class="cm"># L1</span></code></pre>
+    <span class="sk">return True</span></code></pre>
 
-<h3>get / deposit（完整 example）</h3>
-<pre><code><span class="sk">def</span> <span class="ch">deposit</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id</span><span class="sk">,</span> <span class="ch">amount</span><span class="sk">):</span>
-    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>              <span class="cm"># L3 加</span>
+<pre><code><span class="sk">def</span> <span class="ch">deposit</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id, amount</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>     <span class="cm"># L3 加</span>
 
-    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">:</span>            <span class="cm"># L1</span>
-        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">:</span>
+        <span class="sk">return None</span>
 
-    <span class="sk">acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">]</span>              <span class="cm"># L1 攞短名</span>
-    <span class="ch">acc["balance"] += amount</span>                      <span class="cm"># L1 做嘢</span>
+    <span class="sk">acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">]</span>
+    <span class="ch">acc["balance"] += amount</span>
     <span class="ch">acc["history"].append((timestamp, acc["balance"]))</span> <span class="cm"># L4 加</span>
 
-    <span class="sk">return</span> <span class="ch">acc["balance"]</span>                         <span class="cm"># L1</span></code></pre>
+    <span class="sk">return</span> <span class="ch">acc["balance"]</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">create_account(1, "alice") 之後：</div>
+<pre><code>self.accounts = {
+  "alice": {
+    "balance": 0,
+    "outgoing": 0,
+    "history": [(1, 0)]
+  }
+}</code></pre>
+<div class="label">deposit(2, "alice", 500) 之後：</div>
+<pre><code>self.accounts = {
+  "alice": {
+    "balance": 500,       ← 0+500
+    "outgoing": 0,
+    "history": [(1,0), (2,500)]  ← 加咗
+  }
+}</code></pre>
+<div class="label">❌ vs ✅</div>
+<pre><code>d.balance           ❌ dot 係 class 用
+d["balance"]        ✅ dict 用 bracket
+
+d["account_id"]     ❌ 搵 literal string
+d[account_id]       ✅ 用 variable 嘅值
+
+acc = d["alice"]    → pointer，改 acc 改原本
+bal = d["alice"]["balance"] → copy，改 bal 唔影響</code></pre>
+</div>
+</div>
 
 <h3>transfer / 雙 entity 操作（完整 example）</h3>
+<div class="split">
+<div class="split-left">
 <pre><code><span class="sk">def</span> <span class="ch">transfer</span><span class="sk">(self, timestamp,</span> <span class="ch">source_id, target_id, amount</span><span class="sk">):</span>
-    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>              <span class="cm"># L3 加</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>     <span class="cm"># L3 加</span>
 
-    <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span> <span class="sk">or</span> <span class="ch">target_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">:</span>  <span class="cm"># L1</span>
-        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
-    <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">==</span> <span class="ch">target_id</span><span class="sk">:</span>                    <span class="cm"># L1</span>
-        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+    <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span> <span class="sk">or</span> <span class="ch">target_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">:</span>
+        <span class="sk">return None</span>
+    <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">==</span> <span class="ch">target_id</span><span class="sk">:</span>
+        <span class="sk">return None</span>
 
-    <span class="sk">s_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">source_id</span><span class="sk">]</span>              <span class="cm"># L1</span>
-    <span class="sk">t_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">target_id</span><span class="sk">]</span>              <span class="cm"># L1</span>
-    <span class="sk">if s_acc[</span><span class="ch">"balance"</span><span class="sk">] &lt;</span> <span class="ch">amount</span><span class="sk">:</span>                 <span class="cm"># L1</span>
-        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+    <span class="sk">s_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">source_id</span><span class="sk">]</span>
+    <span class="sk">t_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">target_id</span><span class="sk">]</span>
+    <span class="sk">if s_acc[</span><span class="ch">"balance"</span><span class="sk">] &lt;</span> <span class="ch">amount</span><span class="sk">:</span>
+        <span class="sk">return None</span>
 
-    <span class="ch">s_acc["balance"] -= amount</span>                    <span class="cm"># L1</span>
-    <span class="ch">s_acc["outgoing"] += amount</span>                   <span class="cm"># L2 加</span>
-    <span class="ch">s_acc["history"].append((timestamp, s_acc["balance"]))</span>  <span class="cm"># L4 加</span>
+    <span class="ch">s_acc["balance"] -= amount</span>
+    <span class="ch">s_acc["outgoing"] += amount</span>            <span class="cm"># L2 加</span>
+    <span class="ch">s_acc["history"].append((timestamp, s_acc["balance"]))</span> <span class="cm"># L4 加</span>
 
-    <span class="ch">t_acc["balance"] += amount</span>                    <span class="cm"># L1</span>
-    <span class="ch">t_acc["history"].append((timestamp, t_acc["balance"]))</span>  <span class="cm"># L4 加</span>
+    <span class="ch">t_acc["balance"] += amount</span>
+    <span class="ch">t_acc["history"].append((timestamp, t_acc["balance"]))</span> <span class="cm"># L4 加</span>
 
-    <span class="sk">return</span> <span class="ch">s_acc["balance"]</span>                       <span class="cm"># L1</span></code></pre>
+    <span class="sk">return</span> <span class="ch">s_acc["balance"]</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">transfer(5, "alice", "bob", 200) 之前：</div>
+<pre><code>"alice": {"balance": 500, "outgoing": 0}
+"bob":   {"balance": 200, "outgoing": 0}</code></pre>
+<div class="label">之後：</div>
+<pre><code>"alice": {"balance": 300, "outgoing": 200}
+"bob":   {"balance": 400, "outgoing": 0}
 
-<div class="tip">
-<strong>Dict vs Dot：</strong> <code>d["balance"]</code> 唔係 <code>d.balance</code><br>
-<strong>Variable vs String：</strong> <code>d[account_id]</code> 用 variable，<code>d["account_id"]</code> 搵 literal string<br>
-<strong>Dict 係 pointer：</strong> <code>acc = self.accounts[id]</code> 改 acc 會改原本
+s_acc = self.accounts["alice"]  ← pointer
+s_acc["balance"] -= 200         ← alice 變 300
+t_acc = self.accounts["bob"]    ← pointer
+t_acc["balance"] += 200         ← bob 變 400</code></pre>
+<div class="label">Check 順序：</div>
+<pre><code>1. 兩個 account 都存在？
+2. 唔係同一個？
+3. source 夠錢？
+→ 全部 pass 先做嘢</code></pre>
+</div>
 </div>
 
 <!-- ============ LEVEL 2 ============ -->

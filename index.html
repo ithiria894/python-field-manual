@@ -288,21 +288,28 @@ rice, soup = <span class="kw">await</span> asyncio.gather(cook_rice(), cook_soup
 <tr><td><strong>Semaphore</strong></td><td>最多 N 個同時做</td><td><code>async with sem:</code></td></tr>
 </table>
 
-<h3>Batch Processing 模板</h3>
-<pre><code><span class="kw">from</span> collections <span class="kw">import</span> defaultdict
+<h3>Batch Processing Skeleton（固定寫法，直接 copy）</h3>
+<p class="note">每次見到「同時處理一堆 operations」就係呢個 pattern。三步：1. 定義 execute_op 2. gather 同時跑 3. return list(results)</p>
+<pre><code><span class="cm"># === __init__ 加 ===</span>
+<span class="kw">from</span> collections <span class="kw">import</span> defaultdict
 self.account_locks = defaultdict(asyncio.Lock)
 
+<span class="cm"># === skeleton（固定寫法） ===</span>
 <span class="kw">async def</span> <span class="fn">process_batch</span>(self, timestamp, operations):
     self._process_cashbacks(timestamp)
 
-    <span class="kw">async def</span> <span class="fn">execute_op</span>(op):
+    <span class="kw">async def</span> <span class="fn">execute_op</span>(op):                          <span class="cm"># 1. 定義點處理一個 op</span>
         lock = self.account_locks[op[<span class="str">"account_id"</span>]]
-        <span class="kw">async with</span> lock:
+        <span class="kw">async with</span> lock:                                  <span class="cm"># 鎖住個 account</span>
             <span class="kw">if</span> op[<span class="str">"type"</span>] == <span class="str">"deposit"</span>:
                 <span class="kw">return</span> self.deposit(timestamp, op[<span class="str">"account_id"</span>], op[<span class="str">"amount"</span>])
+            <span class="kw">elif</span> op[<span class="str">"type"</span>] == <span class="str">"transfer"</span>:
+                <span class="kw">return</span> self.transfer(timestamp, op[<span class="str">"source_id"</span>], op[<span class="str">"target_id"</span>], op[<span class="str">"amount"</span>])
+            <span class="kw">elif</span> op[<span class="str">"type"</span>] == <span class="str">"pay"</span>:
+                <span class="kw">return</span> self.pay(timestamp, op[<span class="str">"account_id"</span>], op[<span class="str">"amount"</span>])
 
-    results = <span class="kw">await</span> asyncio.gather(*[execute_op(op) <span class="kw">for</span> op <span class="kw">in</span> operations])
-    <span class="kw">return</span> list(results)</code></pre>
+    results = <span class="kw">await</span> asyncio.gather(*[execute_op(op) <span class="kw">for</span> op <span class="kw">in</span> operations])  <span class="cm"># 2. 全部同時跑</span>
+    <span class="kw">return</span> list(results)                                <span class="cm"># 3. 返回結果</span></code></pre>
 
 <h3>Rate Limited 模板</h3>
 <pre><code><span class="kw">async def</span> <span class="fn">process_external</span>(self, timestamp, transfers, max_concurrent):

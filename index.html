@@ -212,7 +212,9 @@ body { margin-left: 96px; }
 <h3>歷史查詢（完整 example）</h3>
 <pre><code><span class="sk">def</span> <span class="ch">get_balance</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id, time_at</span><span class="sk">):</span>
     <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+
     <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">: return None</span>
+
     <span class="sk">acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">]</span>
     <span class="sk">for ts, val in reversed(acc[</span><span class="ch">"history"</span><span class="sk">]):</span>      <span class="cm"># ← 由尾搵返去</span>
         <span class="sk">if ts &lt;=</span> <span class="ch">time_at</span><span class="sk">:</span>
@@ -221,15 +223,20 @@ body { margin-left: 96px; }
 <h3>merge / 合併兩個 entity（完整 example）</h3>
 <pre><code><span class="sk">def</span> <span class="ch">merge_accounts</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id_1, account_id_2</span><span class="sk">):</span>
     <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+
     <span class="sk">if</span> <span class="ch">account_id_1</span> <span class="sk">not in self.</span><span class="ch">accounts</span> <span class="sk">or</span> <span class="ch">account_id_2</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">: return False</span>
     <span class="sk">if</span> <span class="ch">account_id_1</span> <span class="sk">==</span> <span class="ch">account_id_2</span><span class="sk">: return False</span>
+
     <span class="sk">acc_1 = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id_1</span><span class="sk">]</span>
     <span class="sk">acc_2 = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id_2</span><span class="sk">]</span>
+
     <span class="ch">acc_1["balance"] += acc_2["balance"]</span>              <span class="cm"># ← 合併 data</span>
     <span class="ch">acc_1["outgoing"] += acc_2["outgoing"]</span>
     <span class="ch">acc_1["history"].append((timestamp, acc_1["balance"]))</span>
+
     <span class="sk">self.</span><span class="ch">merged_accounts</span><span class="sk">[</span><span class="ch">account_id_2</span><span class="sk">] =</span> <span class="ch">account_id_1</span>
     <span class="sk">del self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id_2</span><span class="sk">]</span>
+
     <span class="sk">return True</span></code></pre>
 
 <h3>backup / deepcopy（完整 example）</h3>
@@ -273,18 +280,22 @@ body { margin-left: 96px; }
     <span class="sk">async def</span> <span class="ch">do_transfer</span><span class="sk">(t):</span>
         <span class="sk">aid =</span> <span class="ch">t["account_id"]</span>
         <span class="sk">lock = self.account_locks[aid]</span>
+
         <span class="sk">async with lock:</span>                               <span class="cm"># ← 鎖住 account</span>
             <span class="cm"># -------- 以下因應題目改（check + 扣錢） --------</span>
             <span class="ch">if aid not in self.accounts:</span>
             <span class="ch">    return False</span>
             <span class="ch">if self.accounts[aid]["balance"] &lt; t["amount"]:</span>
             <span class="ch">    return False</span>
+
             <span class="ch">self.accounts[aid]["balance"] -= t["amount"]</span>
             <span class="ch">self.accounts[aid]["outgoing"] += t["amount"]</span>
             <span class="ch">self.accounts[aid]["history"].append((timestamp, self.accounts[aid]["balance"]))</span>
             <span class="cm"># -------- 以上因應題目改 --------</span>
+
         <span class="sk">async with sem:</span>                                <span class="cm"># ← 限制同時數量</span>
             <span class="sk">await asyncio.sleep(0.01)</span>                  <span class="cm"># ← 模擬外部 call</span>
+
         <span class="sk">return True</span>
 
     <span class="sk">results = await asyncio.gather(*[</span><span class="ch">do_transfer</span><span class="sk">(t) for t in</span> <span class="ch">transfers</span><span class="sk">])</span>

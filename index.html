@@ -435,7 +435,8 @@ document.querySelectorAll('pre code').forEach(code => {
     <div id="timer-progress" style="position:absolute;left:0;top:0;height:100%;width:0%;background:rgba(255,255,255,0.15);transition:width 1s linear;"></div>
     <div id="timer-needle" style="position:absolute;left:0;top:0;height:100%;width:2px;background:#f0c040;transition:left 1s linear;"></div>
   </div>
-  <span id="timer-level" style="color:#f0c040;margin-right:8px;min-width:80px;">Ready</span>
+  <span id="timer-level" style="color:#f0c040;margin-right:6px;min-width:70px;">Ready</span>
+  <button onclick="resetTimer()" style="background:#30363d;color:#8b949e;border:none;padding:2px 8px;border-radius:3px;cursor:pointer;font-size:10px;margin-right:6px;">Reset</button>
 </div>
 <div style="height:28px;"></div>
 
@@ -466,6 +467,20 @@ function toggleTimer() {
     btn.style.background = '#da3633';
     timerInterval = setInterval(updateTimer, 1000);
   }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  startTime = null;
+  localStorage.removeItem('timer-start');
+  document.getElementById('timer-btn').textContent = '▶ Start';
+  document.getElementById('timer-btn').style.background = '#238636';
+  document.getElementById('timer-display').textContent = '90:00';
+  document.getElementById('timer-progress').style.width = '0%';
+  document.getElementById('timer-needle').style.left = '0%';
+  document.getElementById('timer-level').textContent = 'Ready';
+  document.getElementById('timer-level').style.color = '#f0c040';
 }
 
 function updateTimer() {

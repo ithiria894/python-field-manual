@@ -101,15 +101,23 @@ body { margin-left: 96px; }
   }
 }</code></pre>
 <div class="label">點攞 data：</div>
-<pre><code>self.accounts["alice"]
-→ {"balance":500, "outgoing":100, ...}
+<pre><code>acc = self.accounts["alice"]
+print(acc)
+# {"balance": 500, "outgoing": 100, "history": [(1,0),(3,500)]}
 
-self.accounts["alice"]["balance"]
-→ 500
+bal = acc["balance"]
+print(bal)
+# 500
 
-acc = self.accounts["alice"]
 acc["balance"] += 100
-→ alice 嘅 balance 變 600</code></pre>
+print(acc["balance"])
+# 600
+# alice 嘅 balance 真係變咗 600（acc 係 pointer）
+
+bal += 100
+print(bal)
+# 600
+# 但 alice 嘅 balance 仲係 600（bal 係 copy）</code></pre>
 </div>
 </div>
 
@@ -460,7 +468,9 @@ document.querySelectorAll('pre').forEach(pre => {
     btn.textContent = 'Copy All';
     btn.onclick = () => {
         const code = pre.querySelector('code') || pre;
-        const clean = code.textContent.split('\n').map(l => l.replace(/^cp/, '').replace(/#\s*(L\d|←|----).*/g, '').trimEnd()).join('\n');
+        const clone = code.cloneNode(true);
+        clone.querySelectorAll('.line-copy').forEach(b => b.remove());
+        const clean = clone.textContent.split('\n').map(l => l.replace(/#\s*(L\d|←|----).*/g, '').trimEnd()).join('\n');
         navigator.clipboard.writeText(clean);
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = 'Copy All', 1500);
@@ -483,7 +493,10 @@ document.querySelectorAll('pre code').forEach(code => {
         // Extract plain text for clipboard
         const temp = document.createElement('span');
         temp.innerHTML = line;
-        const plainText = temp.textContent.replace(/^cp/, '').replace(/#\s*(L\d|←|----).*/g, '').trimEnd();
+        const clone = document.createElement('span');
+        clone.innerHTML = line;
+        clone.querySelectorAll('.line-copy').forEach(b => b.remove());
+        const plainText = clone.textContent.replace(/#\s*(L\d|←|----).*/g, '').trimEnd();
         if (plainText.trim() === '') return line;
         const escaped = plainText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         return `<span class="line-wrap"><button class="line-copy line-copy-l" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button>${line}<button class="line-copy line-copy-r" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button></span>`;

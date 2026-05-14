@@ -26,9 +26,8 @@ code { font-family: inherit; font-size: 13px; color: #e6edf3; }
 table { width: 100%; border-collapse: collapse; margin: 8px 0 16px 0; font-size: 13px; }
 th { background: #161b22; color: #58a6ff; text-align: left; padding: 8px; border: 1px solid #30363d; }
 td { padding: 8px; border: 1px solid #30363d; }
-.copy-btn { position: absolute; top: -24px; right: 0; background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+.copy-btn { position: relative; display: inline-block; background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-bottom: 4px; }
 .copy-btn:hover { background: #484f58; color: #e6edf3; }
-pre { margin-top: 28px; }
 .gotcha { background: #1c0e0e; border: 1px solid #f85149; border-radius: 6px; padding: 10px; margin: 8px 0; }
 .tip { background: #0e1c0e; border: 1px solid #3fb950; border-radius: 6px; padding: 10px; margin: 8px 0; }
 .legend { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin: 16px 0; font-size: 13px; }
@@ -353,8 +352,7 @@ document.querySelectorAll('pre').forEach(pre => {
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = 'Copy All', 1500);
     };
-    pre.style.position = 'relative';
-    pre.appendChild(btn);
+    pre.parentNode.insertBefore(btn, pre);
 });
 
 // Per-line copy button for skeleton lines

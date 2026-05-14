@@ -355,7 +355,9 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 <style>
 .line-wrap { position: relative; display: inline-block; width: 100%; }
 .line-wrap:hover { background: rgba(255,255,255,0.05); }
-.line-copy { background: #30363d; color: #8b949e; border: none; padding: 0px 4px; border-radius: 3px; cursor: pointer; font-size: 9px; opacity: 0; transition: opacity 0.15s; margin-right: 4px; }
+.line-copy { background: #30363d; color: #8b949e; border: none; padding: 0px 4px; border-radius: 3px; cursor: pointer; font-size: 9px; opacity: 0; transition: opacity 0.15s; }
+.line-copy-l { margin-right: 4px; }
+.line-copy-r { position: absolute; right: 4px; }
 .line-wrap:hover .line-copy { opacity: 1; }
 .line-copy:hover { background: #484f58; color: #e6edf3; }
 </style>
@@ -372,7 +374,13 @@ document.querySelectorAll('pre').forEach(pre => {
         btn.textContent = 'Copied!';
         setTimeout(() => btn.textContent = 'Copy All', 1500);
     };
-    pre.parentNode.insertBefore(btn, pre);
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:2px;';
+    const btn2 = btn.cloneNode(true);
+    btn2.onclick = btn.onclick;
+    wrapper.appendChild(btn);
+    wrapper.appendChild(btn2);
+    pre.parentNode.insertBefore(wrapper, pre);
 });
 
 // Per-line copy button for skeleton lines
@@ -387,7 +395,7 @@ document.querySelectorAll('pre code').forEach(code => {
         const plainText = temp.textContent.replace(/^cp/, '').replace(/#\s*(L\d|←|----).*/g, '').trimEnd();
         if (plainText.trim() === '') return line;
         const escaped = plainText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-        return `<span class="line-wrap"><button class="line-copy" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button>${line}</span>`;
+        return `<span class="line-wrap"><button class="line-copy line-copy-l" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button>${line}<button class="line-copy line-copy-r" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button></span>`;
     });
     code.innerHTML = newLines.join('\n');
 });

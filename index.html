@@ -94,11 +94,18 @@ lst[<span class="num">-1</span>]                 <span class="cm"># 最後一個
 lst[:n]                 <span class="cm"># 頭 n 個（n 太大唔會 error）</span>
 len(lst)                <span class="cm"># 長度</span></code></pre>
 
+<h3>Import（成份 copy 去最頂）</h3>
+<pre><code><span class="kw">import</span> asyncio
+<span class="kw">import</span> copy
+<span class="kw">import</span> bisect
+<span class="kw">from</span> collections <span class="kw">import</span> defaultdict</code></pre>
+
 <h3>Class 結構</h3>
 <pre><code><span class="kw">class</span> <span class="fn">MySystem</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(self):         <span class="cm"># 兩個底線，self 第一個</span>
         self.data = {}            <span class="cm"># self.xxx 存入 object</span>
         self.counter = <span class="num">0</span>
+        self.account_locks = defaultdict(asyncio.Lock)  <span class="cm"># L5-6 用</span>
 
     <span class="kw">def</span> <span class="fn">method</span>(self, arg):      <span class="cm"># 每個 method 都要 self</span>
         <span class="kw">return</span> self.data[arg]</code></pre>

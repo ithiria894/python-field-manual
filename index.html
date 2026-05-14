@@ -413,10 +413,10 @@ document.querySelectorAll('pre code').forEach(code => {
 </script>
 
 <!-- TIMER BAR -->
-<div id="timer-bar" style="position:fixed;bottom:0;left:96px;right:0;height:36px;background:#0d1117;border-top:1px solid #30363d;z-index:200;display:flex;align-items:center;font-size:12px;">
-  <button id="timer-btn" onclick="toggleTimer()" style="background:#238636;color:white;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;margin:0 8px;font-size:12px;">▶ Start</button>
-  <span id="timer-display" style="color:#e6edf3;margin-right:8px;min-width:50px;">90:00</span>
-  <div style="flex:1;height:20px;background:#161b22;border-radius:4px;overflow:hidden;position:relative;margin-right:8px;">
+<div id="timer-bar" style="position:fixed;bottom:0;left:96px;right:0;height:22px;background:#0d1117;border-top:1px solid #30363d;z-index:200;display:flex;align-items:center;font-size:10px;">
+  <button id="timer-btn" onclick="toggleTimer()" style="background:#238636;color:white;border:none;padding:2px 8px;border-radius:3px;cursor:pointer;margin:0 6px;font-size:10px;">▶ Start</button>
+  <span id="timer-display" style="color:#e6edf3;margin-right:6px;min-width:40px;">90:00</span>
+  <div style="flex:1;height:14px;background:#161b22;border-radius:3px;overflow:hidden;position:relative;margin-right:6px;">
     <!-- Level segments -->
     <div style="position:absolute;left:0;width:11.1%;height:100%;background:#238636;opacity:0.3;border-right:1px solid #30363d;" title="L1 10min"></div>
     <div style="position:absolute;left:11.1%;width:11.1%;height:100%;background:#1f6feb;opacity:0.3;border-right:1px solid #30363d;" title="L2 10min"></div>
@@ -437,12 +437,13 @@ document.querySelectorAll('pre code').forEach(code => {
   </div>
   <span id="timer-level" style="color:#f0c040;margin-right:8px;min-width:80px;">Ready</span>
 </div>
-<div style="height:44px;"></div>
+<div style="height:28px;"></div>
 
 <script>
 let timerInterval = null;
-let startTime = null;
+let startTime = localStorage.getItem('timer-start') ? parseInt(localStorage.getItem('timer-start')) : null;
 const TOTAL = 90 * 60;
+if (startTime) { toggleTimer(); }
 const levels = [
   {name:'L1', end:10*60, color:'#238636'},
   {name:'L2', end:20*60, color:'#1f6feb'},
@@ -460,7 +461,7 @@ function toggleTimer() {
     btn.textContent = '▶ Resume';
     btn.style.background = '#238636';
   } else {
-    if (!startTime) startTime = Date.now();
+    if (!startTime) { startTime = Date.now(); localStorage.setItem('timer-start', startTime); }
     btn.textContent = '⏸ Pause';
     btn.style.background = '#da3633';
     timerInterval = setInterval(updateTimer, 1000);

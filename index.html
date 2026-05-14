@@ -295,47 +295,63 @@ rice, soup = <span class="kw">await</span> asyncio.gather(cook_rice(), cook_soup
 <tr><td><strong>Semaphore</strong></td><td>最多 N 個同時做</td><td><code>async with sem:</code></td></tr>
 </table>
 
-<h3>Batch Processing Skeleton（固定寫法，直接 copy）</h3>
-<p class="note">每次見到「同時處理一堆 operations」就係呢個 pattern。三步：1. 定義 execute_op 2. gather 同時跑 3. return list(results)</p>
+<h3>L5 Batch Processing（完整 example，灰色部分因應題目改）</h3>
+<p class="note">固定寫法。三步：1. 定義 execute_op 2. gather 同時跑 3. return list(results)</p>
 <pre><code><span class="cm"># === __init__ 加 ===</span>
-<span class="kw">from</span> collections <span class="kw">import</span> defaultdict
 self.account_locks = defaultdict(asyncio.Lock)
 
-<span class="cm"># === skeleton（固定寫法） ===</span>
-<span class="kw">async def</span> <span class="fn">process_batch</span>(self, timestamp, operations):
-    self._process_cashbacks(timestamp)
+<span class="cm"># === 完整 example ===</span>
+<span class="kw">async def</span> <span class="fn">process_batch</span>(self, timestamp, operations):   <span class="cm"># ← 固定</span>
+    self._process_cashbacks(timestamp)                     <span class="cm"># ← 固定</span>
 
-    <span class="kw">async def</span> <span class="fn">execute_op</span>(op):                          <span class="cm"># 1. 定義點處理一個 op</span>
-        lock = self.account_locks[op[<span class="str">"account_id"</span>]]
-        <span class="kw">async with</span> lock:                                  <span class="cm"># 鎖住個 account</span>
+    <span class="kw">async def</span> <span class="fn">execute_op</span>(op):                            <span class="cm"># ← 固定</span>
+        aid = op.get(<span class="str">"account_id"</span>) <span class="kw">or</span> op.get(<span class="str">"source_id"</span>)  <span class="cm"># ← 固定</span>
+        lock = self.account_locks[aid]                     <span class="cm"># ← 固定</span>
+        <span class="kw">async with</span> lock:                                  <span class="cm"># ← 固定</span>
+            <span class="cm"># -------- 以下因應題目改 --------</span>
             <span class="kw">if</span> op[<span class="str">"type"</span>] == <span class="str">"deposit"</span>:
                 <span class="kw">return</span> self.deposit(timestamp, op[<span class="str">"account_id"</span>], op[<span class="str">"amount"</span>])
             <span class="kw">elif</span> op[<span class="str">"type"</span>] == <span class="str">"transfer"</span>:
                 <span class="kw">return</span> self.transfer(timestamp, op[<span class="str">"source_id"</span>], op[<span class="str">"target_id"</span>], op[<span class="str">"amount"</span>])
             <span class="kw">elif</span> op[<span class="str">"type"</span>] == <span class="str">"pay"</span>:
                 <span class="kw">return</span> self.pay(timestamp, op[<span class="str">"account_id"</span>], op[<span class="str">"amount"</span>])
+            <span class="cm"># -------- 以上因應題目改 --------</span>
 
-    results = <span class="kw">await</span> asyncio.gather(*[execute_op(op) <span class="kw">for</span> op <span class="kw">in</span> operations])  <span class="cm"># 2. 全部同時跑</span>
-    <span class="kw">return</span> list(results)                                <span class="cm"># 3. 返回結果</span></code></pre>
+    results = <span class="kw">await</span> asyncio.gather(*[execute_op(op) <span class="kw">for</span> op <span class="kw">in</span> operations])  <span class="cm"># ← 固定</span>
+    <span class="kw">return</span> list(results)                                <span class="cm"># ← 固定</span></code></pre>
 
-<h3>Rate Limited 模板</h3>
-<pre><code><span class="kw">async def</span> <span class="fn">process_external</span>(self, timestamp, transfers, max_concurrent):
-    sem = asyncio.Semaphore(max_concurrent)
+<h3>L6 Rate Limited（完整 example，灰色部分因應題目改）</h3>
+<p class="note">同 L5 一樣嘅 skeleton，加 Semaphore 限制同時數量。Lock 包住扣錢，Sem 包住外部 call。</p>
+<pre><code><span class="kw">async def</span> <span class="fn">process_external_transfers</span>(self, timestamp, transfers, max_concurrent):  <span class="cm"># ← 固定</span>
+    self._process_cashbacks(timestamp)                     <span class="cm"># ← 固定</span>
+    sem = asyncio.Semaphore(max_concurrent)                <span class="cm"># ← 固定</span>
 
-    <span class="kw">async def</span> <span class="fn">do_transfer</span>(t):
-        lock = self.account_locks[t[<span class="str">"account_id"</span>]]
-        <span class="kw">async with</span> lock:
-            <span class="kw">if</span> t[<span class="str">"account_id"</span>] <span class="kw">not in</span> self.accounts:
+    <span class="kw">async def</span> <span class="fn">do_transfer</span>(t):                            <span class="cm"># ← 固定</span>
+        aid = t[<span class="str">"account_id"</span>]
+        lock = self.account_locks[aid]                     <span class="cm"># ← 固定</span>
+        <span class="kw">async with</span> lock:                                  <span class="cm"># ← 固定：鎖住 account</span>
+            <span class="cm"># -------- 以下因應題目改（check + 扣錢） --------</span>
+            <span class="kw">if</span> aid <span class="kw">not in</span> self.accounts:
                 <span class="kw">return</span> <span class="num">False</span>
-            <span class="kw">if</span> self.accounts[t[<span class="str">"account_id"</span>]][<span class="str">"balance"</span>] < t[<span class="str">"amount"</span>]:
+            <span class="kw">if</span> self.accounts[aid][<span class="str">"balance"</span>] < t[<span class="str">"amount"</span>]:
                 <span class="kw">return</span> <span class="num">False</span>
-            self.accounts[t[<span class="str">"account_id"</span>]][<span class="str">"balance"</span>] -= t[<span class="str">"amount"</span>]
-        <span class="kw">async with</span> sem:
-            <span class="kw">await</span> asyncio.sleep(<span class="num">0.01</span>)
+            self.accounts[aid][<span class="str">"balance"</span>] -= t[<span class="str">"amount"</span>]
+            self.accounts[aid][<span class="str">"outgoing"</span>] += t[<span class="str">"amount"</span>]
+            self.accounts[aid][<span class="str">"history"</span>].append((timestamp, self.accounts[aid][<span class="str">"balance"</span>]))
+            <span class="cm"># -------- 以上因應題目改 --------</span>
+        <span class="kw">async with</span> sem:                                  <span class="cm"># ← 固定：限制同時數量</span>
+            <span class="kw">await</span> asyncio.sleep(<span class="num">0.01</span>)                      <span class="cm"># ← 固定：模擬外部 call</span>
         <span class="kw">return</span> <span class="num">True</span>
 
-    results = <span class="kw">await</span> asyncio.gather(*[do_transfer(t) <span class="kw">for</span> t <span class="kw">in</span> transfers])
-    <span class="kw">return</span> list(results)</code></pre>
+    results = <span class="kw">await</span> asyncio.gather(*[do_transfer(t) <span class="kw">for</span> t <span class="kw">in</span> transfers])  <span class="cm"># ← 固定</span>
+    <span class="kw">return</span> list(results)                                <span class="cm"># ← 固定</span></code></pre>
+
+<div class="tip">
+<strong>L5 vs L6 嘅分別：</strong><br>
+L5：gather + Lock（全部同時跑，鎖住 account）<br>
+L6：gather + Lock + Semaphore（限制同時幾多個，鎖住 account + 模擬外部 call）<br><br>
+<strong>記住：</strong>Lock 同 Sem 分開用。Lock 包住改 data 嘅部分，Sem 包住外部 call 嘅部分。唔好 return 太早。
+</div>
 </div>
 
 <!-- ============ GOTCHAS ============ -->

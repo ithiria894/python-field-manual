@@ -3,34 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python Field Manual</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+<title>Nicole's Python Field Manual</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; background: #0d1117; color: #e6edf3; padding: 20px; line-height: 1.3; }
-h1 { color: #58a6ff; font-size: 22px; margin-bottom: 8px; border-bottom: 2px solid #30363d; padding-bottom: 8px; }
-h2 { color: #ff7b72; font-size: 17px; margin-top: 28px; margin-bottom: 10px; padding: 6px 8px; background: #161b22; border-radius: 6px; border-left: 4px solid #ff7b72; }
-h3 { color: #d2a8ff; font-size: 14px; margin-top: 14px; margin-bottom: 6px; }
-p, li { font-size: 13px; margin-bottom: 4px; }
-.note { color: #8b949e; font-size: 12px; font-style: italic; margin-bottom: 8px; }
-pre { margin: 4px 0 12px 0; border-radius: 6px; }
-pre code { font-size: 13px !important; line-height: 1.4 !important; padding: 10px !important; }
-table { width: 100%; border-collapse: collapse; margin: 6px 0 12px 0; font-size: 12px; }
-th { background: #161b22; color: #58a6ff; text-align: left; padding: 6px; border: 1px solid #30363d; }
-td { padding: 6px; border: 1px solid #30363d; }
-.copy-all { display: inline-block; background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 10px; margin-bottom: 2px; }
-.copy-all:hover { background: #484f58; color: #e6edf3; }
-.sk-line { background: rgba(187, 128, 9, 0.18) !important; }
-.ch-line { background: rgba(139, 148, 158, 0.1) !important; font-style: italic; }
-.gotcha { background: #1c0e0e; border: 1px solid #f85149; border-radius: 6px; padding: 8px; margin: 6px 0; font-size: 13px; }
-.tip { background: #0e1c0e; border: 1px solid #3fb950; border-radius: 6px; padding: 8px; margin: 6px 0; font-size: 13px; }
-.legend { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 8px; margin: 12px 0; font-size: 12px; }
+h1 { color: #58a6ff; font-size: 24px; margin-bottom: 8px; border-bottom: 2px solid #30363d; padding-bottom: 8px; }
+h2 { color: #ff7b72; font-size: 18px; margin-top: 32px; margin-bottom: 12px; padding: 8px; background: #161b22; border-radius: 6px; border-left: 4px solid #ff7b72; }
+h3 { color: #d2a8ff; font-size: 15px; margin-top: 16px; margin-bottom: 8px; }
+p, li { font-size: 14px; margin-bottom: 6px; }
+.note { color: #8b949e; font-size: 13px; font-style: italic; margin-bottom: 12px; }
+pre { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 8px; margin: 4px 0 10px 0; overflow-x: auto; position: relative; line-height: 1.25; }
+code { font-family: inherit; font-size: 13px; color: #e6edf3; }
+.kw { color: #ff7b72; }
+.fn { color: #d2a8ff; }
+.str { color: #a5d6ff; }
+.cm { color: #8b949e; }
+.num { color: #79c0ff; }
 .warn { color: #f85149; font-weight: bold; }
 .ok { color: #3fb950; font-weight: bold; }
-nav { position: fixed; top: 0; right: 0; background: #161b22; border-left: 1px solid #30363d; border-bottom: 1px solid #30363d; padding: 10px; border-radius: 0 0 0 8px; z-index: 100; font-size: 11px; }
-nav a { color: #58a6ff; text-decoration: none; display: block; padding: 2px 0; }
+.sk { background: #3d2e00; color: #f0c040; }
+.ch { color: #8b949e; font-style: italic; }
+table { width: 100%; border-collapse: collapse; margin: 8px 0 16px 0; font-size: 13px; }
+th { background: #161b22; color: #58a6ff; text-align: left; padding: 8px; border: 1px solid #30363d; }
+td { padding: 8px; border: 1px solid #30363d; }
+.copy-btn { position: relative; display: inline-block; background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-bottom: 4px; }
+.copy-btn:hover { background: #484f58; color: #e6edf3; }
+.gotcha { background: #1c0e0e; border: 1px solid #f85149; border-radius: 6px; padding: 10px; margin: 8px 0; }
+.tip { background: #0e1c0e; border: 1px solid #3fb950; border-radius: 6px; padding: 10px; margin: 8px 0; }
+.legend { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin: 16px 0; font-size: 13px; }
+nav { position: fixed; top: 0; right: 0; background: #161b22; border-left: 1px solid #30363d; border-bottom: 1px solid #30363d; padding: 12px; border-radius: 0 0 0 8px; z-index: 100; font-size: 12px; }
+nav a { color: #58a6ff; text-decoration: none; display: block; padding: 3px 0; }
 nav a:hover { color: #79c0ff; }
 @media (max-width: 768px) { nav { display: none; } body { padding: 10px; } }
 </style>
@@ -50,71 +52,71 @@ nav a:hover { color: #79c0ff; }
 <a href="#quick">Quick Ref</a>
 </nav>
 
-<h1>Python Field Manual</h1>
+<h1>Nicole's Python Field Manual</h1>
 
 <div class="legend">
-<span style="background:rgba(187,128,9,0.18);padding:2px 6px;">黃底行</span> = skeleton，直接抄<br>
-<span style="color:#8b949e;font-style:italic;">灰色斜體行</span> = 因應題目改（Bank System 做例子）
+<span class="sk">黃底</span> = skeleton，直接抄，唔使改<br>
+<span class="ch">灰色斜體</span> = 因應題目改嘅部分（Bank System 做例子）
 </div>
 
 <!-- ============ IMPORTS ============ -->
 <h2 id="imports">Imports（最頂 copy）</h2>
-<pre><code class="language-python">import asyncio                                      #SK
-import copy                                          #SK
-import bisect                                        #SK
-from collections import defaultdict                  #SK</code></pre>
+<pre><code><span class="sk">import asyncio</span>
+<span class="sk">import copy</span>
+<span class="sk">import bisect</span>
+<span class="sk">from collections import defaultdict</span></code></pre>
 
 <!-- ============ LEVEL 1 ============ -->
 <h2 id="l1">L1 — CRUD</h2>
 
-<h3>__init__（完整 example）</h3>
-<pre><code class="language-python">class BankSystem:                                    #SK
-    def __init__(self):                              #SK
-        self.accounts = {}                           #SK  # L1 主要 data store
-        self.payment_counter = 0                     #CH  # L3 加
-        self.payment = {}                            #CH  # L3 加
-        self.merged_accounts = {}                    #CH  # L4 加
-        self.account_locks = defaultdict(asyncio.Lock) #SK # L5 加</code></pre>
+<h3>__init__（完整 example — 標明每行邊個 level 加）</h3>
+<pre><code><span class="sk">class</span> <span class="ch">BankSystem</span><span class="sk">:</span>
+    <span class="sk">def __init__(self):</span>
+        <span class="sk">self.</span><span class="ch">accounts</span><span class="sk"> = {}</span>                          <span class="cm"># L1 主要 data store</span>
+        <span class="ch">self.payment_counter = 0</span>                    <span class="cm"># L3 加</span>
+        <span class="ch">self.payment = {}</span>                            <span class="cm"># L3 加</span>
+        <span class="ch">self.merged_accounts = {}</span>                    <span class="cm"># L4 加</span>
+        <span class="sk">self.account_locks = defaultdict(asyncio.Lock)</span> <span class="cm"># L5 加</span></code></pre>
 
 <h3>create（完整 example）</h3>
-<pre><code class="language-python">def create_account(self, timestamp, account_id):     #SK
-    self._process_cashbacks(timestamp)               #SK  # L3 加（L1 冇呢行）
-    if account_id in self.accounts:                  #SK  # L1
-        return False                                 #SK  # L1
-    self.accounts[account_id] = {                    #SK
-        "balance": 0,                                #CH  # L1
-        "outgoing": 0,                               #CH  # L2 加
-        "history": [(timestamp, 0)]                  #CH  # L4 加
-    }
-    return True                                      #SK  # L1</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">create_account</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>             <span class="cm"># L3 加（L1 冇呢行）</span>
+    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">in self.</span><span class="ch">accounts</span><span class="sk">:</span>                <span class="cm"># L1</span>
+        <span class="sk">return False</span>                                 <span class="cm"># L1</span>
+    <span class="sk">self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">] = {</span>
+        <span class="ch">"balance": 0,</span>                                <span class="cm"># L1</span>
+        <span class="ch">"outgoing": 0,</span>                               <span class="cm"># L2 加（tracking 用）</span>
+        <span class="ch">"history": [(timestamp, 0)]</span>                  <span class="cm"># L4 加（歷史查詢用）</span>
+    <span class="sk">}</span>
+    <span class="sk">return True</span>                                      <span class="cm"># L1</span></code></pre>
 
 <h3>get / deposit（完整 example）</h3>
-<pre><code class="language-python">def deposit(self, timestamp, account_id, amount):    #SK
-    self._process_cashbacks(timestamp)               #SK  # L3 加
-    if account_id not in self.accounts:              #SK  # L1
-        return None                                  #SK  # L1
-    acc = self.accounts[account_id]                  #SK  # L1 攞短名
-    acc["balance"] += amount                         #CH  # L1 做嘢
-    acc["history"].append((timestamp, acc["balance"])) #CH # L4 加
-    return acc["balance"]                            #SK  # L1</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">deposit</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id</span><span class="sk">,</span> <span class="ch">amount</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>              <span class="cm"># L3 加</span>
+    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">:</span>            <span class="cm"># L1</span>
+        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+    <span class="sk">acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">]</span>              <span class="cm"># L1 攞短名</span>
+    <span class="ch">acc["balance"] += amount</span>                      <span class="cm"># L1 做嘢</span>
+    <span class="ch">acc["history"].append((timestamp, acc["balance"]))</span> <span class="cm"># L4 加</span>
+    <span class="sk">return</span> <span class="ch">acc["balance"]</span>                         <span class="cm"># L1</span></code></pre>
 
 <h3>transfer / 雙 entity 操作（完整 example）</h3>
-<pre><code class="language-python">def transfer(self, timestamp, source_id, target_id, amount): #SK
-    self._process_cashbacks(timestamp)               #SK  # L3 加
-    if source_id not in self.accounts or target_id not in self.accounts: #SK # L1
-        return None                                  #SK  # L1
-    if source_id == target_id:                       #SK  # L1
-        return None                                  #SK  # L1
-    s_acc = self.accounts[source_id]                 #SK  # L1
-    t_acc = self.accounts[target_id]                 #SK  # L1
-    if s_acc["balance"] < amount:                    #SK  # L1
-        return None                                  #SK  # L1
-    s_acc["balance"] -= amount                       #CH  # L1
-    s_acc["outgoing"] += amount                      #CH  # L2 加
-    s_acc["history"].append((timestamp, s_acc["balance"])) #CH # L4 加
-    t_acc["balance"] += amount                       #CH  # L1
-    t_acc["history"].append((timestamp, t_acc["balance"])) #CH # L4 加
-    return s_acc["balance"]                          #SK  # L1</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">transfer</span><span class="sk">(self, timestamp,</span> <span class="ch">source_id, target_id, amount</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>              <span class="cm"># L3 加</span>
+    <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span> <span class="sk">or</span> <span class="ch">target_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">:</span>  <span class="cm"># L1</span>
+        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+    <span class="sk">if</span> <span class="ch">source_id</span> <span class="sk">==</span> <span class="ch">target_id</span><span class="sk">:</span>                    <span class="cm"># L1</span>
+        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+    <span class="sk">s_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">source_id</span><span class="sk">]</span>              <span class="cm"># L1</span>
+    <span class="sk">t_acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">target_id</span><span class="sk">]</span>              <span class="cm"># L1</span>
+    <span class="sk">if s_acc[</span><span class="ch">"balance"</span><span class="sk">] &lt;</span> <span class="ch">amount</span><span class="sk">:</span>                 <span class="cm"># L1</span>
+        <span class="sk">return None</span>                                  <span class="cm"># L1</span>
+    <span class="ch">s_acc["balance"] -= amount</span>                    <span class="cm"># L1</span>
+    <span class="ch">s_acc["outgoing"] += amount</span>                   <span class="cm"># L2 加</span>
+    <span class="ch">s_acc["history"].append((timestamp, s_acc["balance"]))</span>  <span class="cm"># L4 加</span>
+    <span class="ch">t_acc["balance"] += amount</span>                    <span class="cm"># L1</span>
+    <span class="ch">t_acc["history"].append((timestamp, t_acc["balance"]))</span>  <span class="cm"># L4 加</span>
+    <span class="sk">return</span> <span class="ch">s_acc["balance"]</span>                       <span class="cm"># L1</span></code></pre>
 
 <div class="tip">
 <strong>Dict vs Dot：</strong> <code>d["balance"]</code> 唔係 <code>d.balance</code><br>
@@ -126,16 +128,16 @@ from collections import defaultdict                  #SK</code></pre>
 <h2 id="l2">L2 — Sort / Filter / Format</h2>
 
 <h3>排序 + format（完整 example）</h3>
-<pre><code class="language-python">def top_spenders(self, timestamp, n):                #SK
-    self._process_cashbacks(timestamp)               #SK
-    sorted_items = dict(sorted(                      #SK
-        self.accounts.items(),                       #SK
-        key=lambda x: (-x[1]["outgoing"], x[0])      #SK  # desc by value, asc by name
-    ))
-    result = []                                      #SK
-    for account_id, acc in sorted_items.items():     #SK
-        result.append(f"{account_id}({acc['outgoing']})") #CH
-    return result[:n]                                #SK  # [:n] 自動處理 n 太大</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">top_spenders</span><span class="sk">(self, timestamp,</span> <span class="ch">n</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+    <span class="sk">sorted_items = dict(sorted(</span>
+        <span class="sk">self.</span><span class="ch">accounts</span><span class="sk">.items(),</span>
+        <span class="sk">key=lambda x: (-x[1][</span><span class="ch">"outgoing"</span><span class="sk">], x[0])</span>     <span class="cm"># ← desc by value, asc by name</span>
+    <span class="sk">))</span>
+    <span class="sk">result = []</span>
+    <span class="sk">for</span> <span class="ch">account_id</span><span class="sk">, acc in sorted_items.items():</span>
+        <span class="sk">result.append(f"</span><span class="ch">{account_id}({acc['outgoing']})</span><span class="sk">")</span>
+    <span class="sk">return result[:</span><span class="ch">n</span><span class="sk">]</span>                              <span class="cm"># ← [:n] 自動處理 n 太大</span></code></pre>
 
 <div class="tip">
 <strong>sorted() 人話：</strong>「將呢堆嘢，按呢個準則排」。負號 = 反轉。<br>
@@ -153,122 +155,127 @@ from collections import defaultdict                  #SK</code></pre>
 </div>
 
 <h3>Lazy Processing Helper（完整 example）</h3>
-<p class="note">所有題都用。每個 method 第一行 call。</p>
-<pre><code class="language-python">def _process_cashbacks(self, timestamp):             #SK
-    for pid, p in self.payment.items():              #SK
-        if not p["received"] and timestamp >= p["cashback_time"]: #SK
-            self.accounts[p["account_id"]]["balance"] += p["cashback_amount"] #CH
-            p["received"] = True                     #SK</code></pre>
+<p class="note">所有題都用。唔會自動到期，每次有人 call method 帶 timestamp 入嚟先 check。</p>
+<pre><code><span class="sk">def _process_</span><span class="ch">cashbacks</span><span class="sk">(self, timestamp):</span>
+    <span class="sk">for</span> <span class="ch">pid, p</span> <span class="sk">in self.</span><span class="ch">payment</span><span class="sk">.items():</span>
+        <span class="sk">if not</span> <span class="ch">p["received"]</span> <span class="sk">and timestamp >=</span> <span class="ch">p["cashback_time"]</span><span class="sk">:</span>
+            <span class="ch">self.accounts[p["account_id"]]["balance"] += p["cashback_amount"]</span>
+            <span class="ch">p["received"] = True</span></code></pre>
 
 <h3>pay / 建立 scheduled event（完整 example）</h3>
-<pre><code class="language-python">def pay(self, timestamp, account_id, amount):        #SK
-    self._process_cashbacks(timestamp)               #SK
-    if account_id not in self.accounts: return None  #SK
-    acc = self.accounts[account_id]                  #SK
-    if acc["balance"] < amount: return None           #SK
-    acc["balance"] -= amount                         #CH
-    acc["outgoing"] += amount                        #CH  # L2 加
-    acc["history"].append((timestamp, acc["balance"])) #CH # L4 加
-    cashback = amount * 2 // 100                     #CH  # 計算 scheduled amount
-    cashback_time = timestamp + 86400000             #CH  # 計算 deadline
-    self.payment_counter += 1                        #SK
-    pid = f"payment{self.payment_counter}"           #SK
-    self.payment[pid] = {"account_id": account_id, "cashback_amount": cashback, "cashback_time": cashback_time, "received": False} #CH
-    return pid                                       #SK</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">pay</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id, amount</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">: return None</span>
+    <span class="sk">acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">]</span>
+    <span class="sk">if acc[</span><span class="ch">"balance"</span><span class="sk">] &lt;</span> <span class="ch">amount</span><span class="sk">: return None</span>
+    <span class="ch">acc["balance"] -= amount</span>
+    <span class="ch">acc["outgoing"] += amount</span>
+    <span class="ch">acc["history"].append((timestamp, acc["balance"]))</span>
+    <span class="ch">cashback = amount * 2 // 100</span>                   <span class="cm"># ← 計算 scheduled amount</span>
+    <span class="ch">cashback_time = timestamp + 86400000</span>             <span class="cm"># ← 計算 deadline</span>
+    <span class="sk">self.</span><span class="ch">payment_counter</span> <span class="sk">+= 1</span>
+    <span class="sk">pid = f"</span><span class="ch">payment</span><span class="sk">{self.</span><span class="ch">payment_counter</span><span class="sk">}"</span>
+    <span class="sk">self.</span><span class="ch">payment</span><span class="sk">[pid] = {</span><span class="ch">"account_id": account_id, "cashback_amount": cashback, "cashback_time": cashback_time, "received": False</span><span class="sk">}</span>
+    <span class="sk">return pid</span></code></pre>
 
 <h3>get status（完整 example）</h3>
-<pre><code class="language-python">def get_payment_status(self, timestamp, account_id, payment_id): #SK
-    self._process_cashbacks(timestamp)               #SK
-    if account_id not in self.accounts: return None  #SK
-    if payment_id not in self.payment: return None   #SK
-    if self.payment[payment_id]["account_id"] != account_id: return None #SK
-    if self.payment[payment_id]["received"]:          #SK
-        return "CASHBACK_RECEIVED"                   #CH
-    return "IN_PROGRESS"                             #CH</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">get_payment_status</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id, payment_id</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">: return None</span>
+    <span class="sk">if</span> <span class="ch">payment_id</span> <span class="sk">not in self.</span><span class="ch">payment</span><span class="sk">: return None</span>
+    <span class="sk">if self.</span><span class="ch">payment</span><span class="sk">[</span><span class="ch">payment_id</span><span class="sk">][</span><span class="ch">"account_id"</span><span class="sk">] !=</span> <span class="ch">account_id</span><span class="sk">: return None</span>
+    <span class="sk">if self.</span><span class="ch">payment</span><span class="sk">[</span><span class="ch">payment_id</span><span class="sk">][</span><span class="ch">"received"</span><span class="sk">]:</span>
+        <span class="sk">return</span> <span class="ch">"CASHBACK_RECEIVED"</span>
+    <span class="sk">return</span> <span class="ch">"IN_PROGRESS"</span></code></pre>
 
 <!-- ============ LEVEL 4 ============ -->
 <h2 id="l4">L4 — Backup / Merge / Historical Query</h2>
 
 <h3>歷史查詢（完整 example）</h3>
-<pre><code class="language-python">def get_balance(self, timestamp, account_id, time_at): #SK
-    self._process_cashbacks(timestamp)               #SK
-    if account_id not in self.accounts: return None  #SK
-    acc = self.accounts[account_id]                  #SK
-    for ts, val in reversed(acc["history"]):          #SK  # 由尾搵返去
-        if ts <= time_at:                            #SK
-            return val                               #SK</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">get_balance</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id, time_at</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+    <span class="sk">if</span> <span class="ch">account_id</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">: return None</span>
+    <span class="sk">acc = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id</span><span class="sk">]</span>
+    <span class="sk">for ts, val in reversed(acc[</span><span class="ch">"history"</span><span class="sk">]):</span>      <span class="cm"># ← 由尾搵返去</span>
+        <span class="sk">if ts &lt;=</span> <span class="ch">time_at</span><span class="sk">:</span>
+            <span class="sk">return val</span></code></pre>
 
 <h3>merge / 合併兩個 entity（完整 example）</h3>
-<pre><code class="language-python">def merge_accounts(self, timestamp, account_id_1, account_id_2): #SK
-    self._process_cashbacks(timestamp)               #SK
-    if account_id_1 not in self.accounts or account_id_2 not in self.accounts: return False #SK
-    if account_id_1 == account_id_2: return False    #SK
-    acc_1 = self.accounts[account_id_1]              #SK
-    acc_2 = self.accounts[account_id_2]              #SK
-    acc_1["balance"] += acc_2["balance"]              #CH  # 合併 data
-    acc_1["outgoing"] += acc_2["outgoing"]            #CH
-    acc_1["history"].append((timestamp, acc_1["balance"])) #CH
-    self.merged_accounts[account_id_2] = account_id_1 #SK
-    del self.accounts[account_id_2]                  #SK
-    return True                                      #SK</code></pre>
+<pre><code><span class="sk">def</span> <span class="ch">merge_accounts</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id_1, account_id_2</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+    <span class="sk">if</span> <span class="ch">account_id_1</span> <span class="sk">not in self.</span><span class="ch">accounts</span> <span class="sk">or</span> <span class="ch">account_id_2</span> <span class="sk">not in self.</span><span class="ch">accounts</span><span class="sk">: return False</span>
+    <span class="sk">if</span> <span class="ch">account_id_1</span> <span class="sk">==</span> <span class="ch">account_id_2</span><span class="sk">: return False</span>
+    <span class="sk">acc_1 = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id_1</span><span class="sk">]</span>
+    <span class="sk">acc_2 = self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id_2</span><span class="sk">]</span>
+    <span class="ch">acc_1["balance"] += acc_2["balance"]</span>              <span class="cm"># ← 合併 data</span>
+    <span class="ch">acc_1["outgoing"] += acc_2["outgoing"]</span>
+    <span class="ch">acc_1["history"].append((timestamp, acc_1["balance"]))</span>
+    <span class="sk">self.</span><span class="ch">merged_accounts</span><span class="sk">[</span><span class="ch">account_id_2</span><span class="sk">] =</span> <span class="ch">account_id_1</span>
+    <span class="sk">del self.</span><span class="ch">accounts</span><span class="sk">[</span><span class="ch">account_id_2</span><span class="sk">]</span>
+    <span class="sk">return True</span></code></pre>
 
-<h3>backup / deepcopy</h3>
-<pre><code class="language-python">import copy
-snapshot = copy.deepcopy(self.accounts)  # 完整複製，改 snapshot 唔影響原本</code></pre>
+<h3>backup / deepcopy（完整 example）</h3>
+<pre><code><span class="sk">import copy</span>
+<span class="sk">snapshot = copy.deepcopy(self.</span><span class="ch">accounts</span><span class="sk">)</span>          <span class="cm"># ← 完整複製</span>
+<span class="cm"># 改 snapshot 唔影響原本</span></code></pre>
 
 <!-- ============ LEVEL 5 ============ -->
 <h2 id="l5">L5 — Concurrent Batch Processing</h2>
+
+<h3>完整 example</h3>
 <p class="note">三步：1. 定義 execute_op  2. gather 同時跑  3. return list(results)</p>
-<pre><code class="language-python">async def process_batch(self, timestamp, operations): #SK
-    self._process_cashbacks(timestamp)               #SK
+<pre><code><span class="sk">async def</span> <span class="ch">process_batch</span><span class="sk">(self, timestamp,</span> <span class="ch">operations</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
 
-    async def execute_op(op):                        #SK
-        aid = op.get("account_id") or op.get("source_id") #SK
-        lock = self.account_locks[aid]               #SK
-        async with lock:                             #SK
-            # -------- 以下因應題目改 --------
-            if op["type"] == "deposit":              #CH
-                return self.deposit(timestamp, op["account_id"], op["amount"]) #CH
-            elif op["type"] == "transfer":           #CH
-                return self.transfer(timestamp, op["source_id"], op["target_id"], op["amount"]) #CH
-            elif op["type"] == "pay":                #CH
-                return self.pay(timestamp, op["account_id"], op["amount"]) #CH
-            # -------- 以上因應題目改 --------
+    <span class="sk">async def execute_op(op):</span>
+        <span class="sk">aid = op.get(</span><span class="ch">"account_id"</span><span class="sk">) or op.get(</span><span class="ch">"source_id"</span><span class="sk">)</span>
+        <span class="sk">lock = self.account_locks[aid]</span>
+        <span class="sk">async with lock:</span>
+            <span class="cm"># -------- 以下因應題目改 --------</span>
+            <span class="ch">if op["type"] == "deposit":</span>
+            <span class="ch">    return self.deposit(timestamp, op["account_id"], op["amount"])</span>
+            <span class="ch">elif op["type"] == "transfer":</span>
+            <span class="ch">    return self.transfer(timestamp, op["source_id"], op["target_id"], op["amount"])</span>
+            <span class="ch">elif op["type"] == "pay":</span>
+            <span class="ch">    return self.pay(timestamp, op["account_id"], op["amount"])</span>
+            <span class="cm"># -------- 以上因應題目改 --------</span>
 
-    results = await asyncio.gather(*[execute_op(op) for op in operations]) #SK
-    return list(results)                             #SK</code></pre>
+    <span class="sk">results = await asyncio.gather(*[execute_op(op) for op in</span> <span class="ch">operations</span><span class="sk">])</span>
+    <span class="sk">return list(results)</span></code></pre>
 
 <!-- ============ LEVEL 6 ============ -->
 <h2 id="l6">L6 — Rate Limited External Call</h2>
+
+<h3>完整 example</h3>
 <p class="note">同 L5 一樣，加 Semaphore。Lock 包住改 data，Sem 包住外部 call。唔好 return 太早。</p>
-<pre><code class="language-python">async def process_external_transfers(self, timestamp, transfers, max_concurrent): #SK
-    self._process_cashbacks(timestamp)               #SK
-    sem = asyncio.Semaphore(max_concurrent)           #SK
+<pre><code><span class="sk">async def</span> <span class="ch">process_external_transfers</span><span class="sk">(self, timestamp,</span> <span class="ch">transfers</span><span class="sk">,</span> <span class="ch">max_concurrent</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+    <span class="sk">sem = asyncio.Semaphore(</span><span class="ch">max_concurrent</span><span class="sk">)</span>
 
-    async def do_transfer(t):                        #SK
-        aid = t["account_id"]                        #CH
-        lock = self.account_locks[aid]               #SK
-        async with lock:                             #SK  # 鎖住 account
-            # -------- 以下因應題目改（check + 扣錢） --------
-            if aid not in self.accounts:             #CH
-                return False                         #CH
-            if self.accounts[aid]["balance"] < t["amount"]: #CH
-                return False                         #CH
-            self.accounts[aid]["balance"] -= t["amount"] #CH
-            self.accounts[aid]["outgoing"] += t["amount"] #CH
-            self.accounts[aid]["history"].append((timestamp, self.accounts[aid]["balance"])) #CH
-            # -------- 以上因應題目改 --------
-        async with sem:                              #SK  # 限制同時數量
-            await asyncio.sleep(0.01)                #SK  # 模擬外部 call
-        return True                                  #SK
+    <span class="sk">async def</span> <span class="ch">do_transfer</span><span class="sk">(t):</span>
+        <span class="sk">aid =</span> <span class="ch">t["account_id"]</span>
+        <span class="sk">lock = self.account_locks[aid]</span>
+        <span class="sk">async with lock:</span>                               <span class="cm"># ← 鎖住 account</span>
+            <span class="cm"># -------- 以下因應題目改（check + 扣錢） --------</span>
+            <span class="ch">if aid not in self.accounts:</span>
+            <span class="ch">    return False</span>
+            <span class="ch">if self.accounts[aid]["balance"] &lt; t["amount"]:</span>
+            <span class="ch">    return False</span>
+            <span class="ch">self.accounts[aid]["balance"] -= t["amount"]</span>
+            <span class="ch">self.accounts[aid]["outgoing"] += t["amount"]</span>
+            <span class="ch">self.accounts[aid]["history"].append((timestamp, self.accounts[aid]["balance"]))</span>
+            <span class="cm"># -------- 以上因應題目改 --------</span>
+        <span class="sk">async with sem:</span>                                <span class="cm"># ← 限制同時數量</span>
+            <span class="sk">await asyncio.sleep(0.01)</span>                  <span class="cm"># ← 模擬外部 call</span>
+        <span class="sk">return True</span>
 
-    results = await asyncio.gather(*[do_transfer(t) for t in transfers]) #SK
-    return list(results)                             #SK</code></pre>
+    <span class="sk">results = await asyncio.gather(*[</span><span class="ch">do_transfer</span><span class="sk">(t) for t in</span> <span class="ch">transfers</span><span class="sk">])</span>
+    <span class="sk">return list(results)</span></code></pre>
 
 <div class="tip">
 <strong>L5 vs L6 分別：</strong><br>
-L5：gather + Lock（全部同時跑，鎖住 account）<br>
-L6：gather + Lock + Semaphore（限制同時幾多個 + 模擬外部 call）<br>
+L5：<span class="sk">gather + Lock</span>（全部同時跑，鎖住 account）<br>
+L6：<span class="sk">gather + Lock + Semaphore</span>（限制同時幾多個 + 模擬外部 call）<br><br>
 Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 </div>
 
@@ -286,20 +293,20 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 <span class="warn">❌</span> <code>acc.amount = amount</code> 覆蓋 → <span class="ok">✅</span> <code>acc["balance"] += amount</code> 累加<br>
 <span class="warn">❌</span> 邊 iterate 邊 delete dict → <span class="ok">✅</span> 先收集 keys 再 delete<br>
 <span class="warn">❌</span> <code>copy_ref = original</code> 同一個 object → <span class="ok">✅</span> <code>copy.deepcopy(original)</code><br>
-<span class="warn">❌</span> <code>async with lock: return ...</code> 之後行唔到 → <span class="ok">✅</span> 唔好 return 太早
+<span class="warn">❌</span> <code>async with lock: return ...</code> 之後嘅 code 行唔到 → <span class="ok">✅</span> 唔好 return 太早，lock 同 sem 分開
 </div>
 
 <!-- ============ ERRORS ============ -->
 <h2 id="errors">Error Message 點讀</h2>
 <table>
 <tr><th>Error</th><th>意思</th><th>點修</th></tr>
-<tr><td>TypeError: takes N args but M given</td><td>param 數量錯</td><td>check 有冇 self / timestamp</td></tr>
-<tr><td>AttributeError: 'dict' has no attribute 'X'</td><td>用咗 dot</td><td>改做 d["X"]</td></tr>
-<tr><td>KeyError: 'X'</td><td>dict 冇呢個 key</td><td>先 check if key in d</td></tr>
-<tr><td>AssertionError: None is not true</td><td>冇 return</td><td>加 return True/False</td></tr>
+<tr><td>TypeError: takes N args but M given</td><td>param 數量錯</td><td>check 有冇 self / 有冇漏 timestamp</td></tr>
+<tr><td>AttributeError: 'dict' has no attribute 'X'</td><td>用咗 dot access dict</td><td>改做 d["X"]</td></tr>
+<tr><td>KeyError: 'X'</td><td>dict 冇呢個 key</td><td>先 check <code>if key in d</code></td></tr>
+<tr><td>AssertionError: None is not true</td><td>function 冇 return</td><td>加 return True/False</td></tr>
 <tr><td>NameError: name 'X' not defined</td><td>variable 未定義</td><td>check 串字 / scope</td></tr>
 </table>
-<p class="note">口訣：1. 睇 Error 類型  2. 睇 > 嗰行  3. 對比你嘅 code</p>
+<p class="note">口訣：1. 睇 Error 類型  2. 睇 > 嗰行（test 點 call 你）  3. 對比你嘅 code</p>
 
 <!-- ============ QUICK REF ============ -->
 <h2 id="quick">Quick Reference</h2>
@@ -324,37 +331,24 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 <tr><td>同時跑</td><td><code>await asyncio.gather(*[fn(x) for x in items])</code></td></tr>
 <tr><td>鎖住</td><td><code>async with lock:</code></td></tr>
 <tr><td>限制數量</td><td><code>sem = asyncio.Semaphore(n); async with sem:</code></td></tr>
-<tr><td>startswith</td><td><code>s.startswith("prefix")</code></td></tr>
-<tr><td>split</td><td><code>s.split("/")</code></td></tr>
-<tr><td>defaultdict</td><td><code>defaultdict(list)</code> / <code>defaultdict(int)</code></td></tr>
 </table>
 
-<script>
-// 1. highlight.js
-document.querySelectorAll('pre code.language-python').forEach(block => {
-    // Save markers before highlighting
-    const lines = block.textContent.split('\n');
-    const markers = lines.map(line => {
-        if (line.includes('#SK')) return 'sk';
-        if (line.includes('#CH')) return 'ch';
-        return '';
-    });
-    // Remove markers from code
-    block.textContent = lines.map(l => l.replace(/\s*#SK\b/, '').replace(/\s*#CH\b/, '')).join('\n');
-    hljs.highlightElement(block);
-    // Wrap each line with highlight class
-    const highlighted = block.innerHTML.split('\n');
-    block.innerHTML = highlighted.map((line, i) => {
-        const cls = markers[i] === 'sk' ? 'sk-line' : markers[i] === 'ch' ? 'ch-line' : '';
-        if (line.trim() === '') return line;
-        return `<span class="${cls}" style="display:inline-block;width:100%;padding:0 4px;">${line}</span>`;
-    }).join('\n');
-});
+<div style="margin-top:40px; padding:16px; background:#161b22; border-radius:8px; text-align:center; color:#8b949e; font-size:13px;">
+Built by Nicole · <a href="https://github.com/ithiria894" style="color:#58a6ff;">github.com/ithiria894</a>
+</div>
 
-// 2. Copy All buttons
+<style>
+.line-wrap { position: relative; display: inline; }
+.line-wrap:hover { background: rgba(255,255,255,0.05); }
+.line-copy { background: #30363d; color: #8b949e; border: none; padding: 0px 4px; border-radius: 3px; cursor: pointer; font-size: 9px; opacity: 0; transition: opacity 0.15s; margin-right: 4px; }
+.line-wrap:hover .line-copy { opacity: 1; }
+.line-copy:hover { background: #484f58; color: #e6edf3; }
+</style>
+<script>
+// Block-level copy button
 document.querySelectorAll('pre').forEach(pre => {
     const btn = document.createElement('button');
-    btn.className = 'copy-all';
+    btn.className = 'copy-btn';
     btn.textContent = 'Copy All';
     btn.onclick = () => {
         const code = pre.querySelector('code') || pre;
@@ -363,6 +357,23 @@ document.querySelectorAll('pre').forEach(pre => {
         setTimeout(() => btn.textContent = 'Copy All', 1500);
     };
     pre.parentNode.insertBefore(btn, pre);
+});
+
+// Per-line copy button for skeleton lines
+document.querySelectorAll('pre code').forEach(code => {
+    const html = code.innerHTML;
+    const lines = html.split('\n');
+    const newLines = lines.map(line => {
+        if (line.trim() === '') return line;
+        // Extract plain text for clipboard
+        const temp = document.createElement('span');
+        temp.innerHTML = line;
+        const plainText = temp.textContent.replace(/# ←.*$/, '').replace(/# ----.*$/, '').trimEnd();
+        if (plainText.trim() === '') return line;
+        const escaped = plainText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        return `<span class="line-wrap"><button class="line-copy" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button>${line}</span>`;
+    });
+    code.innerHTML = newLines.join('\n');
 });
 </script>
 

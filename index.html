@@ -49,6 +49,7 @@ nav a:hover { color: #79c0ff; }
 <a href="#l6">L6 Rate Limit</a>
 <a href="#gotchas">Gotchas</a>
 <a href="#errors">Errors</a>
+<a href="#quick">Quick Ref</a>
 </nav>
 
 <h1>Nicole's Python Field Manual</h1>
@@ -304,7 +305,7 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 <p class="note">口訣：1. 睇 Error 類型  2. 睇 > 嗰行（test 點 call 你）  3. 對比你嘅 code</p>
 
 <!-- ============ QUICK REF ============ -->
-<h2>Quick Reference</h2>
+<h2 id="quick">Quick Reference</h2>
 <table>
 <tr><th>要做咩</th><th>Code</th></tr>
 <tr><td>建空 dict</td><td><code>d = {}</code></td></tr>
@@ -332,19 +333,44 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 Built by Nicole · <a href="https://github.com/ithiria894" style="color:#58a6ff;">github.com/ithiria894</a>
 </div>
 
+<style>
+.line-wrap { position: relative; display: block; padding-right: 50px; }
+.line-wrap:hover { background: rgba(255,255,255,0.03); }
+.line-copy { position: absolute; right: 2px; top: 0; background: #30363d; color: #8b949e; border: none; padding: 1px 6px; border-radius: 3px; cursor: pointer; font-size: 10px; opacity: 0; transition: opacity 0.15s; }
+.line-wrap:hover .line-copy { opacity: 1; }
+.line-copy:hover { background: #484f58; color: #e6edf3; }
+</style>
 <script>
+// Block-level copy button
 document.querySelectorAll('pre').forEach(pre => {
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
-    btn.textContent = 'Copy';
+    btn.textContent = 'Copy All';
     btn.onclick = () => {
         const code = pre.querySelector('code') || pre;
         navigator.clipboard.writeText(code.textContent);
         btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = 'Copy', 1500);
+        setTimeout(() => btn.textContent = 'Copy All', 1500);
     };
     pre.style.position = 'relative';
     pre.appendChild(btn);
+});
+
+// Per-line copy button for skeleton lines
+document.querySelectorAll('pre code').forEach(code => {
+    const html = code.innerHTML;
+    const lines = html.split('\n');
+    const newLines = lines.map(line => {
+        if (line.trim() === '') return line;
+        // Extract plain text for clipboard
+        const temp = document.createElement('span');
+        temp.innerHTML = line;
+        const plainText = temp.textContent.replace(/# ←.*$/, '').replace(/# ----.*$/, '').trimEnd();
+        if (plainText.trim() === '') return line;
+        const escaped = plainText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        return `<span class="line-wrap">${line}<button class="line-copy" onclick="navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button></span>`;
+    });
+    code.innerHTML = newLines.join('\n');
 });
 </script>
 

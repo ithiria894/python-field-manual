@@ -63,6 +63,7 @@ body { margin-left: 96px; }
 <nav>
 <button class="sys-btn active" onclick="switchSystem('bank')">Bank</button>
 <button class="sys-btn" onclick="switchSystem('hotel')">Hotel</button>
+<button class="sys-btn" onclick="switchSystem('inmemdb')">InMemDB</button>
 <button class="sys-btn" onclick="switchSystem('domains')">Domains</button>
 <div class="nav-divider"></div>
 <a href="#imports">Imports</a>
@@ -867,6 +868,401 @@ f"(Alice,200)"       ❌ string
     <span class="sk">return list(results)</span></code></pre>
 
 </div><!-- end sys-hotel -->
+
+<div id="sys-inmemdb" class="sys-section">
+
+<div class="legend">
+InMemDB vs Bank 核心分別：<b>兩層 dict</b>（key → field → {value, expiry}），TTL 用 <b>inline check</b> 唔係 lazy delete，L2 return <b>string</b> 唔係 list，L6 係 <b>all-sleep</b>
+</div>
+
+<!-- ============ INMEMDB INIT ============ -->
+<h2 id="inmemdb-init">__init__</h2>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">class</span> <span class="ch">InMemoryDB</span><span class="sk">:</span>
+    <span class="sk">def __init__(self):</span>
+        <span class="sk">self.</span><span class="ch">data</span><span class="sk"> = {}</span>                                   <span class="cm"># L1</span>
+        <span class="ch">self.backups = []</span>                               <span class="cm"># L4 加</span>
+        <span class="sk">self.</span><span class="ch">key</span><span class="sk">_locks = defaultdict(asyncio.Lock)</span>        <span class="cm"># L5 加</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">self.data 嘅樣（Spreadsheet）：</div>
+<pre><code>#          | name          | email          | session
+# ---------+---------------+----------------+------------------
+#  user1   | {val, expiry} | {val, expiry}  | {val, expiry:60}
+#  user2   | {val, expiry} |                |
+
+self.data = {
+    "user1": {
+        "name":    {"value": "alice",   "expiry": None},
+        "email":   {"value": "a@b.com", "expiry": None},
+        "session": {"value": "abc",     "expiry": 60},
+    },
+    "user2": {
+        "name":    {"value": "bob",     "expiry": None},
+    },
+}
+# key = 行, field = 欄
+# 每格 = {"value": ..., "expiry": ...}
+# 攞 value: self.data[key][field]["value"]</code></pre>
+</div></div>
+
+<!-- ============ INMEMDB L1 ============ -->
+<h2 id="inmemdb-l1">L1 — CRUD (set / get / delete)</h2>
+<p class="note">兩層 dict。set 冇 return。get return "" if missing。delete return True/False。</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">set</span><span class="sk">(self,</span> <span class="ch">key, field, value</span><span class="sk">):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">:</span>
+        <span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">] = {}</span>           <span class="cm"># 開新行</span>
+    <span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">] = {</span>
+        <span class="str">"value"</span><span class="sk">:</span> <span class="ch">value</span><span class="sk">,</span>
+        <span class="str">"expiry"</span><span class="sk">: None</span>              <span class="cm"># L3 會用</span>
+    <span class="sk">}</span>
+
+<span class="sk">def</span> <span class="ch">get</span><span class="sk">(self,</span> <span class="ch">key, field</span><span class="sk">):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span> <span class="sk">or</span> <span class="ch">field</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]:</span>
+        <span class="sk">return</span> <span class="str">""</span>                  <span class="cm"># 唔係 None！</span>
+    <span class="sk">return self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">][</span><span class="str">"value"</span><span class="sk">]</span>
+
+<span class="sk">def</span> <span class="ch">delete</span><span class="sk">(self,</span> <span class="ch">key, field</span><span class="sk">):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span> <span class="sk">or</span> <span class="ch">field</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]:</span>
+        <span class="sk">return False</span>
+    <span class="sk">del self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">]</span>
+    <span class="sk">if not self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]:</span>          <span class="cm"># 行冇欄了</span>
+        <span class="sk">del self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]</span>        <span class="cm"># 刪行</span>
+    <span class="sk">return True</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">set("user1","name","alice") 之後：</div>
+<pre><code>self.data = {
+    "user1": {
+        "name": {"value": "alice", "expiry": None}
+    }
+}</code></pre>
+<div class="label">set("user1","email","a@b.com") 之後：</div>
+<pre><code>self.data = {
+    "user1": {
+        "name":  {"value": "alice",   "expiry": None},
+        "email": {"value": "a@b.com", "expiry": None},
+    }
+}
+# 同一個 key 入面加多一個 field</code></pre>
+<div class="label">get("user1","name") →</div>
+<pre><code>data["user1"]["name"]["value"]  →  "alice"</code></pre>
+<div class="label">get("user1","age") →</div>
+<pre><code>"age" not in data["user1"]  →  ""</code></pre>
+<div class="label">vs Bank L1:</div>
+<pre><code># Bank: return None if missing
+# InMemDB: return "" if missing
+
+# Bank: self.accounts["alice"] = {"balance":0}  (一層)
+# InMemDB: self.data["user1"]["name"] = {...}   (兩層)</code></pre>
+</div></div>
+
+<!-- ============ INMEMDB L2 ============ -->
+<h2 id="inmemdb-l2">L2 — Scan (scan / scan_by_prefix)</h2>
+<p class="note">Return 一條 string（唔係 list！）。sorted by field name alphabetically。format: "field(value), field(value)"</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">scan</span><span class="sk">(self,</span> <span class="ch">key</span><span class="sk">):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+    <span class="sk">fields = sorted(self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">].keys())</span>
+    <span class="sk">if not fields:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+    <span class="sk">parts = [</span><span class="str">f"{f}({</span><span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][f][</span><span class="str">'value'</span><span class="sk">]</span><span class="str">})"</span> <span class="sk">for f in fields]</span>
+    <span class="sk">return</span> <span class="str">", "</span><span class="sk">.join(parts)</span>
+
+<span class="sk">def</span> <span class="ch">scan_by_prefix</span><span class="sk">(self,</span> <span class="ch">key, prefix</span><span class="sk">):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+    <span class="sk">fields = sorted(</span>
+        <span class="sk">f for f in self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]</span>
+        <span class="sk">if f.startswith(</span><span class="ch">prefix</span><span class="sk">)</span>
+    <span class="sk">)</span>
+    <span class="sk">if not fields:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+    <span class="sk">parts = [</span><span class="str">f"{f}({</span><span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][f][</span><span class="str">'value'</span><span class="sk">]</span><span class="str">})"</span> <span class="sk">for f in fields]</span>
+    <span class="sk">return</span> <span class="str">", "</span><span class="sk">.join(parts)</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">假設 data：</div>
+<pre><code>data["user1"] = {
+    "addr_city": {"value":"NYC",    "expiry":None},
+    "addr_zip":  {"value":"10001",  "expiry":None},
+    "name":      {"value":"alice",  "expiry":None},
+}</code></pre>
+<div class="label">scan("user1") →</div>
+<pre><code>sorted fields: [addr_city, addr_zip, name]
+→ "addr_city(NYC), addr_zip(10001), name(alice)"
+#  ↑ 一條 string，唔係 list</code></pre>
+<div class="label">scan_by_prefix("user1", "addr_") →</div>
+<pre><code>filter: addr_city ✅  addr_zip ✅  name ❌
+→ "addr_city(NYC), addr_zip(10001)"</code></pre>
+<div class="label">vs Bank L2:</div>
+<pre><code># Bank: return list ["alice(500)", "bob(200)"]
+#       sort by value DESC, tie by name ASC
+# InMemDB: return string "a(1), b(2)"
+#          sort by field name ASC only</code></pre>
+</div></div>
+
+<!-- ============ INMEMDB L3 ============ -->
+<h2 id="inmemdb-l3">L3 — TTL (set_at / set_at_with_ttl / get_at / delete_at / scan_at)</h2>
+<p class="note">唔用 lazy helper。用 inline _is_alive check。過期嘅唔真刪，只係跳過。</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="cm"># helper：呢個 field 而家仲活唔活？</span>
+<span class="sk">def _is_alive(self, field_data, timestamp=None):</span>
+    <span class="sk">if field_data[</span><span class="str">"expiry"</span><span class="sk">] is None:</span>    <span class="cm"># 冇 TTL → 永遠活</span>
+        <span class="sk">return True</span>
+    <span class="sk">if timestamp is None:</span>              <span class="cm"># L1/L2 冇 ts → 當活</span>
+        <span class="sk">return True</span>
+    <span class="sk">return timestamp &lt; field_data[</span><span class="str">"expiry"</span><span class="sk">]</span>  <span class="cm"># &lt; 唔係 &lt;=</span>
+
+<span class="sk">def</span> <span class="ch">set_at</span><span class="sk">(self,</span> <span class="ch">key, field, value</span><span class="sk">, timestamp):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">:</span>
+        <span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">] = {}</span>
+    <span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">] = {</span><span class="str">"value"</span><span class="sk">:</span> <span class="ch">value</span><span class="sk">,</span> <span class="str">"expiry"</span><span class="sk">: None}</span>
+
+<span class="sk">def</span> <span class="ch">set_at_with_ttl</span><span class="sk">(self,</span> <span class="ch">key, field, value</span><span class="sk">, timestamp, ttl):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">:</span>
+        <span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">] = {}</span>
+    <span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">] = {</span><span class="str">"value"</span><span class="sk">:</span> <span class="ch">value</span><span class="sk">,</span> <span class="str">"expiry"</span><span class="sk">: timestamp + ttl}</span>
+
+<span class="sk">def</span> <span class="ch">get_at</span><span class="sk">(self,</span> <span class="ch">key, field</span><span class="sk">, timestamp):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span> <span class="sk">or</span> <span class="ch">field</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+    <span class="sk">fd = self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">]</span>
+    <span class="sk">if not self._is_alive(fd, timestamp):</span>
+        <span class="sk">return</span> <span class="str">""</span>                       <span class="cm"># 過期 → 當冇</span>
+    <span class="sk">return fd[</span><span class="str">"value"</span><span class="sk">]</span>
+
+<span class="sk">def</span> <span class="ch">delete_at</span><span class="sk">(self,</span> <span class="ch">key, field</span><span class="sk">, timestamp):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span> <span class="sk">or</span> <span class="ch">field</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]:</span>
+        <span class="sk">return False</span>
+    <span class="sk">if not self._is_alive(self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">], timestamp):</span>
+        <span class="sk">return False</span>                    <span class="cm"># 已死 = 當唔存在</span>
+    <span class="sk">del self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][</span><span class="ch">field</span><span class="sk">]</span>
+    <span class="sk">if not self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]: del self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]</span>
+    <span class="sk">return True</span>
+
+<span class="sk">def</span> <span class="ch">scan_at</span><span class="sk">(self,</span> <span class="ch">key</span><span class="sk">, timestamp):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+    <span class="sk">fields = sorted(</span>
+        <span class="sk">f for f in self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]</span>
+        <span class="sk">if self._is_alive(self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][f], timestamp)</span>
+    <span class="sk">)</span>
+    <span class="sk">if not fields: return</span> <span class="str">""</span>
+    <span class="sk">parts = [</span><span class="str">f"{f}({</span><span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][f][</span><span class="str">'value'</span><span class="sk">]</span><span class="str">})"</span> <span class="sk">for f in fields]</span>
+    <span class="sk">return</span> <span class="str">", "</span><span class="sk">.join(parts)</span>
+
+<span class="sk">def</span> <span class="ch">scan_by_prefix_at</span><span class="sk">(self,</span> <span class="ch">key, prefix</span><span class="sk">, timestamp):</span>
+    <span class="sk">if</span> <span class="ch">key</span> <span class="sk">not in self.</span><span class="ch">data</span><span class="sk">:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+    <span class="sk">fields = sorted(</span>
+        <span class="sk">f for f in self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">]</span>
+        <span class="sk">if f.startswith(</span><span class="ch">prefix</span><span class="sk">) and self._is_alive(self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][f], timestamp)</span>
+    <span class="sk">)</span>
+    <span class="sk">if not fields: return</span> <span class="str">""</span>
+    <span class="sk">parts = [</span><span class="str">f"{f}({</span><span class="sk">self.</span><span class="ch">data</span><span class="sk">[</span><span class="ch">key</span><span class="sk">][f][</span><span class="str">'value'</span><span class="sk">]</span><span class="str">})"</span> <span class="sk">for f in fields]</span>
+    <span class="sk">return</span> <span class="str">", "</span><span class="sk">.join(parts)</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">set_at_with_ttl 之後：</div>
+<pre><code>set_at("u1", "name", "alice", 10)
+set_at_with_ttl("u1", "session", "s1", 10, 50)
+set_at_with_ttl("u1", "cache",   "c1", 10, 20)
+
+data["u1"] = {
+    "name":    {"value":"alice","expiry":None},  # 永遠活
+    "session": {"value":"s1",  "expiry":60},     # 10+50=60
+    "cache":   {"value":"c1",  "expiry":30},     # 10+20=30
+}</code></pre>
+<div class="label">時間線：</div>
+<pre><code>時間:  10 --- 25 --- 30 --- 35 --- 60 --- 999
+name:    ✅     ✅     ✅     ✅     ✅     ✅
+session: ✅     ✅     ✅     ✅     ❌     ❌
+cache:   ✅     ✅     ❌     ❌     ❌     ❌
+                       ↑ 30 < 30? No → dead</code></pre>
+<div class="label">get_at 例子：</div>
+<pre><code>get_at("u1","session",59) → 59<60 → alive → "s1"
+get_at("u1","session",60) → 60<60 → NO → dead → ""
+get_at("u1","name",999)   → expiry=None → alive → "alice"</code></pre>
+<div class="label">scan_at("u1", 25) →</div>
+<pre><code>cache:25<30 ✅  name:None ✅  session:25<60 ✅
+→ "cache(c1), name(alice), session(s1)"</code></pre>
+<div class="label">scan_at("u1", 35) →</div>
+<pre><code>cache:35<30? ❌ DEAD   name:✅   session:35<60 ✅
+→ "name(alice), session(s1)"</code></pre>
+<div class="label">delete_at("u1","cache",35) →</div>
+<pre><code>cache: 35<30? NO → DEAD → return False
+# 已死嘅 field 你 delete 唔到</code></pre>
+<div class="label">vs Bank L3:</div>
+<pre><code># Bank: _process_cashbacks(ts) → 真正 delete
+# InMemDB: _is_alive(fd, ts) → 唔真刪，check 時跳過
+
+# ⚠️ TTL boundary: ts < expiry (strictly less than)
+# ts=60, expiry=60 → DEAD</code></pre>
+</div></div>
+
+<!-- ============ INMEMDB L4 ============ -->
+<h2 id="inmemdb-l4">L4 — Backup & Restore</h2>
+<p class="note">backup 存 remaining_ttl（唔係 expiry！），restore 用 remaining_ttl 重新計 expiry</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">backup</span><span class="sk">(self, timestamp):</span>
+    <span class="sk">snapshot = {}</span>
+    <span class="sk">count = 0</span>
+    <span class="sk">for key, fields in self.</span><span class="ch">data</span><span class="sk">.items():</span>
+        <span class="sk">alive_fields = {}</span>
+        <span class="sk">for field, fd in fields.items():</span>
+            <span class="sk">if self._is_alive(fd, timestamp):</span>
+                <span class="sk">remaining = None</span>
+                <span class="sk">if fd[</span><span class="str">"expiry"</span><span class="sk">] is not None:</span>
+                    <span class="sk">remaining = fd[</span><span class="str">"expiry"</span><span class="sk">] - timestamp</span>  <span class="cm"># 仲剩幾耐</span>
+                <span class="sk">alive_fields[field] = {</span>
+                    <span class="str">"value"</span><span class="sk">: fd[</span><span class="str">"value"</span><span class="sk">],</span>
+                    <span class="str">"remaining_ttl"</span><span class="sk">: remaining</span>
+                <span class="sk">}</span>
+        <span class="sk">if alive_fields:</span>
+            <span class="sk">snapshot[key] = alive_fields</span>
+            <span class="sk">count += 1</span>
+    <span class="sk">self.backups.append((timestamp, snapshot))</span>
+    <span class="sk">return count</span>
+
+<span class="sk">def</span> <span class="ch">restore</span><span class="sk">(self, timestamp, backup_timestamp):</span>
+    <span class="sk">best = None</span>
+    <span class="sk">for ts, snap in self.backups:</span>
+        <span class="sk">if ts &lt;= backup_timestamp:</span>         <span class="cm"># at or before</span>
+            <span class="sk">if best is None or ts > best[0]:</span>
+                <span class="sk">best = (ts, snap)</span>
+    <span class="sk">if best is None:</span>
+        <span class="sk">return</span> <span class="str">""</span>
+
+    <span class="sk">_, snapshot = best</span>
+    <span class="sk">self.</span><span class="ch">data</span><span class="sk"> = {}</span>                          <span class="cm"># 清空</span>
+    <span class="sk">count = 0</span>
+    <span class="sk">for key, fields in snapshot.items():</span>
+        <span class="sk">self.</span><span class="ch">data</span><span class="sk">[key] = {}</span>
+        <span class="sk">for field, fd in fields.items():</span>
+            <span class="sk">expiry = None</span>
+            <span class="sk">if fd[</span><span class="str">"remaining_ttl"</span><span class="sk">] is not None:</span>
+                <span class="sk">expiry = timestamp + fd[</span><span class="str">"remaining_ttl"</span><span class="sk">]</span>  <span class="cm"># 重算</span>
+            <span class="sk">self.</span><span class="ch">data</span><span class="sk">[key][field] = {</span>
+                <span class="str">"value"</span><span class="sk">: fd[</span><span class="str">"value"</span><span class="sk">],</span>
+                <span class="str">"expiry"</span><span class="sk">: expiry</span>
+            <span class="sk">}</span>
+        <span class="sk">if self.</span><span class="ch">data</span><span class="sk">[key]: count += 1</span>
+    <span class="sk">return str(count)</span>                      <span class="cm"># return string！</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">backup(40) 做咩：</div>
+<pre><code># session expiry=60, name expiry=None
+
+backup 存嘅：
+snapshot = {
+    "u1": {
+        "name":    {"value":"alice", "remaining_ttl": None},
+        "session": {"value":"s1",    "remaining_ttl": 20},
+    }                          #  60 - 40 = 20 (仲剩 20)
+}</code></pre>
+<div class="label">restore(200, 40) 做咩：</div>
+<pre><code># 搵 backup: ts=40 <= 40 ✅ → 用呢個
+# session: remaining=20 → new expiry = 200+20 = 220
+# name: remaining=None → expiry = None
+
+data 變成：
+{
+    "u1": {
+        "name":    {"value":"alice", "expiry": None},
+        "session": {"value":"s1",    "expiry": 220},
+    }
+}
+# session 又活多 20 個 time unit</code></pre>
+<div class="label">vs Bank L4:</div>
+<pre><code># Bank: copy.deepcopy(self.accounts) → 直接 copy
+# InMemDB: 存 remaining_ttl，restore 再計 new expiry
+#          呢個係 InMemDB 最 unique 嘅位
+
+# Bank merge: return True/False (bool)
+# InMemDB restore: return str(count) 或 "" (string！)</code></pre>
+</div></div>
+
+<!-- ============ INMEMDB L5 ============ -->
+<h2 id="inmemdb-l5">L5 — Batch (batch_operations)</h2>
+<p class="note">同 Bank L5 一模一樣嘅 pattern。lock per key。set return None。</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">async def</span> <span class="ch">batch_operations</span><span class="sk">(self, operations):</span>
+    <span class="sk">async def execute_op(op):</span>
+        <span class="sk">key = op.get(</span><span class="str">"key"</span><span class="sk">,</span> <span class="str">""</span><span class="sk">)</span>
+        <span class="sk">lock = self.</span><span class="ch">key</span><span class="sk">_locks[key]</span>
+        <span class="sk">async with lock:</span>
+            <span class="sk">if op[</span><span class="str">"type"</span><span class="sk">] ==</span> <span class="str">"set"</span><span class="sk">:</span>
+                <span class="sk">self.</span><span class="ch">set</span><span class="sk">(op[</span><span class="str">"key"</span><span class="sk">], op[</span><span class="str">"field"</span><span class="sk">], op[</span><span class="str">"value"</span><span class="sk">])</span>
+                <span class="sk">return None</span>                 <span class="cm"># set 冇 return</span>
+            <span class="sk">elif op[</span><span class="str">"type"</span><span class="sk">] ==</span> <span class="str">"get"</span><span class="sk">:</span>
+                <span class="sk">return self.</span><span class="ch">get</span><span class="sk">(op[</span><span class="str">"key"</span><span class="sk">], op[</span><span class="str">"field"</span><span class="sk">])</span>
+            <span class="sk">elif op[</span><span class="str">"type"</span><span class="sk">] ==</span> <span class="str">"delete"</span><span class="sk">:</span>
+                <span class="sk">return self.</span><span class="ch">delete</span><span class="sk">(op[</span><span class="str">"key"</span><span class="sk">], op[</span><span class="str">"field"</span><span class="sk">])</span>
+            <span class="sk">elif op[</span><span class="str">"type"</span><span class="sk">] ==</span> <span class="str">"scan"</span><span class="sk">:</span>
+                <span class="sk">return self.</span><span class="ch">scan</span><span class="sk">(op[</span><span class="str">"key"</span><span class="sk">])</span>
+        <span class="sk">return None</span>
+
+    <span class="sk">results = await asyncio.gather(*[execute_op(op) for op in operations])</span>
+    <span class="sk">return list(results)</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">例子：</div>
+<pre><code>ops = [
+    {"type":"set","key":"u1","field":"name","value":"alice"},
+    {"type":"get","key":"u1","field":"name"},
+    {"type":"delete","key":"u2","field":"x"},
+]
+→ [None, "alice", False]</code></pre>
+<div class="label">pattern（同 Bank 一樣）：</div>
+<pre><code># 1. lock per KEY（唔係 per field）
+# 2. async with lock: 入面 call sync method
+# 3. asyncio.gather(*[...]) 同時跑
+# 4. set return None</code></pre>
+</div></div>
+
+<!-- ============ INMEMDB L6 ============ -->
+<h2 id="inmemdb-l6">L6 — Rate-Limited Scan (batch_scan)</h2>
+<p class="note"><span class="warn">All-sleep</span> — 全部 key 都 sleep，冇 fail-fast。同 Bank L6 唔同！</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">async def</span> <span class="ch">batch_scan</span><span class="sk">(self, keys, max_concurrent):</span>
+    <span class="sk">sem = asyncio.Semaphore(max_concurrent)</span>
+
+    <span class="sk">async def scan_key(key):</span>
+        <span class="sk">async with sem:</span>                  <span class="cm"># 全部都攞 sem</span>
+            <span class="sk">await asyncio.sleep(0.01)</span>    <span class="cm"># 全部都 sleep</span>
+            <span class="sk">return (key, self.</span><span class="ch">scan</span><span class="sk">(key))</span>
+
+    <span class="sk">results = await asyncio.gather(*[scan_key(k) for k in keys])</span>
+    <span class="sk">return dict(results)</span>             <span class="cm"># return dict 唔係 list</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">All-sleep vs Fail-fast：</div>
+<pre><code># Bank L6 (fail-fast):
+#   check 喺 sem 之前
+#   失敗 → return False，唔 sleep
+#
+# InMemDB L6 (all-sleep):
+#   冇 check，全部 sleep
+#   key 唔存在？scan return "" → 照 sleep</code></pre>
+<div class="label">例子：</div>
+<pre><code>keys = ["u1", "u2", "nokey"]
+max_concurrent = 2
+
+# 第一輪（同時 2 個）: u1 + u2 → sleep
+# 第二輪: nokey → sleep
+→ {"u1":"name(alice)","u2":"name(bob)","nokey":""}
+
+# return dict，唔係 list</code></pre>
+<div class="label">點分 fail-fast vs all-sleep：</div>
+<pre><code># spec 講 "skip missing without I/O" → fail-fast
+# spec 講 "scan all keys" → all-sleep
+# InMemDB: 冇 fail path → all-sleep</code></pre>
+</div></div>
+
+</div><!-- end sys-inmemdb -->
 
 <div id="sys-domains" class="sys-section">
 <h2>Domain Quick Reference</h2>

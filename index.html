@@ -521,8 +521,9 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 <div class="split-left">
 <pre><code><span class="sk">class</span> <span class="ch">HotelSystem</span><span class="sk">:</span>
     <span class="sk">def __init__(self):</span>
-        <span class="sk">self.</span><span class="ch">rooms</span><span class="sk">={}</span>                       <span class="cm"># L1</span>
-        <span class="ch">self.booking_counter = 0</span>            <span class="cm"># L1</span></code></pre>
+        <span class="sk">self.</span><span class="ch">rooms</span><span class="sk">={}</span>                                       <span class="cm"># L1</span>
+        <span class="ch">self.booking_counter = 0</span>                             <span class="cm"># L1</span>
+        <span class="sk">self.rooms_locks = defaultdict(asyncio.Lock)</span>         <span class="cm"># L5 加</span></code></pre>
 </div><div class="resizer"></div><div class="split-right">
 <div class="label">self.rooms 實際樣子：</div>
 <pre><code>{
@@ -817,6 +818,53 @@ f"(Alice,200)"       ❌ string
 #    每個 method 只做 spec 講嘅嘢</code></pre>
 </div>
 </div>
+
+<!-- ============ HOTEL L5 ============ -->
+<h2 id="h-l5">L5 — Concurrent Batch（Hotel）</h2>
+<p class="note">同時處理 book / checkout / upgrade。Lock per room。</p>
+<pre><code><span class="sk">async def</span> <span class="ch">batch_operations</span><span class="sk">(self, timestamp,</span> <span class="ch">operations</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">late_fee</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">async def execute_op(op):</span>
+        <span class="sk">rid = op.get(</span><span class="ch">"room_id"</span><span class="sk">) or op.get(</span><span class="ch">"to_room_id"</span><span class="sk">)</span>   <span class="cm"># upgrade 用 to_room_id</span>
+        <span class="sk">lock = self.rooms_locks[rid]</span>
+        <span class="sk">async with lock:</span>
+            <span class="ch">if op["type"] == "book":</span>
+                <span class="ch">return self.book_room(timestamp, op["room_id"], op["guest_name"], op["nights"])</span>
+            <span class="ch">elif op["type"] == "checkout":</span>
+                <span class="ch">return self.checkout(timestamp, op["room_id"])</span>
+            <span class="ch">elif op["type"] == "upgrade":</span>
+                <span class="ch">return self.upgrade_room(timestamp, op["from_room_id"], op["to_room_id"])</span>
+
+    <span class="sk">results = await asyncio.gather(*[execute_op(op) for op in operations])</span>
+    <span class="sk">return list(results)</span></code></pre>
+
+<!-- ============ HOTEL L6 ============ -->
+<h2 id="h-l6">L6 — Rate Limited Notifications（Hotel）</h2>
+<p class="note">同時 send notifications。Failed（room 唔存在或 guest 唔啱）唔 sleep。</p>
+<pre><code><span class="sk">async def</span> <span class="ch">send_notifications</span><span class="sk">(self, timestamp,</span> <span class="ch">notifications</span><span class="sk">,</span> <span class="ch">max_concurrent</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">late_fee</span><span class="sk">(timestamp)</span>
+    <span class="sk">sem = asyncio.Semaphore(</span><span class="ch">max_concurrent</span><span class="sk">)</span>
+
+    <span class="sk">async def</span> <span class="ch">do_notification</span><span class="sk">(t):</span>
+        <span class="sk">rid =</span> <span class="ch">t["room_id"]</span>
+        <span class="sk">lock = self.rooms_locks[rid]</span>
+
+        <span class="sk">async with lock:</span>
+            <span class="ch">if rid not in self.rooms:</span>
+                <span class="ch">return False</span>
+            <span class="ch">if self.rooms[rid]["guest_name"] != t["guest_name"]:</span>
+                <span class="ch">return False</span>
+            <span class="ch">if self.rooms[rid]["guest_name"] == "":</span>
+                <span class="ch">return False</span>
+
+        <span class="sk">async with sem:</span>                       <span class="cm"># 過咗 check 先用 sem</span>
+            <span class="sk">await asyncio.sleep(0.01)</span>
+
+        <span class="sk">return True</span>
+
+    <span class="sk">results = await asyncio.gather(*[</span><span class="ch">do_notification</span><span class="sk">(t) for t in</span> <span class="ch">notifications</span><span class="sk">])</span>
+    <span class="sk">return list(results)</span></code></pre>
 
 </div><!-- end sys-hotel -->
 

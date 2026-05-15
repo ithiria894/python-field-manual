@@ -96,6 +96,7 @@ body { margin-left: 96px; }
 
 <!-- ============ LEVEL 1 ============ -->
 <h2 id="l1">L1 — CRUD</h2>
+<p class="note">建 account，存錢（deposit），轉賬（transfer）。每個 method check 存唔存在 + return 適當嘅值。</p>
 
 <h3>__init__（完整 example）</h3>
 <div class="split">
@@ -245,6 +246,7 @@ t_acc["balance"] += 200         ← bob 變 400</code></pre>
 
 <!-- ============ LEVEL 2 ============ -->
 <h2 id="l2">L2 — Sort / Filter / Format</h2>
+<p class="note">排名（top_spenders）：按 outgoing desc 排，同分按名 asc。Return format "name(value)"。</p>
 
 <h3>排序 + format（完整 example）</h3>
 <div class="split">
@@ -295,6 +297,7 @@ f"{account_id}({acc['outgoing']})"
 
 <!-- ============ LEVEL 3 ============ -->
 <h2 id="l3">L3 — Timestamp / TTL / Lazy Processing</h2>
+<p class="note">pay 扣錢 + schedule cashback（24h 後自動入賬）。每個 method 開頭 call _process_cashbacks 處理到期嘅。get_payment_status return "IN_PROGRESS" 或 "CASHBACK_RECEIVED"。</p>
 
 <div class="tip">
 <strong>Timestamp</strong> = 「而家幾點」，數字，大 = 遲<br>
@@ -344,6 +347,7 @@ f"{account_id}({acc['outgoing']})"
 
 <!-- ============ LEVEL 4 ============ -->
 <h2 id="l4">L4 — Backup / Merge / Historical Query</h2>
+<p class="note">get_balance(time_at) 查歷史某個時間嘅 balance（reversed loop history）。merge 合併兩個 account（balance + outgoing 加埋，del 第二個）。</p>
 
 <h3>歷史查詢（完整 example）</h3>
 <pre><code><span class="sk">def</span> <span class="ch">get_balance</span><span class="sk">(self, timestamp,</span> <span class="ch">account_id, time_at</span><span class="sk">):</span>
@@ -382,6 +386,7 @@ f"{account_id}({acc['outgoing']})"
 
 <!-- ============ LEVEL 5 ============ -->
 <h2 id="l5">L5 — Concurrent Batch Processing</h2>
+<p class="note">同時處理多個 operations。Skeleton：async def + execute_op + gather + lock。入面嘅 if/elif 因應題目改。抄 template 改幾行就得。</p>
 
 <h3>完整 example</h3>
 <p class="note">三步：1. 定義 execute_op  2. gather 同時跑  3. return list(results)</p>
@@ -406,6 +411,7 @@ f"{account_id}({acc['outgoing']})"
 
 <!-- ============ LEVEL 6 ============ -->
 <h2 id="l6">L6 — Rate Limited External Call</h2>
+<p class="note">同 L5 一樣但加 Semaphore 限制同時幾多個。Lock 包住改 data，Sem 包住外部 call（sleep）。Failed 嘅 return False 唔 sleep。抄 template 改 check + 扣錢嗰段就得。</p>
 
 <h3>完整 example</h3>
 <p class="note">同 L5 一樣，加 Semaphore。Lock 包住改 data，Sem 包住外部 call。唔好 return 太早。</p>

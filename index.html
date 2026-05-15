@@ -813,6 +813,20 @@ f"(Alice,200)"       ❌ string
 <h2>Domain Quick Reference</h2>
 <p class="note">考試見到唔熟嘅 domain？搵返類似嘅睇下 L1-L4 做咩。Pattern 永遠一樣。</p>
 
+<div class="tip">
+<strong>每個 domain 嘅 __init__ 都係呢四行開始：</strong>
+<pre><code>def __init__(self):
+    self.主要store = {}                           # L1
+    self.counter = 0                              # L1（如果要 generate ID）
+    self.pending_某嘢 = {} 或 []                   # L3（lazy processing）
+    self.locks = defaultdict(asyncio.Lock)         # L5</code></pre>
+<strong>邊啲擺外面，邊啲擺 entity 入面：</strong><br>
+<code>Counter</code> → 永遠外面（global sequential ID）<br>
+<code>Locks</code> → 永遠外面（per entity，L5-6 用）<br>
+<code>Pending list</code> → 外面或 entity 入面都得<br>
+<code>其他 data</code> → 擺 entity dict 入面
+</div>
+
 <input type="text" id="domain-search" placeholder="Search domain..." oninput="filterDomains()" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;color:#e6edf3;border-radius:4px;margin-bottom:12px;font-size:13px;">
 
 <div class="domain-card" data-tags="hashing distributed nodes routing">

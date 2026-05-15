@@ -36,8 +36,9 @@ td { padding: 8px; border: 1px solid #30363d; }
 .tip { background: #0e1c0e; border: 1px solid #3fb950; border-radius: 6px; padding: 10px; margin: 8px 0; }
 .legend { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin: 16px 0; font-size: 13px; }
 nav { position: fixed; top: 0; left: 0; width: 90px; height: 100vh; background: #161b22; border-right: 1px solid #30363d; padding: 10px 6px; z-index: 100; font-size: 11px; overflow-y: auto; }
-nav a { color: #58a6ff; text-decoration: none; display: block; padding: 4px 2px; }
+nav a { color: #58a6ff; text-decoration: none; display: block; padding: 4px 2px; border-left: 2px solid transparent; }
 nav a:hover { color: #79c0ff; }
+nav a.active { color: #f0c040; border-left: 2px solid #f0c040; }
 body { margin-left: 96px; }
 .split { display: flex; gap: 12px; }
 .split-left { flex: 3; min-width: 0; }
@@ -824,6 +825,20 @@ f"(Alice,200)"       ❌ string
 .line-copy:hover { background: #484f58; color: #e6edf3; }
 </style>
 <script>
+// Scroll spy — highlight current section in nav
+const navLinks = document.querySelectorAll('nav a[href^="#"]');
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            navLinks.forEach(a => a.classList.remove('active'));
+            const link = document.querySelector('nav a[href="#' + entry.target.id + '"]');
+            if (link) link.classList.add('active');
+        }
+    });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+document.querySelectorAll('h2[id]').forEach(h2 => observer.observe(h2));
+
 // System switcher
 function switchSystem(sys) {
     document.querySelectorAll('.sys-section').forEach(s => s.classList.remove('active'));

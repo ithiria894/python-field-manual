@@ -930,7 +930,6 @@ document.querySelectorAll('pre code').forEach(code => {
 let timerInterval = null;
 let startTime = localStorage.getItem('timer-start') ? parseInt(localStorage.getItem('timer-start')) : null;
 const TOTAL = 90 * 60;
-if (startTime) { toggleTimer(); }
 const levels = [
   {name:'L1', end:10*60, color:'#238636'},
   {name:'L2', end:20*60, color:'#1f6feb'},
@@ -997,6 +996,9 @@ function updateTimer() {
     levelEl.textContent = 'Should be on: ' + currentLevel;
   }
 }
+
+// Auto-resume on page load
+if (startTime) { toggleTimer(); updateTimer(); }
 </script>
 
 </body>

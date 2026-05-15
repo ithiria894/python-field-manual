@@ -40,12 +40,13 @@ nav a { color: #58a6ff; text-decoration: none; display: block; padding: 4px 2px;
 nav a:hover { color: #79c0ff; }
 nav a.active { color: #f0c040; border-left: 2px solid #f0c040; }
 body { margin-left: 96px; }
-.split { display: flex; gap: 12px; }
-.split-left { flex: 4; min-width: 0; }
+.split { display: flex; gap: 0; }
+.split-left { flex: 1; min-width: 0; }
 .split-right { flex: 1; min-width: 0; }
-.split-right pre { background: #1c2333; border-color: #2d4a7a; font-size: 10px; padding: 4px; line-height: 1.2; }
-.split-right code { font-size: 10px; }
-.split-right .label { font-size: 10px; }
+.split-right pre { background: #1c2333; border-color: #2d4a7a; font-size: 11px; padding: 6px; }
+.split-right code { font-size: 11px; }
+.resizer { width: 6px; background: #30363d; cursor: col-resize; flex-shrink: 0; border-radius: 3px; }
+.resizer:hover { background: #58a6ff; }
 .split-right .copy-btn, .split-right .copy-all { display: none; }
 .split-right .label { color: #58a6ff; font-size: 11px; margin-bottom: 4px; font-weight: bold; }
 .sys-btn { display: block; width: 100%; padding: 4px 2px; margin-bottom: 2px; border: 1px solid #30363d; border-radius: 3px; background: #0d1117; color: #8b949e; cursor: pointer; font-size: 10px; text-align: left; }
@@ -105,8 +106,7 @@ body { margin-left: 96px; }
         <span class="ch">self.payment = {}</span>                <span class="cm"># L3 加</span>
         <span class="ch">self.merged_accounts = {}</span>        <span class="cm"># L4 加</span>
         <span class="sk">self.account_locks = defaultdict(asyncio.Lock)</span> <span class="cm"># L5 加</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">self.accounts 實際樣子：</div>
 <pre><code>{
   "alice": {
@@ -169,8 +169,7 @@ print(bal)
     <span class="ch">acc["history"].append((timestamp, acc["balance"]))</span> <span class="cm"># L4 加</span>
 
     <span class="sk">return</span> <span class="ch">acc["balance"]</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">create_account(1, "alice") 之後：</div>
 <pre><code>self.accounts = {
   "alice": {
@@ -223,8 +222,7 @@ bal = d["alice"]["balance"] → copy，改 bal 唔影響</code></pre>
     <span class="ch">t_acc["history"].append((timestamp, t_acc["balance"]))</span> <span class="cm"># L4 加</span>
 
     <span class="sk">return</span> <span class="ch">s_acc["balance"]</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">transfer(5, "alice", "bob", 200) 之前：</div>
 <pre><code>"alice": {"balance": 500, "outgoing": 0}
 "bob":   {"balance": 200, "outgoing": 0}</code></pre>
@@ -263,8 +261,7 @@ t_acc["balance"] += 200         ← bob 變 400</code></pre>
         <span class="sk">result.append(f"</span><span class="ch">{account_id}({acc['outgoing']})</span><span class="sk">")</span>
 
     <span class="sk">return result[:</span><span class="ch">n</span><span class="sk">]</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">sorted 點運作：</div>
 <pre><code>self.accounts.items() 出嚟嘅 x：
 x = ("alice", {"balance":500, "outgoing":300})
@@ -521,8 +518,7 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
         <span class="ch">self.booking_counter = 0</span>          <span class="cm"># L1</span>
         <span class="ch">self.pending_fees = []</span>            <span class="cm"># L3 加</span>
         <span class="sk">self.account_locks = defaultdict(asyncio.Lock)</span> <span class="cm"># L5 加</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">self.rooms 實際樣子：</div>
 <pre><code>{
   "r1": {
@@ -597,8 +593,7 @@ guest_name != "" → occupied</code></pre>
     <span class="ch">room["history"].append((guest_name, room["price_per_night"] * room["nights"]))</span> <span class="cm"># L4 加</span>
 
     <span class="sk">return</span> <span class="ch">guest_name</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">book_room(1, "r1", "Alice", 2) 之後：</div>
 <pre><code>"r1": {
   "guest_name": "Alice",    ← 入住
@@ -661,8 +656,7 @@ if room["guest_name"] == "":  ← available</code></pre>
         <span class="sk">result.append(f"</span><span class="ch">{room_id}({room['revenue']})</span><span class="sk">")</span>
 
     <span class="sk">return result[:</span><span class="ch">n</span><span class="sk">]</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">find_available sort by price asc：</div>
 <pre><code>rooms = {
   "r1": {"price": 100, "guest": "Alice"},
@@ -713,8 +707,7 @@ if price_ok and room["guest_name"] == "":
 <pre><code><span class="sk">def</span> <span class="ch">get_pending_fees</span><span class="sk">(self, timestamp):</span>
     <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
     <span class="sk">return sum(</span><span class="ch">pf["fee"] for pf in self.pending_fees</span><span class="sk">)</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">late_checkout(100, "r1", 4)：</div>
 <pre><code>fee = 4 * 50 = 200
 deadline = 100 + 3600000 = 3600100
@@ -778,8 +771,7 @@ if guest_name != "":  ❌ guest 已經走咗
     <span class="ch">from_room["guest_name"] = ""</span>                    <span class="cm"># from 清空</span>
 
     <span class="sk">return True</span></code></pre>
-</div>
-<div class="split-right">
+</div><div class="resizer"></div><div class="split-right">
 <div class="label">upgrade_room(5, "r1", "r2")：</div>
 <pre><code>之前：
 "r1": {"guest":"Alice", "revenue":200}
@@ -996,6 +988,30 @@ function updateTimer() {
     levelEl.textContent = 'Should be on: ' + currentLevel;
   }
 }
+
+// Draggable resizer
+document.querySelectorAll('.resizer').forEach(resizer => {
+    let startX, leftW, rightW, left, right;
+    resizer.addEventListener('mousedown', e => {
+        left = resizer.previousElementSibling;
+        right = resizer.nextElementSibling;
+        startX = e.clientX;
+        leftW = left.offsetWidth;
+        rightW = right.offsetWidth;
+        document.addEventListener('mousemove', onDrag);
+        document.addEventListener('mouseup', () => document.removeEventListener('mousemove', onDrag));
+        e.preventDefault();
+    });
+    function onDrag(e) {
+        const dx = e.clientX - startX;
+        const total = leftW + rightW;
+        const newLeft = Math.max(200, Math.min(total - 100, leftW + dx));
+        left.style.flex = 'none';
+        right.style.flex = 'none';
+        left.style.width = newLeft + 'px';
+        right.style.width = (total - newLeft) + 'px';
+    }
+});
 
 // Auto-resume on page load
 if (startTime) { toggleTimer(); updateTimer(); }

@@ -61,8 +61,9 @@ body { margin-left: 96px; }
 <body>
 
 <nav>
-<button class="sys-btn active" onclick="switchSystem('bank')">Bank System</button>
-<button class="sys-btn" onclick="switchSystem('hotel')">Hotel v3</button>
+<button class="sys-btn active" onclick="switchSystem('bank')">Bank</button>
+<button class="sys-btn" onclick="switchSystem('hotel')">Hotel</button>
+<button class="sys-btn" onclick="switchSystem('domains')">Domains</button>
 <div class="nav-divider"></div>
 <a href="#imports">Imports</a>
 <a href="#l1">L1 CRUD</a>
@@ -807,6 +808,330 @@ f"(Alice,200)"       ❌ string
 </div>
 
 </div><!-- end sys-hotel -->
+
+<div id="sys-domains" class="sys-section">
+<h2>Domain Quick Reference</h2>
+<p class="note">考試見到唔熟嘅 domain？搵返類似嘅睇下 L1-L4 做咩。Pattern 永遠一樣。</p>
+
+<input type="text" id="domain-search" placeholder="Search domain..." oninput="filterDomains()" style="width:100%;padding:6px;background:#161b22;border:1px solid #30363d;color:#e6edf3;border-radius:4px;margin-bottom:12px;font-size:13px;">
+
+<div class="domain-card" data-tags="hashing distributed nodes routing">
+<h3>Consistent Hashing（Reddit 真題）</h3>
+<pre><code>L1: add_node / remove_node / assign_key(key)→搵最近 node
+    self.ring = {}    # position → node_id
+    self.sorted_pos = []  # bisect 搵最近
+
+L2: get_keys_for_node / get_node_load sorted
+
+L3: virtual nodes — 每個 node 有 N 個 position
+    hash(node_id + "_" + str(i))
+
+L4: snapshot + restore（deepcopy）
+
+L5: async batch_assign(keys) → gather + lock
+L6: async migrate(keys, max) → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="memory cache eviction lru">
+<h3>Memory / Cache Eviction（Reddit 真題）</h3>
+<pre><code>L1: set(key, value) / get(key) / delete(key)
+    self.cache = {}    # key → value
+    self.capacity = N
+
+L2: get_all_keys sorted / search_by_prefix
+    if key.startswith(prefix)
+
+L3: TTL — set_with_ttl(key, value, ttl, timestamp)
+    alive when ts < expiry
+
+L4: LRU eviction — 滿咗踢最舊嘅
+    用 OrderedDict 或 list 記 usage order
+
+L5: async batch_get(keys) → gather + lock
+L6: async batch_evict(keys, max) → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="database db key value store">
+<h3>In-Memory Database</h3>
+<pre><code>L1: set(key, field, value) / get / delete
+    self.data = {}    # key → {field: value}
+
+L2: scan(key) sorted / scan_by_prefix
+    field.startswith(prefix)
+
+L3: set_at_with_ttl — ts + ttl = expiry
+    get_at — check ts < expiry
+
+L4: backup(ts) → deepcopy + 記 remaining TTL
+    restore(ts) → 還原 + 重算 expiry
+
+L5: async batch_operations → gather + lock per key
+L6: async batch_scan(keys, max) → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="bank finance account transfer payment">
+<h3>Banking System</h3>
+<pre><code>L1: create_account / deposit / transfer
+    self.accounts = {}  # id → {"balance":0}
+
+L2: top_spenders(n) sorted desc + format
+
+L3: pay → cashback after 86400000ms
+    _process_cashbacks every method
+
+L4: merge_accounts / get_balance(time_at)
+    history = [(ts, balance)]
+
+L5: async batch → gather + lock per account
+L6: async external_transfer → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="hotel room booking guest">
+<h3>Hotel Booking</h3>
+<pre><code>L1: add_room / book_room→return bid / checkout→return name
+    self.rooms = {}  # id → {"guest":"","revenue":0}
+
+L2: top_rooms / find_available(min,max) + check occupied
+
+L3: late_checkout→fee after 3600000ms
+    _process_fees check fee>0 唔係 check guest
+
+L4: get_booking_history→return tuple唔係string
+    upgrade_room→搬guest唔係merge
+
+L5: async batch → gather + lock per room
+L6: async send_notifications → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="file system storage cloud">
+<h3>File System / Cloud Storage</h3>
+<pre><code>L1: upload(name, size) / get(name) / copy(src, dest)
+    self.files = {}  # name → {"size":0}
+    self.capacity = N
+
+L2: search(prefix) sorted / top_n_largest
+
+L3: upload_at_with_ttl / get_at
+    TTL: alive when ts < expiry
+
+L4: rollback(ts) → deepcopy restore
+    OR compress/decompress
+
+L5: async batch_upload → gather + lock
+L6: async batch_download → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="task queue job worker priority">
+<h3>Task Queue / Job Processor</h3>
+<pre><code>L1: add_task(id, priority) / get_next_task(FIFO within priority)
+    self.tasks = {}  # id → {"priority":0,"status":"QUEUED"}
+
+L2: start/complete/fail_task + get_tasks_by_status
+
+L3: retry with backoff — fail→RETRY_SCHEDULED
+    retry_time = ts + base * 2^attempt
+    process_retries(ts)
+
+L4: dependencies — 所有 deps COMPLETED 先可以 start
+
+L5: async run_workers(n) → gather + lock
+L6: async dispatch(ids, max) → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="inventory warehouse stock product">
+<h3>Inventory / Warehouse</h3>
+<pre><code>L1: add_item(id, qty, price) / get_item / remove_item
+    self.items = {}  # id → {"qty":0,"price":0}
+
+L2: search(prefix) / top_items by value(qty*price)
+
+L3: warehouses with capacity limit
+    assign_item / transfer_item
+
+L4: price_history / snapshot + restore(deepcopy)
+
+L5: async bulk_import → semaphore + lock per item
+L6: async process_orders → gather + lock per warehouse</code></pre>
+</div>
+
+<div class="domain-card" data-tags="package manager dependency install">
+<h3>Package Manager</h3>
+<pre><code>L1: add_package / install / uninstall / get_status
+    self.packages = {}  # id → {"installed":False,"deps":[]}
+
+L2: search(prefix) / list_installed sorted
+
+L3: dependencies — install A auto install B,C
+    check circular deps
+
+L4: version history / rollback to previous state
+
+L5: async batch_install → gather + lock
+L6: async download_packages → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="message queue pubsub topic subscribe">
+<h3>Message Queue / Pub-Sub</h3>
+<pre><code>L1: create_topic / publish / subscribe / consume
+    self.topics = {}  # id → {"messages":[],"subs":set()}
+
+L2: list_topics / get_message_count sorted
+
+L3: TTL — messages expire after N ms
+
+L4: consumer offset tracking / replay from offset
+
+L5: async batch_publish → gather + lock per topic
+L6: async fan_out → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="load balancer server request routing">
+<h3>Load Balancer</h3>
+<pre><code>L1: add_server / remove_server / route_request(round-robin)
+    self.servers = {}  # id → {"weight":1,"load":0}
+
+L2: get_server_load sorted / find_least_loaded
+
+L3: health check — timeout→unhealthy, auto recover
+
+L4: sticky session history / failover
+
+L5: async batch_route → gather + lock
+L6: async health_check_all → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="leaderboard ranking score game player">
+<h3>Leaderboard / Ranking</h3>
+<pre><code>L1: add_player / update_score / get_rank
+    self.players = {}  # id → {"score":0}
+
+L2: top_players(n) sorted / search_by_prefix
+
+L3: score decay — 每 N ms 扣分（lazy processing）
+
+L4: season history / rollback to previous season
+
+L5: async batch_update_scores → gather + lock
+L6: async sync_external → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="notification alert escalate severity">
+<h3>Notification / Alert System</h3>
+<pre><code>L1: create_alert / acknowledge / get_status
+    self.alerts = {}  # id → {"severity":"warning","acked":False}
+
+L2: list_by_severity sorted / filter_unacknowledged
+
+L3: auto-escalate — N ms 冇 ack→升級 severity
+
+L4: alert history / merge duplicate alerts
+
+L5: async batch_create → gather + lock
+L6: async send_notifications → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="session login token user auth">
+<h3>Session Manager</h3>
+<pre><code>L1: create_session(user)→token / get_session / revoke
+    self.sessions = {}  # token → {"user":"","expiry":ts}
+
+L2: list_active sorted / get_sessions_by_user
+
+L3: TTL — session 過期, refresh 續期
+
+L4: session history per user / limit max concurrent
+
+L5: async batch_create → gather + lock per user
+L6: async cleanup_expired → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="workflow pipeline step process">
+<h3>Workflow / Pipeline</h3>
+<pre><code>L1: create_workflow / add_step / start / complete
+    self.workflows = {}  # id → {"steps":[{"status":"pending"}]}
+
+L2: get_progress sorted / list_by_status
+
+L3: auto-trigger — 完成一步自動觸發下一步
+
+L4: rollback — 失敗後回退已完成嘅 steps
+
+L5: async run_steps → gather + lock
+L6: async external_trigger → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="dns resolver record domain ip">
+<h3>DNS Resolver</h3>
+<pre><code>L1: add_record(domain, ip) / resolve(domain) / delete
+    self.records = {}  # domain → {"ip":"","ttl":0}
+
+L2: list_records sorted / search wildcard *.example.com
+
+L3: TTL — records 過期
+
+L4: CNAME chains / backup + restore
+
+L5: async batch_resolve → gather + lock
+L6: async bulk_update → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="permission access control role user">
+<h3>Permission / Access Control</h3>
+<pre><code>L1: add_user / grant(user, resource, perm) / check_access
+    self.users = {}    # user → set of roles
+    self.perms = {}    # (user, resource) → set of perms
+
+L2: list_users_with_access / get_permissions sorted
+
+L3: time-limited access — grant expires after N ms
+
+L4: role inheritance / audit history
+
+L5: async batch_check → gather + lock
+L6: async sync_permissions → semaphore</code></pre>
+</div>
+
+<div class="domain-card" data-tags="log aggregator monitor error">
+<h3>Log Aggregator</h3>
+<pre><code>L1: add_log(ts, level, source, msg) / get_logs(source)
+    self.logs = []  # [(ts, level, source, msg)]
+
+L2: filter_by_level / count_by_source sorted
+
+L3: retention — 超過 N ms 嘅 logs 自動刪
+
+L4: snapshot + restore / aggregate stats
+
+L5: async batch_ingest → gather + lock per source
+L6: async export_logs → semaphore</code></pre>
+</div>
+
+<div class="gotcha" style="margin-top:16px;">
+<strong>考試見到陌生 domain？</strong><br>
+1. 搵上面最似嘅 domain<br>
+2. L1-L4 pattern 一樣：CRUD → Filter/Sort → TTL/Lazy → Backup/History<br>
+3. L5-6 永遠係 gather + lock + semaphore<br>
+4. Domain 唔同，moves 一樣
+</div>
+
+</div><!-- end sys-domains -->
+
+<script>
+function filterDomains() {
+    const q = document.getElementById('domain-search').value.toLowerCase();
+    document.querySelectorAll('.domain-card').forEach(card => {
+        const text = card.textContent.toLowerCase() + ' ' + (card.dataset.tags || '');
+        card.style.display = text.includes(q) ? 'block' : 'none';
+    });
+}
+</script>
+
+<style>
+.domain-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+.domain-card h3 { color: #58a6ff; font-size: 13px; margin-bottom: 4px; }
+.domain-card pre { font-size: 11px; margin: 4px 0 0 0; padding: 6px; line-height: 1.3; }
+.domain-card code { font-size: 11px; }
+</style>
 
 <style>
 .line-wrap { position: relative; display: inline-block; width: 100%; }

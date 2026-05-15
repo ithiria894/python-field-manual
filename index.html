@@ -29,8 +29,9 @@ code { font-family: inherit; font-size: 13px; color: #e6edf3; }
 table { width: 100%; border-collapse: collapse; margin: 8px 0 16px 0; font-size: 13px; }
 th { background: #161b22; color: #58a6ff; text-align: left; padding: 8px; border: 1px solid #30363d; }
 td { padding: 8px; border: 1px solid #30363d; }
-.copy-btn { position: relative; display: inline-block; background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-bottom: 4px; }
+.copy-btn { position: relative; display: inline-block; background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-bottom: 4px; user-select: none; -webkit-user-select: none; transition: background 0.2s; }
 .copy-btn:hover { background: #484f58; color: #e6edf3; }
+.copy-btn.copied { background: #238636; color: white; }
 .gotcha { background: #1c0e0e; border: 1px solid #f85149; border-radius: 6px; padding: 10px; margin: 8px 0; }
 .tip { background: #0e1c0e; border: 1px solid #3fb950; border-radius: 6px; padding: 10px; margin: 8px 0; }
 .legend { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin: 16px 0; font-size: 13px; }
@@ -45,12 +46,21 @@ body { margin-left: 96px; }
 .split-right code { font-size: 11px; }
 .split-right .copy-btn, .split-right .copy-all { display: none; }
 .split-right .label { color: #58a6ff; font-size: 11px; margin-bottom: 4px; font-weight: bold; }
+.sys-btn { display: block; width: 100%; padding: 4px 2px; margin-bottom: 2px; border: 1px solid #30363d; border-radius: 3px; background: #0d1117; color: #8b949e; cursor: pointer; font-size: 10px; text-align: left; }
+.sys-btn:hover { background: #161b22; color: #e6edf3; }
+.sys-btn.active { background: #1f6feb; color: white; border-color: #1f6feb; }
+.sys-section { display: none; }
+.sys-section.active { display: block; }
+.nav-divider { border-top: 1px solid #30363d; margin: 6px 0; }
 @media (max-width: 768px) { nav { display: none; } body { margin-left: 0; padding: 10px; } .split { flex-direction: column; } }
 </style>
 </head>
 <body>
 
 <nav>
+<button class="sys-btn active" onclick="switchSystem('bank')">Bank System</button>
+<button class="sys-btn" onclick="switchSystem('hotel')">Hotel v3</button>
+<div class="nav-divider"></div>
 <a href="#imports">Imports</a>
 <a href="#l1">L1 CRUD</a>
 <a href="#l2">L2 Sort</a>
@@ -58,12 +68,15 @@ body { margin-left: 96px; }
 <a href="#l4">L4 Backup</a>
 <a href="#l5">L5 Batch</a>
 <a href="#l6">L6 Rate Limit</a>
+<div class="nav-divider"></div>
 <a href="#gotchas">Gotchas</a>
 <a href="#errors">Errors</a>
 <a href="#quick">Quick Ref</a>
 </nav>
 
 <h1>Python Field Manual</h1>
+
+<div id="sys-bank" class="sys-section active">
 
 <div class="legend">
 <span class="sk">黃底</span> = skeleton，直接抄，唔使改<br>
@@ -455,17 +468,31 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 <tr><td>限制數量</td><td><code>sem = asyncio.Semaphore(n); async with sem:</code></td></tr>
 </table>
 
+</div><!-- end sys-bank -->
+
+<div id="sys-hotel" class="sys-section">
+<h2>Hotel v3 — 做完之後加</h2>
+<p class="note">做完 Hotel v3 之後會加入呢度。包括所有 gotchas 同 dummy data examples。</p>
+</div><!-- end sys-hotel -->
 
 <style>
 .line-wrap { position: relative; display: inline-block; width: 100%; }
 .line-wrap:hover { background: rgba(255,255,255,0.05); }
-.line-copy { background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; opacity: 0; transition: opacity 0.15s; }
+.line-copy { background: #30363d; color: #8b949e; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; opacity: 0; transition: opacity 0.15s; user-select: none; -webkit-user-select: none; }
 .line-copy-l { margin-right: 4px; }
 .line-copy-r { position: absolute; right: 4px; }
 .line-wrap:hover .line-copy { opacity: 1; }
 .line-copy:hover { background: #484f58; color: #e6edf3; }
 </style>
 <script>
+// System switcher
+function switchSystem(sys) {
+    document.querySelectorAll('.sys-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.sys-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('sys-' + sys).classList.add('active');
+    document.querySelector('.sys-btn[onclick*="' + sys + '"]').classList.add('active');
+}
+
 // Syntax highlight right-side code blocks only
 document.querySelectorAll('.split-right pre code').forEach(block => {
     block.className = 'language-python';
@@ -483,8 +510,8 @@ document.querySelectorAll('pre').forEach(pre => {
         clone.querySelectorAll('.line-copy').forEach(b => b.remove());
         const clean = clone.textContent.split('\n').map(l => l.replace(/#\s*(L\d|←|----).*/g, '').trimEnd()).join('\n');
         navigator.clipboard.writeText(clean);
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = 'Copy All', 1500);
+        btn.textContent = 'Copied!'; btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy All'; btn.classList.remove('copied'); }, 1500);
     };
     const wrapper = document.createElement('div');
     wrapper.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:2px;';
@@ -507,7 +534,7 @@ document.querySelectorAll('pre code').forEach(code => {
         const clone = document.createElement('span');
         clone.innerHTML = line;
         clone.querySelectorAll('.line-copy').forEach(b => b.remove());
-        const plainText = clone.textContent.replace(/#\s*(L\d|←|----).*/g, '').trimEnd();
+        const plainText = clone.textContent.replace(/#\s*(L\d|←|----).*/g, '').trim();
         if (plainText.trim() === '') return line;
         const escaped = plainText.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         return `<span class="line-wrap"><button class="line-copy line-copy-l" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button>${line}<button class="line-copy line-copy-r" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped.replace(/\\/g, '\\\\')}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)">cp</button></span>`;

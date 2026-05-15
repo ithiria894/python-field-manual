@@ -471,8 +471,317 @@ Lock 同 Sem 分開用。Lock 包住改 data，Sem 包住外部 call。
 </div><!-- end sys-bank -->
 
 <div id="sys-hotel" class="sys-section">
-<h2>Hotel v3 — 做完之後加</h2>
-<p class="note">做完 Hotel v3 之後會加入呢度。包括所有 gotchas 同 dummy data examples。</p>
+
+<div class="legend">
+<span class="sk">黃底行</span> = skeleton，直接抄<br>
+<span class="ch">灰色斜體行</span> = 因應題目改（Hotel System 做例子）
+</div>
+
+<!-- ============ HOTEL L1 ============ -->
+<h2 id="h-l1">L1 — CRUD（Hotel）</h2>
+
+<h3>__init__</h3>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">class</span> <span class="ch">HotelSystem</span><span class="sk">:</span>
+    <span class="sk">def __init__(self):</span>
+        <span class="sk">self.</span><span class="ch">rooms</span><span class="sk"> = {}</span>                    <span class="cm"># L1</span>
+        <span class="ch">self.booking_counter = 0</span>          <span class="cm"># L1</span>
+        <span class="ch">self.pending_fees = []</span>            <span class="cm"># L3 加</span>
+        <span class="sk">self.account_locks = defaultdict(asyncio.Lock)</span> <span class="cm"># L5 加</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">self.rooms 實際樣子：</div>
+<pre><code>{
+  "r1": {
+    "price_per_night": 100,
+    "guest_name": "Alice",
+    "nights": 2,
+    "revenue": 200,
+    "booking_id": "booking1",
+    "history": [("Alice", 200)]
+  },
+  "r2": {
+    "price_per_night": 150,
+    "guest_name": "",
+    "nights": 0,
+    "revenue": 0,
+    "booking_id": "",
+    "history": []
+  }
+}
+
+guest_name == "" → available
+guest_name != "" → occupied</code></pre>
+</div>
+</div>
+
+<h3>add_room + book_room + checkout</h3>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">add_room</span><span class="sk">(self, timestamp,</span> <span class="ch">room_id, price_per_night</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>          <span class="cm"># L3 加</span>
+
+    <span class="sk">if</span> <span class="ch">room_id</span> <span class="sk">in self.</span><span class="ch">rooms</span><span class="sk">:</span>
+        <span class="sk">return False</span>
+
+    <span class="sk">self.</span><span class="ch">rooms</span><span class="sk">[</span><span class="ch">room_id</span><span class="sk">] = {</span>
+        <span class="ch">"price_per_night": price_per_night,</span>
+        <span class="ch">"guest_name": "",</span>
+        <span class="ch">"nights": 0,</span>
+        <span class="ch">"revenue": 0,</span>
+        <span class="ch">"booking_id": "",</span>
+        <span class="ch">"history": []</span>                        <span class="cm"># L4 加</span>
+    <span class="sk">}</span>
+
+    <span class="sk">return True</span></code></pre>
+
+<pre><code><span class="sk">def</span> <span class="ch">book_room</span><span class="sk">(self, timestamp,</span> <span class="ch">room_id, guest_name, nights</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">if</span> <span class="ch">room_id</span> <span class="sk">not in self.</span><span class="ch">rooms</span><span class="sk">: return None</span>
+    <span class="sk">room = self.</span><span class="ch">rooms</span><span class="sk">[</span><span class="ch">room_id</span><span class="sk">]</span>
+    <span class="sk">if room[</span><span class="ch">"guest_name"</span><span class="sk">] != "": return None</span>
+
+    <span class="ch">room["guest_name"] = guest_name</span>
+    <span class="ch">room["nights"] = nights</span>
+    <span class="ch">room["revenue"] += room["price_per_night"] * nights</span>
+
+    <span class="sk">self.</span><span class="ch">booking_counter</span> <span class="sk">+= 1</span>
+    <span class="sk">bid = f"</span><span class="ch">booking</span><span class="sk">{self.</span><span class="ch">booking_counter</span><span class="sk">}"</span>
+    <span class="ch">room["booking_id"] = bid</span>
+
+    <span class="sk">return bid</span></code></pre>
+
+<pre><code><span class="sk">def</span> <span class="ch">checkout</span><span class="sk">(self, timestamp,</span> <span class="ch">room_id</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">if</span> <span class="ch">room_id</span> <span class="sk">not in self.</span><span class="ch">rooms</span><span class="sk">: return None</span>
+    <span class="sk">room = self.</span><span class="ch">rooms</span><span class="sk">[</span><span class="ch">room_id</span><span class="sk">]</span>
+    <span class="sk">if room[</span><span class="ch">"guest_name"</span><span class="sk">] == "": return None</span>
+
+    <span class="ch">guest_name = room["guest_name"]</span>
+    <span class="ch">room["guest_name"] = ""</span>
+    <span class="ch">room["history"].append((guest_name, room["price_per_night"] * room["nights"]))</span> <span class="cm"># L4 加</span>
+
+    <span class="sk">return</span> <span class="ch">guest_name</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">book_room(1, "r1", "Alice", 2) 之後：</div>
+<pre><code>"r1": {
+  "guest_name": "Alice",    ← 入住
+  "nights": 2,
+  "revenue": 200,           ← 100 * 2
+  "booking_id": "booking1"
+}</code></pre>
+<div class="label">checkout(5, "r1") 之後：</div>
+<pre><code>"r1": {
+  "guest_name": "",         ← 走咗
+  "revenue": 200,           ← 唔變
+  "history": [("Alice", 200)] ← 加咗
+}
+return "Alice"  ← return 名，唔係 True</code></pre>
+<div class="label" style="color:#f85149;">撞過嘅板：</div>
+<pre><code># book_room return booking ID
+# 唔係 return True/balance
+bid = "booking1"  ← return 呢個
+
+# checkout return guest name
+# 唔係 return True/False
+return "Alice"    ← return 呢個
+
+# check occupied 用 guest_name
+if room["guest_name"] != "":  ← occupied
+if room["guest_name"] == "":  ← available</code></pre>
+</div>
+</div>
+
+<!-- ============ HOTEL L2 ============ -->
+<h2 id="h-l2">L2 — Search + Revenue（Hotel）</h2>
+
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">find_available</span><span class="sk">(self, timestamp,</span> <span class="ch">min_price, max_price</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">sorted_items = dict(sorted(</span>
+        <span class="sk">self.</span><span class="ch">rooms</span><span class="sk">.items(),</span>
+        <span class="sk">key=lambda x: (x[1][</span><span class="ch">"price_per_night"</span><span class="sk">], x[0])</span>
+    <span class="sk">))</span>
+
+    <span class="sk">result = []</span>
+    <span class="sk">for</span> <span class="ch">room_id</span><span class="sk">, room in sorted_items.items():</span>
+        <span class="sk">if</span> <span class="ch">min_price</span> <span class="sk">&lt;= room[</span><span class="ch">"price_per_night"</span><span class="sk">] &lt;=</span> <span class="ch">max_price</span> <span class="sk">and room[</span><span class="ch">"guest_name"</span><span class="sk">] == "":</span>
+            <span class="sk">result.append(</span><span class="ch">room_id</span><span class="sk">)</span>
+
+    <span class="sk">return result</span></code></pre>
+
+<pre><code><span class="sk">def</span> <span class="ch">top_rooms</span><span class="sk">(self, timestamp,</span> <span class="ch">n</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">sorted_items = dict(sorted(</span>
+        <span class="sk">self.</span><span class="ch">rooms</span><span class="sk">.items(),</span>
+        <span class="sk">key=lambda x: (-x[1][</span><span class="ch">"revenue"</span><span class="sk">], x[0])</span>
+    <span class="sk">))</span>
+
+    <span class="sk">result = []</span>
+    <span class="sk">for</span> <span class="ch">room_id</span><span class="sk">, room in sorted_items.items():</span>
+        <span class="sk">result.append(f"</span><span class="ch">{room_id}({room['revenue']})</span><span class="sk">")</span>
+
+    <span class="sk">return result[:</span><span class="ch">n</span><span class="sk">]</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">find_available sort by price asc：</div>
+<pre><code>rooms = {
+  "r1": {"price": 100, "guest": "Alice"},
+  "r2": {"price": 150, "guest": ""},
+  "r3": {"price": 80,  "guest": ""}
+}
+find_available(1, 50, 200)
+→ ["r3", "r2"]
+# r1 有人住，排除
+# r3(80) 排先，r2(150) 排後</code></pre>
+<div class="label" style="color:#f85149;">撞過嘅板：</div>
+<pre><code># find_available 要 check occupied！
+# 唔係淨 check price range
+if price_ok and room["guest_name"] == "":
+#                 ^^^^^^^^^^^^^^^^^^^^^^^^
+#                 漏咗呢個就全部 room 都出嚟</code></pre>
+</div>
+</div>
+
+<!-- ============ HOTEL L3 ============ -->
+<h2 id="h-l3">L3 — Late Checkout Fees（Hotel）</h2>
+
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">late_checkout</span><span class="sk">(self, timestamp,</span> <span class="ch">room_id, extra_hours</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">if</span> <span class="ch">room_id</span> <span class="sk">not in self.</span><span class="ch">rooms</span><span class="sk">: return None</span>
+    <span class="sk">room = self.</span><span class="ch">rooms</span><span class="sk">[</span><span class="ch">room_id</span><span class="sk">]</span>
+    <span class="sk">if room[</span><span class="ch">"guest_name"</span><span class="sk">] == "": return None</span>
+
+    <span class="ch">fee = extra_hours * 50</span>
+    <span class="ch">self.pending_fees.append({"room_id": room_id, "fee": fee, "deadline": timestamp + 3600000})</span>
+
+    <span class="ch">self.checkout(timestamp, room_id)</span>   <span class="cm"># checkout guest</span>
+
+    <span class="sk">return</span> <span class="ch">fee</span></code></pre>
+
+<pre><code><span class="sk">def _process_</span><span class="ch">fees</span><span class="sk">(self, timestamp):</span>
+    <span class="ch">remaining = []</span>
+    <span class="sk">for</span> <span class="ch">pf</span> <span class="sk">in self.</span><span class="ch">pending_fees</span><span class="sk">:</span>
+        <span class="sk">if timestamp >=</span> <span class="ch">pf["deadline"]</span><span class="sk">:</span>
+            <span class="ch">self.rooms[pf["room_id"]]["revenue"] += pf["fee"]</span>
+        <span class="sk">else:</span>
+            <span class="ch">remaining.append(pf)</span>
+    <span class="ch">self.pending_fees = remaining</span></code></pre>
+
+<pre><code><span class="sk">def</span> <span class="ch">get_pending_fees</span><span class="sk">(self, timestamp):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+    <span class="sk">return sum(</span><span class="ch">pf["fee"] for pf in self.pending_fees</span><span class="sk">)</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">late_checkout(100, "r1", 4)：</div>
+<pre><code>fee = 4 * 50 = 200
+deadline = 100 + 3600000 = 3600100
+
+pending_fees = [
+  {"room_id":"r1", "fee":200,
+   "deadline":3600100}
+]
+
+guest 即刻 checkout（room available）
+fee 等到 3600100 先加去 revenue</code></pre>
+<div class="label" style="color:#f85149;">撞過嘅板：</div>
+<pre><code># 1. checkout 入面唔好 call late_checkout
+#    兩個係獨立嘅 method
+#    caller 決定 call 邊個
+
+# 2. late_checkout 要做兩件事：
+#    checkout guest + schedule fee
+#    要 return fee amount
+
+# 3. _process_fees check fee > 0
+#    唔好 check guest_name
+#    因為 guest 已經走咗但 fee 未收
+if pf["fee"] > 0:     ✅
+if guest_name != "":  ❌ guest 已經走咗
+
+# 4. _process_fees 唔加 history
+#    history 已經喺 checkout 加咗</code></pre>
+</div>
+</div>
+
+<!-- ============ HOTEL L4 ============ -->
+<h2 id="h-l4">L4 — History + Upgrade（Hotel）</h2>
+
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">get_booking_history</span><span class="sk">(self, timestamp,</span> <span class="ch">room_id</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">if</span> <span class="ch">room_id</span> <span class="sk">not in self.</span><span class="ch">rooms</span><span class="sk">: return None</span>
+
+    <span class="sk">room = self.</span><span class="ch">rooms</span><span class="sk">[</span><span class="ch">room_id</span><span class="sk">]</span>
+    <span class="sk">return room[</span><span class="ch">"history"</span><span class="sk">]</span></code></pre>
+
+<pre><code><span class="sk">def</span> <span class="ch">upgrade_room</span><span class="sk">(self, timestamp,</span> <span class="ch">from_room_id, to_room_id</span><span class="sk">):</span>
+    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>
+
+    <span class="sk">if</span> <span class="ch">from_room_id</span> <span class="sk">not in self.</span><span class="ch">rooms</span> <span class="sk">or</span> <span class="ch">to_room_id</span> <span class="sk">not in self.</span><span class="ch">rooms</span><span class="sk">: return False</span>
+    <span class="sk">if</span> <span class="ch">from_room_id</span> <span class="sk">==</span> <span class="ch">to_room_id</span><span class="sk">: return False</span>
+
+    <span class="ch">from_room = self.rooms[from_room_id]</span>
+    <span class="ch">to_room = self.rooms[to_room_id]</span>
+
+    <span class="sk">if</span> <span class="ch">from_room["guest_name"]</span> <span class="sk">== "": return False</span>   <span class="cm"># from 要有人</span>
+    <span class="sk">if</span> <span class="ch">to_room["guest_name"]</span> <span class="sk">!= "": return False</span>    <span class="cm"># to 要冇人</span>
+
+    <span class="ch">to_room["guest_name"] = from_room["guest_name"]</span>
+    <span class="ch">to_room["booking_id"] = from_room["booking_id"]</span>
+    <span class="ch">to_room["nights"] = from_room["nights"]</span>
+
+    <span class="ch">from_room["guest_name"] = ""</span>                    <span class="cm"># from 清空</span>
+
+    <span class="sk">return True</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">upgrade_room(5, "r1", "r2")：</div>
+<pre><code>之前：
+"r1": {"guest":"Alice", "revenue":200}
+"r2": {"guest":"",      "revenue":0}
+
+之後：
+"r1": {"guest":"",      "revenue":200}
+"r2": {"guest":"Alice", "revenue":0}
+
+# Alice 搬咗去 r2
+# revenue 留喺 r1（唔跟人走）
+# booking_id 跟人走</code></pre>
+<div class="label" style="color:#f85149;">撞過嘅板：</div>
+<pre><code># 1. history return tuple 唔係 string
+("Alice", 200)       ✅ tuple
+f"(Alice,200)"       ❌ string
+
+# 2. history 只記 checkout 完嘅 booking
+#    唔好喺 create_account 加 history
+#    history = [] 開始係空
+
+# 3. upgrade 唔係 merge
+#    upgrade 搬 guest，唔合併 room
+#    revenue 留喺原 room
+
+# 4. upgrade 唔加 history
+#    guest 只係搬房，唔算 checkout
+
+# 5. Spec 冇講嘅就唔做
+#    checkout 唔好自動判斷 late
+#    每個 method 只做 spec 講嘅嘢</code></pre>
+</div>
+</div>
+
 </div><!-- end sys-hotel -->
 
 <style>

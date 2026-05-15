@@ -246,21 +246,51 @@ t_acc["balance"] += 200         ← bob 變 400</code></pre>
 <h2 id="l2">L2 — Sort / Filter / Format</h2>
 
 <h3>排序 + format（完整 example）</h3>
+<div class="split">
+<div class="split-left">
 <pre><code><span class="sk">def</span> <span class="ch">top_spenders</span><span class="sk">(self, timestamp,</span> <span class="ch">n</span><span class="sk">):</span>
     <span class="sk">self._process_</span><span class="ch">cashbacks</span><span class="sk">(timestamp)</span>
+
     <span class="sk">sorted_items = dict(sorted(</span>
         <span class="sk">self.</span><span class="ch">accounts</span><span class="sk">.items(),</span>
-        <span class="sk">key=lambda x: (-x[1][</span><span class="ch">"outgoing"</span><span class="sk">], x[0])</span>     <span class="cm"># ← desc by value, asc by name</span>
+        <span class="sk">key=lambda x: (-x[1][</span><span class="ch">"outgoing"</span><span class="sk">], x[0])</span>
     <span class="sk">))</span>
+
     <span class="sk">result = []</span>
     <span class="sk">for</span> <span class="ch">account_id</span><span class="sk">, acc in sorted_items.items():</span>
         <span class="sk">result.append(f"</span><span class="ch">{account_id}({acc['outgoing']})</span><span class="sk">")</span>
-    <span class="sk">return result[:</span><span class="ch">n</span><span class="sk">]</span>                              <span class="cm"># ← [:n] 自動處理 n 太大</span></code></pre>
 
-<div class="tip">
-<strong>sorted() 人話：</strong>「將呢堆嘢，按呢個準則排」。負號 = 反轉。<br>
-<code>x[0]</code> = key（"alice"），<code>x[1]</code> = value（成個 dict）<br>
-<strong>f-string：</strong> <code>f"{name}({value})"</code> → <code>"alice(500)"</code>
+    <span class="sk">return result[:</span><span class="ch">n</span><span class="sk">]</span></code></pre>
+</div>
+<div class="split-right">
+<div class="label">sorted 點運作：</div>
+<pre><code>self.accounts.items() 出嚟嘅 x：
+x = ("alice", {"balance":500, "outgoing":300})
+x = ("bob",   {"balance":200, "outgoing":100})
+x = ("charlie",{"balance":800, "outgoing":300})
+
+x[0] = "alice"         ← account name
+x[1] = {"balance":500} ← 成個 dict
+x[1]["outgoing"] = 300 ← 攞 outgoing 值
+
+key=lambda x: (-x[1]["outgoing"], x[0])
+              ↓                   ↓
+         -300 排先(desc)    同分按名排(asc)
+
+排完：
+(-300, "alice")   ← alice 先（a < c）
+(-300, "charlie") ← charlie 後
+(-100, "bob")     ← bob 最尾
+
+result = ["alice(300)", "charlie(300)", "bob(100)"]
+result[:2] = ["alice(300)", "charlie(300)"]</code></pre>
+<div class="label">f-string 點用：</div>
+<pre><code>account_id = "alice"
+acc["outgoing"] = 300
+
+f"{account_id}({acc['outgoing']})"
+→ "alice(300)"</code></pre>
+</div>
 </div>
 
 <!-- ============ LEVEL 3 ============ -->

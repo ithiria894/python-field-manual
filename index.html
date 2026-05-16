@@ -120,7 +120,8 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 <button class="sys-btn" onclick="switchSystem('notification')"> ├ Notification</button>
 <button class="sys-btn" onclick="switchSystem('session')"> ├ Session</button>
 <button class="sys-btn" onclick="switchSystem('scheduler')"> ├ Scheduler</button>
-<button class="sys-btn" onclick="switchSystem('gym')"> └ Gym</button>
+<button class="sys-btn" onclick="switchSystem('gym')"> ├ Gym</button>
+<button class="sys-btn" onclick="switchSystem('tetris')"> └ Tetris</button>
 </div>
 <div style="color:#58a6ff;font-size:10px;padding:2px 0;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">B: Nested+TTL ▾</div>
 <div>
@@ -158,13 +159,13 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 <button class="sys-btn" onclick="switchSystem('keywordmap')">Keyword Map</button>
 <button class="sys-btn" onclick="switchSystem('compare')">Compare</button>
 <div class="nav-divider"></div>
-<a href="#inmemdb-init" class="nav-level" data-variants="var-l1" data-bank="bank-init" data-hotel="hotel-imports" data-inmemdb="inmemdb-init" data-hashring="hr-init" data-taskqueue="tq-init" data-gym="gym-init" data-domains="">Init</a>
-<a href="#inmemdb-l1" class="nav-level" data-variants="var-l1" data-bank="l1" data-hotel="hotel-l1" data-inmemdb="inmemdb-l1" data-hashring="hr-l1" data-taskqueue="tq-l1" data-gym="gym-l1" data-domains="">L1 CRUD</a>
-<a href="#inmemdb-l2" class="nav-level" data-variants="var-l2" data-bank="l2" data-hotel="hotel-l2" data-inmemdb="inmemdb-l2" data-hashring="hr-l2" data-taskqueue="tq-l2" data-gym="gym-l2" data-domains="">L2 Sort</a>
-<a href="#inmemdb-l3" class="nav-level" data-variants="var-l3" data-bank="l3" data-hotel="hotel-l3" data-inmemdb="inmemdb-l3" data-hashring="hr-l3" data-taskqueue="tq-l3" data-gym="gym-l3" data-domains="">L3 TTL</a>
-<a href="#inmemdb-l4" class="nav-level" data-variants="var-l4" data-bank="l4" data-hotel="hotel-l4" data-inmemdb="inmemdb-l4" data-hashring="hr-l4" data-taskqueue="tq-l4" data-gym="gym-l4" data-domains="">L4 Backup</a>
-<a href="#inmemdb-l5" class="nav-level" data-variants="var-l5" data-bank="l5" data-hotel="hotel-l5" data-inmemdb="inmemdb-l5" data-hashring="hr-l5" data-taskqueue="tq-l5" data-gym="gym-l5" data-domains="">L5 Batch</a>
-<a href="#inmemdb-l6" class="nav-level" data-variants="var-l6" data-bank="l6" data-hotel="hotel-l6" data-inmemdb="inmemdb-l6" data-hashring="hr-l6" data-taskqueue="tq-l6" data-gym="gym-l6" data-domains="">L6 Rate Limit</a>
+<a href="#inmemdb-init" class="nav-level" data-variants="var-l1" data-bank="bank-init" data-hotel="hotel-imports" data-inmemdb="inmemdb-init" data-hashring="hr-init" data-taskqueue="tq-init" data-gym="gym-init" data-tetris="tetris-init" data-domains="">Init</a>
+<a href="#inmemdb-l1" class="nav-level" data-variants="var-l1" data-bank="l1" data-hotel="hotel-l1" data-inmemdb="inmemdb-l1" data-hashring="hr-l1" data-taskqueue="tq-l1" data-gym="gym-l1" data-tetris="tetris-l1" data-domains="">L1 CRUD</a>
+<a href="#inmemdb-l2" class="nav-level" data-variants="var-l2" data-bank="l2" data-hotel="hotel-l2" data-inmemdb="inmemdb-l2" data-hashring="hr-l2" data-taskqueue="tq-l2" data-gym="gym-l2" data-tetris="tetris-l2" data-domains="">L2 Sort</a>
+<a href="#inmemdb-l3" class="nav-level" data-variants="var-l3" data-bank="l3" data-hotel="hotel-l3" data-inmemdb="inmemdb-l3" data-hashring="hr-l3" data-taskqueue="tq-l3" data-gym="gym-l3" data-tetris="tetris-l3" data-domains="">L3 TTL</a>
+<a href="#inmemdb-l4" class="nav-level" data-variants="var-l4" data-bank="l4" data-hotel="hotel-l4" data-inmemdb="inmemdb-l4" data-hashring="hr-l4" data-taskqueue="tq-l4" data-gym="gym-l4" data-tetris="tetris-l4" data-domains="">L4 Backup</a>
+<a href="#inmemdb-l5" class="nav-level" data-variants="var-l5" data-bank="l5" data-hotel="hotel-l5" data-inmemdb="inmemdb-l5" data-hashring="hr-l5" data-taskqueue="tq-l5" data-gym="gym-l5" data-tetris="tetris-l5" data-domains="">L5 Batch</a>
+<a href="#inmemdb-l6" class="nav-level" data-variants="var-l6" data-bank="l6" data-hotel="hotel-l6" data-inmemdb="inmemdb-l6" data-hashring="hr-l6" data-taskqueue="tq-l6" data-gym="gym-l6" data-tetris="tetris-l6" data-domains="">L6 Rate Limit</a>
 <div class="nav-divider"></div>
 <a href="#gotchas">Gotchas</a>
 <a href="#errors">Errors</a>
@@ -15637,6 +15638,664 @@ _do_one_transfer(timestamp, transfer, sem)
 </div></div>
 
 </div><!-- end sys-gym -->
+
+<div id="sys-tetris" class="sys-section">
+
+<!-- ============ TETRIS INTRO ============ -->
+<h2 id="tetris-intro">條題目係乜</h2>
+<p class="note">想像你寫一個 Tetris 棋盤 mock。有一塊 2D grid（board），可以放積木、移動、消行、跌落、undo。每塊積木有 shape（佔邊幾格）、位置（row, col）。</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="cm"># 想像一塊 Tetris 棋盤：</span>
+<span class="cm"># ┌──────────────────────────────────────────┐</span>
+<span class="cm"># │  0  0  1  1  0  │  第 0 行               │</span>
+<span class="cm"># │  0  0  0  0  0  │  第 1 行               │</span>
+<span class="cm"># │  1  1  1  1  1  │  第 2 行 ← 成行滿咗    │</span>
+<span class="cm"># │  0  0  0  1  0  │  第 3 行               │</span>
+<span class="cm"># └──────────────────────────────────────────┘</span>
+
+<span class="cm"># 每塊積木有：</span>
+<span class="cm"># piece_id   = 積木編號（自動遞增 "p1", "p2"...）</span>
+<span class="cm"># shape      = list of (r, c) offset（積木佔嘅相對格仔��</span>
+<span class="cm"># row, col   = 而家積木左上角嘅位置</span>
+
+<span class="cm"># 規則：</span>
+<span class="cm"># 1. 放積木之前要 check collision（格仔有冇人、出唔出界）</span>
+<span class="cm"># 2. 移動方向 = "left"/"right"/"down"，每次移一格</span>
+<span class="cm"># 3. 成行滿晒 → 消行（上面嘅行跌落嚟填位）</span>
+<span class="cm"># 4. drop = 直接跌到最低有效位置</span>
+<span class="cm"># 5. undo = rollback 最後一個動作</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<pre><code># 例：上面塊棋盤查一啲嘢
+
+get_board_state(t)    → 返成個 grid（2D list）
+get_piece_count(t)    → 2（而家棋盤上有 2 塊積木）
+list_pieces(t, "row") → "p2(3), p1(0)"（由低排到高）
+get_score(t)          → 1（已經消咗 1 行）
+
+# 後面 level 加多啲嘢：
+# L1 place_piece / remove_piece / get_board_state
+# L2 move_piece / get_piece_count / list_pieces
+# L3 _process_line_clears / get_score（lazy 消行）
+# L4 drop_piece / get_history / undo_last
+# L5 async batch_operations（per-piece lock）
+# L6 sync_boards（rate-limited，semaphore）</code></pre>
+</div></div>
+
+<!-- ============ TETRIS INIT ============ -->
+<h2 id="tetris-init">__init__</h2>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">import</span> asyncio
+<span class="sk">from collections import</span> defaultdict
+
+<span class="sk">class</span> <span class="ch">TetrisSystem</span><span class="sk">:</span>
+    <span class="sk">def __init__(self, rows, cols):</span>
+        <span class="sk">self.</span><span class="ch">rows</span><span class="sk"> = rows</span>                                <span class="cm"># 棋盤有幾多行</span>
+        <span class="sk">self.</span><span class="ch">cols</span><span class="sk"> = cols</span>                                <span class="cm"># 棋盤有幾多列</span>
+        <span class="sk">self.</span><span class="ch">board</span><span class="sk"> = []</span>                                 <span class="cm"># 棋盤本體（2D list，0=空格 1=有積木）</span>
+        <span class="sk">for r in range(rows):</span>                          <span class="cm"># 逐行造</span>
+            <span class="sk">row = []</span>                                    <span class="cm"># 一行嘅格仔</span>
+            <span class="sk">for c in range(cols):</span>                       <span class="cm"># 逐格填 0</span>
+                <span class="sk">row.append(0)</span>                           <span class="cm"># 0 = 空格</span>
+            <span class="sk">self.</span><span class="ch">board</span><span class="sk">.append(row)</span>                     <span class="cm"># 入落棋盤</span>
+        <span class="sk">self.</span><span class="ch">pieces</span><span class="sk"> = {}</span>                               <span class="cm"># L1 所有積木（piece_id → info dict）</span>
+        <span class="sk">self.</span><span class="ch">piece_counter</span><span class="sk"> = 0</span>                         <span class="cm"># L1 自動遞增（下一塊積木嘅編號）</span>
+        <span class="sk">self.</span><span class="ch">score</span><span class="sk"> = 0</span>                                 <span class="cm"># L3 加：消咗幾多行</span>
+        <span class="sk">self.</span><span class="ch">history</span><span class="sk"> = []</span>                               <span class="cm"># L4 加：所有動作記錄</span>
+        <span class="sk">self.locks = defaultdict(asyncio.Lock)</span>         <span class="cm"># L5 加：per-piece 嘅 async lock</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">想像 self.board 嘅樣：</div>
+<pre><code>self.board = [                    # 棋盤（2D list，每格 0=空 1=有嘢）
+    [0, 0, 1, 1, 0],             # 第 0 行
+    [0, 0, 0, 0, 0],             # 第 1 行
+    [1, 1, 1, 1, 1],             # 第 2 行 ← 成行滿咗，會被消
+    [0, 0, 0, 1, 0],             # 第 3 行
+]</code></pre>
+
+<div class="label">想像 self.pieces 嘅樣：</div>
+<pre><code>self.pieces = {                   # 積木記錄（piece_id → 資料）
+    "p1": {
+        "shape": [(0,0),(0,1)],   # 佔嘅格仔（row, col offset）
+        "row": 0,                 # 而家喺第幾行（左上角）
+        "col": 2,                 # 而家喺第幾列（左上角）
+    },
+    "p2": {
+        "shape": [(0,0)],         # 單格積木
+        "row": 3,                 # 第 3 行
+        "col": 3,                 # 第 3 列
+    },
+}</code></pre>
+
+<div class="label">逐個 level 加咩 field：</div>
+<pre><code>L1：board, pieces, piece_counter  # 最基本
+L2：（冇加新 field，只係讀 pieces）
+L3：score                         # 消咗幾多行
+L4：history                       # 動作記錄 list
+L5：self.locks                    # defaultdict(asyncio.Lock)
+L6：（冇加新 field，semaphore 喺 method 入面開）</code></pre>
+</div></div>
+
+<!-- ============ TETRIS HELPERS ============ -->
+<h2 id="tetris-helpers">Helpers（成個 mock 都用）</h2>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="cm"># Helper: _is_valid — check 積木放喺某個位置有冇 collision</span>
+<span class="sk">def _is_valid(self, shape, row, col, exclude_piece_id=None):</span>  <span class="cm"># 檢查呢個位置得唔得</span>
+    <span class="sk">for dr, dc in shape:</span>                           <span class="cm"># 逐個 offset 睇</span>
+        <span class="sk">r = row + dr</span>                                <span class="cm"># 實際行數</span>
+        <span class="sk">c = col + dc</span>                                <span class="cm"># 實際列數</span>
+        <span class="sk">if r &lt; 0 or r >= self.</span><span class="ch">rows</span><span class="sk">:</span>               <span class="cm"># 超出上下界</span>
+            <span class="sk">return False</span>                            <span class="cm"># 出界 → 唔得</span>
+        <span class="sk">if c &lt; 0 or c >= self.</span><span class="ch">cols</span><span class="sk">:</span>               <span class="cm"># 超出左右界</span>
+            <span class="sk">return False</span>                            <span class="cm"># 出界 → 唔得</span>
+        <span class="sk">if self.</span><span class="ch">board</span><span class="sk">[r][c] != 0:</span>                  <span class="cm"># 個格已經有積木</span>
+            <span class="sk">if exclude_piece_id is not None:</span>        <span class="cm"># 如果係移動（排除自己）</span>
+                <span class="sk">pass</span>                                <span class="cm"># 下面再 check 係咪自己嘅格</span>
+            <span class="sk">else:</span>                                   <span class="cm"># 放新積木，唔可以撞</span>
+                <span class="sk">return False</span>                        <span class="cm"># collision → 唔得</span>
+    <span class="sk">return True</span>                                    <span class="cm"># 全部 offset 都冇問題 → OK</span>
+
+&nbsp;
+<span class="cm"># Helper: _stamp — 將積木寫入棋盤（填 1）</span>
+<span class="sk">def _stamp(self, shape, row, col):</span>                 <span class="cm"># 喺棋盤上畫呢塊積木</span>
+    <span class="sk">for dr, dc in shape:</span>                           <span class="cm"># 逐個 offset</span>
+        <span class="sk">r = row + dr</span>                                <span class="cm"># 實際行</span>
+        <span class="sk">c = col + dc</span>                                <span class="cm"># 實際列</span>
+        <span class="sk">self.</span><span class="ch">board</span><span class="sk">[r][c] = 1</span>                       <span class="cm"># 填 1（有積木）</span>
+
+&nbsp;
+<span class="cm"># Helper: _erase — 將積木從棋盤擦走（填 0）</span>
+<span class="sk">def _erase(self, shape, row, col):</span>                 <span class="cm"># 喺棋盤上擦走呢塊積木</span>
+    <span class="sk">for dr, dc in shape:</span>                           <span class="cm"># 逐個 offset</span>
+        <span class="sk">r = row + dr</span>                                <span class="cm"># 實際行</span>
+        <span class="sk">c = col + dc</span>                                <span class="cm"># 實際列</span>
+        <span class="sk">self.</span><span class="ch">board</span><span class="sk">[r][c] = 0</span>                       <span class="cm"># 填 0（空格）</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">helper 嘅職責：</div>
+<pre><code>_is_valid(shape, row, col, exclude_piece_id=None)
+    逐個 offset check：
+    1. 有冇出界（row/col 超出 board 範圍）
+    2. 有冇 collision（個格已經有嘢）
+    exclude_piece_id 用喺移動時排除自己嘅格仔
+
+_stamp(shape, row, col)
+    將積木寫入 board（fill 1）
+    place_piece / move_piece 成功後 call
+
+_erase(shape, row, col)
+    將積木從 board 擦走（fill 0）
+    remove_piece / move_piece 前 call</code></pre>
+
+<div class="label">同其他 mock 嘅 helper 比較：</div>
+<pre><code># Bank/Gym/FS 嘅 helper = _process_expired（lazy TTL）
+# Tetris 唔用 TTL，用 collision detection
+# 所以 helper 換咗做 _is_valid / _stamp / _erase
+# 冇 "每個 public method 第一行 call" 嘅 pattern
+# 但 L3 有 _process_line_clears（lazy 消行）</code></pre>
+</div></div>
+
+<!-- ============ TETRIS L1 ============ -->
+<h2 id="tetris-l1">L1 — Board + Place Piece</h2>
+<p class="note">place_piece = 放積木落棋盤 &nbsp; remove_piece = 移走積木 &nbsp; get_board_state = 攞成個棋盤</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">place_piece</span><span class="sk">(self, timestamp, shape, row, col):</span>  <span class="cm"># 放一塊積木落棋盤</span>
+    <span class="sk">if not self._is_valid(shape, row, col):</span>        <span class="cm"># check collision（出界或撞到人）</span>
+        <span class="sk">return None</span>                                 <span class="cm"># 放唔到 → return None</span>
+    <span class="sk">self.</span><span class="ch">piece_counter</span><span class="sk"> += 1</span>                         <span class="cm"># 遞增編號</span>
+    <span class="sk">pid =</span> <span class="str">"p"</span> <span class="sk">+ str(self.</span><span class="ch">piece_counter</span><span class="sk">)</span>          <span class="cm"># 造 piece_id（"p1", "p2"...）</span>
+    <span class="sk">self.</span><span class="ch">pieces</span><span class="sk">[pid] = {</span>                           <span class="cm"># 記錄呢塊積木嘅資料</span>
+        <span class="str">"shape"</span><span class="sk">: shape,</span>                            <span class="cm"># 佔邊幾格（offset list）</span>
+        <span class="str">"row"</span><span class="sk">: row,</span>                                <span class="cm"># 而家喺第幾行</span>
+        <span class="str">"col"</span><span class="sk">: col,</span>                                <span class="cm"># 而家喺第幾列</span>
+    <span class="sk">}</span>
+    <span class="sk">self._stamp(shape, row, col)</span>                    <span class="cm"># 畫上棋盤（填 1）</span>
+    <span class="sk">self.</span><span class="ch">history</span><span class="sk">.append(</span><span class="str">"placed:"</span> <span class="sk">+ pid +</span> <span class="str">"@("</span> <span class="sk">+ str(row) +</span> <span class="str">","</span> <span class="sk">+ str(col) +</span> <span class="str">")"</span><span class="sk">)</span>  <span class="cm"># 記入���史</span>
+    <span class="sk">return pid</span>                                     <span class="cm"># 返 piece_id</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">remove_piece</span><span class="sk">(self, timestamp, piece_id):</span>      <span class="cm"># 移走一塊積木</span>
+    <span class="sk">if piece_id not in self.</span><span class="ch">pieces</span><span class="sk">:</span>             <span class="cm"># 唔存在</span>
+        <span class="sk">return False</span>                                <span class="cm"># 查無此積木</span>
+    <span class="sk">info = self.</span><span class="ch">pieces</span><span class="sk">[piece_id]</span>                <span class="cm"># 攞積木資料</span>
+    <span class="sk">self._erase(info[</span><span class="str">"shape"</span><span class="sk">], info[</span><span class="str">"row"</span><span class="sk">], info[</span><span class="str">"col"</span><span class="sk">])</span>  <span class="cm"># 從棋盤擦走（填 0）</span>
+    <span class="sk">del self.</span><span class="ch">pieces</span><span class="sk">[piece_id]</span>                    <span class="cm"># 從 pieces dict 刪走</span>
+    <span class="sk">self.</span><span class="ch">history</span><span class="sk">.append(</span><span class="str">"removed:"</span> <span class="sk">+ piece_id)</span>    <span class="cm"># 記入歷史</span>
+    <span class="sk">return True</span>                                    <span class="cm"># 移走成功</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">get_board_state</span><span class="sk">(self, timestamp):</span>           <span class="cm"># 攞成個棋盤狀態</span>
+    <span class="sk">result = []</span>                                    <span class="cm"># 造一個新 list（避免 caller 改到原本嘅 board）</span>
+    <span class="sk">for r in range(self.</span><span class="ch">rows</span><span class="sk">):</span>                   <span class="cm"># 逐行</span>
+        <span class="sk">row_copy = []</span>                               <span class="cm"># 呢行嘅 copy</span>
+        <span class="sk">for c in range(self.</span><span class="ch">cols</span><span class="sk">):</span>               <span class="cm"># 逐格</span>
+            <span class="sk">row_copy.append(self.</span><span class="ch">board</span><span class="sk">[r][c])</span>     <span class="cm"># copy 過去</span>
+        <span class="sk">result.append(row_copy)</span>                     <span class="cm"># 入落 result</span>
+    <span class="sk">return result</span>                                  <span class="cm"># 返 2D list（deep copy）</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">L1 嘅 __init__：</div>
+<pre><code>def __init__(self, rows, cols):
+    self.rows = rows
+    self.cols = cols
+    self.board = [[0]*cols for _ in range(rows)]
+    self.pieces = {}
+    self.piece_counter = 0</code></pre>
+
+<div class="label">L1 嘅 data structure：</div>
+<pre><code>self.board = [
+    [0, 0, 1, 1, 0],    # p1 佔 (0,2) 同 (0,3)
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+]
+
+self.pieces = {
+    "p1": {
+        "shape": [(0,0),(0,1)],  # 橫住兩格
+        "row": 0,                # 第 0 行
+        "col": 2,                # 第 2 列
+    },
+}
+
+# board[row][col] 入面嘅 1 同 pieces 入面嘅 shape + row + col 要一致
+# _stamp 負責寫入，_erase 負責擦走</code></pre>
+
+<div class="label">L1 用嘅 helper：</div>
+<pre><code>_is_valid(shape, row, col)
+    place_piece 入面 call，check 有冇出界/collision
+_stamp(shape, row, col)
+    place_piece 成功後 call，將積木畫上棋盤
+_erase(shape, row, col)
+    remove_piece 入面 call，將積木從棋盤擦走</code></pre>
+</div></div>
+
+<!-- ============ TETRIS L2 ============ -->
+<h2 id="tetris-l2">L2 — Move + Stats</h2>
+<p class="note">move_piece = 移動積木（左/右/落）&nbsp; get_piece_count = 而家幾多塊 &nbsp; list_pieces = 列晒所有積木</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">move_piece</span><span class="sk">(self, timestamp, piece_id, direction):</span>  <span class="cm"># 移動積木（"left"/"right"/"down"）</span>
+    <span class="sk">if piece_id not in self.</span><span class="ch">pieces</span><span class="sk">:</span>             <span class="cm"># 唔存在</span>
+        <span class="sk">return False</span>                                <span class="cm"># 查無此積木</span>
+    <span class="sk">info = self.</span><span class="ch">pieces</span><span class="sk">[piece_id]</span>                <span class="cm"># 攞積木資料</span>
+    <span class="sk">old_row = info[</span><span class="str">"row"</span><span class="sk">]</span>                        <span class="cm"># 記住舊位置</span>
+    <span class="sk">old_col = info[</span><span class="str">"col"</span><span class="sk">]</span>                        <span class="cm"># 記住舊列</span>
+    <span class="sk">new_row = old_row</span>                              <span class="cm"># 預設唔變</span>
+    <span class="sk">new_col = old_col</span>                              <span class="cm"># 預設唔變</span>
+    <span class="sk">if direction ==</span> <span class="str">"left"</span><span class="sk">:</span>                      <span class="cm"># 向左</span>
+        <span class="sk">new_col = old_col - 1</span>                       <span class="cm"># 列數 -1</span>
+    <span class="sk">elif direction ==</span> <span class="str">"right"</span><span class="sk">:</span>                   <span class="cm"># 向右</span>
+        <span class="sk">new_col = old_col + 1</span>                       <span class="cm"># 列數 +1</span>
+    <span class="sk">elif direction ==</span> <span class="str">"down"</span><span class="sk">:</span>                    <span class="cm"># 向下</span>
+        <span class="sk">new_row = old_row + 1</span>                       <span class="cm"># 行數 +1（越大越低）</span>
+    <span class="sk">else:</span>                                          <span class="cm"># 未知方向</span>
+        <span class="sk">return False</span>                                <span class="cm"># 唔支援</span>
+    <span class="sk">self._erase(info[</span><span class="str">"shape"</span><span class="sk">], old_row, old_col)</span>  <span class="cm"># 先擦走舊位置（避免自己撞自己）</span>
+    <span class="sk">if not self._is_valid(info[</span><span class="str">"shape"</span><span class="sk">], new_row, new_col):</span>  <span class="cm"># check 新位置</span>
+        <span class="sk">self._stamp(info[</span><span class="str">"shape"</span><span class="sk">], old_row, old_col)</span>  <span class="cm"># 唔得 → 畫返舊位</span>
+        <span class="sk">return False</span>                                <span class="cm"># 移動失敗</span>
+    <span class="sk">self._stamp(info[</span><span class="str">"shape"</span><span class="sk">], new_row, new_col)</span>  <span class="cm"># 得 → 畫新位置</span>
+    <span class="sk">info[</span><span class="str">"row"</span><span class="sk">] = new_row</span>                         <span class="cm"># 更新 row</span>
+    <span class="sk">info[</span><span class="str">"col"</span><span class="sk">] = new_col</span>                         <span class="cm"># 更新 col</span>
+    <span class="sk">self.</span><span class="ch">history</span><span class="sk">.append(</span><span class="str">"moved:"</span> <span class="sk">+ piece_id +</span> <span class="str">":"</span> <span class="sk">+ direction)</span>  <span class="cm"># 記入歷史</span>
+    <span class="sk">return True</span>                                    <span class="cm"># 移動成功</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">get_piece_count</span><span class="sk">(self, timestamp):</span>           <span class="cm"># 而家棋盤上幾多塊積木</span>
+    <span class="sk">count = 0</span>                                      <span class="cm"># 由 0 開始數</span>
+    <span class="sk">for pid in self.</span><span class="ch">pieces</span><span class="sk">:</span>                      <span class="cm"># 逐個 piece 行</span>
+        <span class="sk">count += 1</span>                                  <span class="cm"># 數一個</span>
+    <span class="sk">return count</span>                                   <span class="cm"># 返總數</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">list_pieces</span><span class="sk">(self, timestamp, sort_by):</span>       <span class="cm"># 列晒所有積木，按 id 或 row 排</span>
+    <span class="sk">items = []</span>                                     <span class="cm"># 暫存 (piece_id, row) tuple</span>
+    <span class="sk">for pid, info in self.</span><span class="ch">pieces</span><span class="sk">.items():</span>       <span class="cm"># 逐塊積木攞出嚟</span>
+        <span class="sk">items.append((pid, info[</span><span class="str">"row"</span><span class="sk">]))</span>          <span class="cm"># 砌做 tuple</span>
+    <span class="sk">if sort_by ==</span> <span class="str">"row"</span><span class="sk">:</span>                          <span class="cm"># 按 row 排（低嘅排先 = 大 row 排先）</span>
+        <span class="sk">items.sort(key=lambda x: (-x[1], x[0]))</span>   <span class="cm"># row desc，tie 用 id asc</span>
+    <span class="sk">else:</span>                                          <span class="cm"># 預設按 id 排</span>
+        <span class="sk">items.sort(key=lambda x: x[0])</span>             <span class="cm"># id asc（字母順序）</span>
+    <span class="sk">parts = []</span>                                     <span class="cm"># 砌 output 字串</span>
+    <span class="sk">for pid, row in items:</span>                         <span class="cm"># 逐個轉做 "pid(row)"</span>
+        <span class="sk">parts.append(pid +</span> <span class="str">"("</span> <span class="sk">+ str(row) +</span> <span class="str">")"</span><span class="sk">)</span>  <span class="cm"># 砌單個 entry</span>
+    <span class="sk">return</span> <span class="str">", "</span><span class="sk">.join(parts)</span>                      <span class="cm"># 用 ", " 連埋一齊</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">L2 嘅 __init__：</div>
+<pre><code>def __init__(self, rows, cols):
+    self.rows = rows
+    self.cols = cols
+    self.board = [[0]*cols for _ in range(rows)]
+    self.pieces = {}
+    self.piece_counter = 0
+# 同 L1 一樣，冇加新 field</code></pre>
+
+<div class="label">move_piece 嘅流程：</div>
+<pre><code># 1. 攞舊位置 (old_row, old_col)
+# 2. 計新位置 (new_row, new_col)
+# 3. _erase 舊位置（先擦走自己，避免自己撞自己）
+# 4. _is_valid 新位置（check 出界/collision）
+#    ├ 唔得 → _stamp 返舊位置 → return False
+#    └ 得   → _stamp 新位置 → 更新 info → return True
+#
+# 關鍵：要先 erase 再 check
+# 如果唔 erase 就 check，積木自己嘅格仔會當做 collision</code></pre>
+
+<div class="label">list_pieces sort_by="row" 之後：</div>
+<pre><code># items.sort(key=lambda x: (-x[1], x[0]))
+#   -x[1] = -row（大 row = 低位置，排先）
+#   x[0] = pid（tie-break 用 id 字母升序）
+
+items = [
+    ("p2", 3),     # -3 ← 最細，排先（最低位置）
+    ("p1", 0),     # -0 ← 排後（最高位置）
+]
+→ "p2(3), p1(0)"</code></pre>
+
+<div class="label">L2 用嘅 helper：</div>
+<pre><code>_is_valid(shape, row, col)
+    move_piece 入面 call，check 新位置有冇 collision
+_stamp(shape, row, col)
+    move_piece 成功後 call，畫新位置
+_erase(shape, row, col)
+    move_piece 前 call，擦走舊位置</code></pre>
+</div></div>
+
+<!-- ============ TETRIS L3 ============ -->
+<h2 id="tetris-l3">L3 — Line Clear + Score (Lazy)</h2>
+<p class="note">消行 = 成行全部係 1 → 清走 → 上面跌落嚟 &nbsp; score = 總共消咗幾多行 &nbsp; lazy = place/move 之後先 check</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">_process_line_clears</span><span class="sk">(self, timestamp):</span>     <span class="cm"># lazy 消行（place/move 之後 call）</span>
+    <span class="sk">cleared = 0</span>                                    <span class="cm"># 今次消咗幾行</span>
+    <span class="sk">r = self.</span><span class="ch">rows</span><span class="sk"> - 1</span>                              <span class="cm"># 由最底行開始往上睇</span>
+    <span class="sk">while r >= 0:</span>                                  <span class="cm"># 逐行往上</span>
+        <span class="sk">full = True</span>                                 <span class="cm"># 假設呢行滿咗</span>
+        <span class="sk">for c in range(self.</span><span class="ch">cols</span><span class="sk">):</span>               <span class="cm"># 逐格 check</span>
+            <span class="sk">if self.</span><span class="ch">board</span><span class="sk">[r][c] == 0:</span>              <span class="cm"># 有空格</span>
+                <span class="sk">full = False</span>                        <span class="cm"># 唔係滿行</span>
+                <span class="sk">break</span>                               <span class="cm"># 呢行唔使再睇</span>
+        <span class="sk">if full:</span>                                    <span class="cm"># 成行全部係 1</span>
+            <span class="sk">del self.</span><span class="ch">board</span><span class="sk">[r]</span>                      <span class="cm"># 刪走呢行</span>
+            <span class="sk">new_row = []</span>                            <span class="cm"># 造一行全 0 補返頂部</span>
+            <span class="sk">for c in range(self.</span><span class="ch">cols</span><span class="sk">):</span>           <span class="cm"># 逐格填</span>
+                <span class="sk">new_row.append(0)</span>                   <span class="cm"># 填 0</span>
+            <span class="sk">self.</span><span class="ch">board</span><span class="sk">.insert(0, new_row)</span>          <span class="cm"># 插入頂部（上面所有行自動跌一格）</span>
+            <span class="sk">cleared += 1</span>                            <span class="cm"># 計數 +1</span>
+            <span class="sk">self.</span><span class="ch">history</span><span class="sk">.append(</span><span class="str">"cleared:row_"</span> <span class="sk">+ str(r))</span>  <span class="cm"># 記入歷史</span>
+        <span class="sk">else:</span>                                       <span class="cm"># 唔係滿行</span>
+            <span class="sk">r -= 1</span>                                  <span class="cm"># 往上一行（滿行唔 -1，因為 del 咗所以下次同一個 r 係新行）</span>
+    <span class="sk">self.</span><span class="ch">score</span><span class="sk"> += cleared</span>                          <span class="cm"># 加入總分</span>
+    <span class="sk">if cleared > 0:</span>                                <span class="cm"># 如果有消行</span>
+        <span class="sk">self._rebuild_pieces()</span>                      <span class="cm"># 重建 pieces 嘅 row（因為行跌咗）</span>
+    <span class="sk">return cleared</span>                                 <span class="cm"># 返今次消咗幾行</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">_rebuild_pieces</span><span class="sk">(self):</span>                       <span class="cm"># 消行後重建 piece 位置</span>
+    <span class="sk">for pid, info in self.</span><span class="ch">pieces</span><span class="sk">.items():</span>       <span class="cm"># 逐塊積木</span>
+        <span class="sk">new_cells = []</span>                              <span class="cm"># 搵返呢塊積木而家實際佔邊幾格</span>
+        <span class="sk">for dr, dc in info[</span><span class="str">"shape"</span><span class="sk">]:</span>             <span class="cm"># 逐個 offset</span>
+            <span class="sk">r = info[</span><span class="str">"row"</span><span class="sk">] + dr</span>                  <span class="cm"># 舊嘅實際行</span>
+            <span class="sk">c = info[</span><span class="str">"col"</span><span class="sk">] + dc</span>                  <span class="cm"># 舊嘅實際列</span>
+            <span class="sk">if r &lt; self.</span><span class="ch">rows</span><span class="sk"> and self.</span><span class="ch">board</span><span class="sk">[r][c] == 1:</span>  <span class="cm"># 仲喺度</span>
+                <span class="sk">new_cells.append((r, c))</span>            <span class="cm"># 記低</span>
+        <span class="sk">if not new_cells:</span>                           <span class="cm"># 成塊積木被消曬</span>
+            <span class="sk">continue</span>                                <span class="cm"># 留住（後面 clean up）</span>
+        <span class="sk">min_r = new_cells[0][0]</span>                     <span class="cm"># 搵最小 row</span>
+        <span class="sk">min_c = new_cells[0][1]</span>                     <span class="cm"># 搵最小 col</span>
+        <span class="sk">for r, c in new_cells:</span>                      <span class="cm"># 搵真正嘅 min</span>
+            <span class="sk">if r &lt; min_r:</span>                           <span class="cm"># 更小嘅 row</span>
+                <span class="sk">min_r = r</span>                           <span class="cm"># 更新</span>
+            <span class="sk">if c &lt; min_c:</span>                           <span class="cm"># 更小嘅 col</span>
+                <span class="sk">min_c = c</span>                           <span class="cm"># 更新</span>
+        <span class="sk">info[</span><span class="str">"row"</span><span class="sk">] = min_r</span>                        <span class="cm"># 更新 row</span>
+        <span class="sk">info[</span><span class="str">"col"</span><span class="sk">] = min_c</span>                        <span class="cm"># 更新 col</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">get_score</span><span class="sk">(self, timestamp):</span>                 <span class="cm"># 攞總分（消咗幾多行）</span>
+    <span class="sk">return self.</span><span class="ch">score</span>                              <span class="cm"># 直接返（score 喺 _process_line_clears 入面加）</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">L3 嘅 __init__：</div>
+<pre><code>def __init__(self, rows, cols):
+    self.rows = rows
+    self.cols = cols
+    self.board = [[0]*cols for _ in range(rows)]
+    self.pieces = {}
+    self.piece_counter = 0
+    self.score = 0</code></pre>
+
+<div class="label">消行嘅機制（想像）：</div>
+<pre><code># 消行前：
+# row 0: [0, 0, 1, 1, 0]
+# row 1: [1, 1, 1, 1, 1]  ← 滿行
+# row 2: [0, 0, 0, 1, 0]
+#
+# del board[1]  → 刪走滿行
+# insert(0, [0,0,0,0,0]) → 頂部補一行空行
+#
+# 消行後：
+# row 0: [0, 0, 0, 0, 0]  ← 新嘅空行
+# row 1: [0, 0, 1, 1, 0]  ← 本來嘅 row 0 跌咗一格
+# row 2: [0, 0, 0, 1, 0]  ← 本來嘅 row 2 唔變</code></pre>
+
+<div class="label">點解由底往上掃（while r >= 0）：</div>
+<pre><code># del board[r] 之後，原本 r+1 嘅行變咗新 r
+# 所以 del 之後唔 r -= 1，下次 loop 自動 check 新行
+# 如果由上往下掃，del 會跳過下一行</code></pre>
+
+<div class="label">L3 要改之前 level 嘅 function：</div>
+<pre><code>要改：
+  place_piece 尾加 self._process_line_clears(timestamp)
+  move_piece 成功後加 self._process_line_clears(timestamp)
+新加：
+  _process_line_clears(timestamp)
+  _rebuild_pieces()
+  get_score(timestamp)</code></pre>
+</div></div>
+
+<!-- ============ TETRIS L4 ============ -->
+<h2 id="tetris-l4">L4 — Gravity Drop + History + Undo</h2>
+<p class="note">drop = 積木直接跌到最低有效位 &nbsp; history = 動作記錄 &nbsp; undo = 回退最後一個動作</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">def</span> <span class="ch">drop_piece</span><span class="sk">(self, timestamp, piece_id):</span>      <span class="cm"># 積木直接跌到最底</span>
+    <span class="sk">if piece_id not in self.</span><span class="ch">pieces</span><span class="sk">:</span>             <span class="cm"># 唔存在</span>
+        <span class="sk">return False</span>                                <span class="cm"># 查無此積木</span>
+    <span class="sk">info = self.</span><span class="ch">pieces</span><span class="sk">[piece_id]</span>                <span class="cm"># 攞積木資料</span>
+    <span class="sk">shape = info[</span><span class="str">"shape"</span><span class="sk">]</span>                        <span class="cm"># 攞 shape</span>
+    <span class="sk">old_row = info[</span><span class="str">"row"</span><span class="sk">]</span>                        <span class="cm"># 記住起始行</span>
+    <span class="sk">old_col = info[</span><span class="str">"col"</span><span class="sk">]</span>                        <span class="cm"># 記住列</span>
+    <span class="sk">self._erase(shape, old_row, old_col)</span>           <span class="cm"># 先擦走（避免自撞）</span>
+    <span class="sk">final_row = old_row</span>                            <span class="cm"># 記住最後有效位置</span>
+    <span class="sk">test_row = old_row + 1</span>                         <span class="cm"># 由下一行開始試</span>
+    <span class="sk">while test_row &lt; self.</span><span class="ch">rows</span><span class="sk">:</span>                  <span class="cm"># 唔超出底部</span>
+        <span class="sk">if self._is_valid(shape, test_row, old_col):</span>  <span class="cm"># 呢行得唔得</span>
+            <span class="sk">final_row = test_row</span>                    <span class="cm"># 記住（繼續試更低）</span>
+            <span class="sk">test_row += 1</span>                           <span class="cm"># 再落一行</span>
+        <span class="sk">else:</span>                                       <span class="cm"># 落唔到</span>
+            <span class="sk">break</span>                                   <span class="cm"># 停喺上一行</span>
+    <span class="sk">self._stamp(shape, final_row, old_col)</span>         <span class="cm"># 畫喺最低有效位</span>
+    <span class="sk">info[</span><span class="str">"row"</span><span class="sk">] = final_row</span>                       <span class="cm"># 更新 row</span>
+    <span class="sk">self.</span><span class="ch">history</span><span class="sk">.append(</span><span class="str">"dropped:"</span> <span class="sk">+ piece_id +</span> <span class="str">"@("</span> <span class="sk">+ str(final_row) +</span> <span class="str">","</span> <span class="sk">+ str(old_col) +</span> <span class="str">")"</span><span class="sk">)</span>  <span class="cm"># 記入歷史</span>
+    <span class="sk">self._process_line_clears(timestamp)</span>           <span class="cm"># drop 之後 check 消行</span>
+    <span class="sk">return True</span>                                    <span class="cm"># drop 成功</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">get_history</span><span class="sk">(self, timestamp):</span>               <span class="cm"># 攞所有動作記錄</span>
+    <span class="sk">result = []</span>                                    <span class="cm"># 造 copy</span>
+    <span class="sk">for entry in self.</span><span class="ch">history</span><span class="sk">:</span>                   <span class="cm"># 逐條記錄</span>
+        <span class="sk">result.append(entry)</span>                        <span class="cm"># copy 入 result</span>
+    <span class="sk">return result</span>                                  <span class="cm"># 返 list of string</span>
+
+&nbsp;
+<span class="sk">def</span> <span class="ch">undo_last</span><span class="sk">(self, timestamp):</span>                 <span class="cm"># 回退最後一個動作</span>
+    <span class="sk">if not self.</span><span class="ch">history</span><span class="sk">:</span>                          <span class="cm"># 冇嘢可以 undo</span>
+        <span class="sk">return False</span>                                <span class="cm"># 空嘅 → False</span>
+    <span class="sk">last = self.</span><span class="ch">history</span><span class="sk">[-1]</span>                      <span class="cm"># 攞最後一條</span>
+    <span class="sk">self.</span><span class="ch">history</span><span class="sk">.pop()</span>                             <span class="cm"># 刪走最後一條</span>
+    <span class="sk">if last.startswith(</span><span class="str">"placed:"</span><span class="sk">):</span>               <span class="cm"># 上次係 place → undo = remove</span>
+        <span class="sk">pid = last.split(</span><span class="str">":"</span><span class="sk">)[1].split(</span><span class="str">"@"</span><span class="sk">)[0]</span>  <span class="cm"># 攞 piece_id</span>
+        <span class="sk">if pid in self.</span><span class="ch">pieces</span><span class="sk">:</span>                   <span class="cm"># 仲喺度</span>
+            <span class="sk">info = self.</span><span class="ch">pieces</span><span class="sk">[pid]</span>              <span class="cm"># 攞 info</span>
+            <span class="sk">self._erase(info[</span><span class="str">"shape"</span><span class="sk">], info[</span><span class="str">"row"</span><span class="sk">], info[</span><span class="str">"col"</span><span class="sk">])</span>  <span class="cm"># 從棋盤擦走</span>
+            <span class="sk">del self.</span><span class="ch">pieces</span><span class="sk">[pid]</span>                <span class="cm"># 刪走 piece</span>
+    <span class="sk">elif last.startswith(</span><span class="str">"removed:"</span><span class="sk">):</span>             <span class="cm"># 上次係 remove → undo = 放返（simplified）</span>
+        <span class="sk">pass</span>                                        <span class="cm"># simplified：remove 嘅 undo 需要額外 snapshot，此處省略</span>
+    <span class="sk">elif last.startswith(</span><span class="str">"moved:"</span><span class="sk">):</span>               <span class="cm"># 上次係 move → undo = 移返反方向</span>
+        <span class="sk">parts = last.split(</span><span class="str">":"</span><span class="sk">)</span>                    <span class="cm"># ["moved", "p1", "left"]</span>
+        <span class="sk">pid = parts[1]</span>                              <span class="cm"># piece_id</span>
+        <span class="sk">direction = parts[2]</span>                        <span class="cm"># 原方向</span>
+        <span class="sk">reverse = {</span><span class="str">"left"</span><span class="sk">:</span> <span class="str">"right"</span><span class="sk">,</span> <span class="str">"right"</span><span class="sk">:</span> <span class="str">"left"</span><span class="sk">,</span> <span class="str">"down"</span><span class="sk">:</span> <span class="str">"up"</span><span class="sk">}</span>  <span class="cm"># 反方向 map</span>
+        <span class="sk">rev_dir = reverse.get(direction,</span> <span class="str">""</span><span class="sk">)</span>       <span class="cm"># 攞反方向</span>
+        <span class="sk">if pid in self.</span><span class="ch">pieces</span><span class="sk"> and rev_dir:</span>        <span class="cm"># 積木仲喺度 + 有反方向</span>
+            <span class="sk">self.move_piece(timestamp, pid, rev_dir)</span>  <span class="cm"># 移返去</span>
+            <span class="sk">self.</span><span class="ch">history</span><span class="sk">.pop()</span>                     <span class="cm"># move 會加 history，要 pop 走</span>
+    <span class="sk">return True</span>                                    <span class="cm"># undo 成功</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">L4 嘅 __init__：</div>
+<pre><code>def __init__(self, rows, cols):
+    self.rows = rows
+    self.cols = cols
+    self.board = [[0]*cols for _ in range(rows)]
+    self.pieces = {}
+    self.piece_counter = 0
+    self.score = 0
+    self.history = []</code></pre>
+
+<div class="label">drop_piece 嘅流程：</div>
+<pre><code># 1. _erase 舊位置（同 move 一樣，先擦走）
+# 2. 由 old_row+1 開始逐行往下試
+#    └ _is_valid → 得就繼續往下，唔得就 break
+# 3. _stamp 最後有效位置
+# 4. 更新 info["row"]
+# 5. _process_line_clears（drop 後好大機會消行）
+#
+# 同 move_piece("down") 嘅分別：
+#   move = 一次一格
+#   drop = 一直落到底</code></pre>
+
+<div class="label">history 嘅格式：</div>
+<pre><code>self.history = [
+    "placed:p1@(0,2)",       # place_piece 產生
+    "moved:p1:down",         # move_piece 產生
+    "cleared:row_4",         # _process_line_clears 產生
+    "dropped:p2@(3,1)",      # drop_piece 產生
+    "removed:p1",            # remove_piece 產生
+]</code></pre>
+
+<div class="label">undo 嘅策略：</div>
+<pre><code># placed → remove 返（erase + del）
+# moved  → move 返反方向
+# removed → 需要 snapshot（simplified，此處 pass）
+# cleared → 極難 undo（需要記住被消嘅行）
+# dropped → 需要記住原始 row（simplified）
+#
+# 考試通常只要求 undo place 同 move</code></pre>
+</div></div>
+
+<!-- ============ TETRIS L5 ============ -->
+<h2 id="tetris-l5">L5 — Async Batch</h2>
+<p class="note">batch = 一拼做幾單嘢 &nbsp; lock = 鎖 &nbsp; per-piece lock = 每個 piece_id 一把鎖</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">async def</span> <span class="ch">batch_operations</span><span class="sk">(self, timestamp, ops):</span>  <span class="cm"># 一次過做一堆 place/move/remove</span>
+    <span class="sk">results = []</span>                                   <span class="cm"># 暫存每個 op 嘅結果</span>
+    <span class="sk">for op in ops:</span>                                 <span class="cm"># 順住 input 順序逐個做</span>
+        <span class="sk">op_type = op[</span><span class="str">"type"</span><span class="sk">]</span>                      <span class="cm"># 攞 op 類型</span>
+        <span class="sk">if op_type ==</span> <span class="str">"place"</span><span class="sk">:</span>                     <span class="cm"># place 類型</span>
+            <span class="sk">shape = op[</span><span class="str">"shape"</span><span class="sk">]</span>                   <span class="cm"># 攞 shape</span>
+            <span class="sk">row = op[</span><span class="str">"row"</span><span class="sk">]</span>                       <span class="cm"># 攞 row</span>
+            <span class="sk">col = op[</span><span class="str">"col"</span><span class="sk">]</span>                       <span class="cm"># 攞 col</span>
+            <span class="sk">pid =</span> <span class="str">"p"</span> <span class="sk">+ str(self.</span><span class="ch">piece_counter</span><span class="sk"> + 1)</span>  <span class="cm"># 預計嘅 piece_id</span>
+            <span class="sk">async with self.locks[pid]:</span>             <span class="cm"># 鎖呢個 piece_id</span>
+                <span class="sk">result = self.place_piece(timestamp, shape, row, col)</span>  <span class="cm"># call L1</span>
+            <span class="sk">results.append(result)</span>                  <span class="cm"># 記返結果（pid 或 None）</span>
+        <span class="sk">elif op_type ==</span> <span class="str">"move"</span><span class="sk">:</span>                    <span class="cm"># move 類型</span>
+            <span class="sk">pid = op[</span><span class="str">"piece_id"</span><span class="sk">]</span>                  <span class="cm"># 攞 piece_id</span>
+            <span class="sk">direction = op[</span><span class="str">"direction"</span><span class="sk">]</span>             <span class="cm"># 攞方向</span>
+            <span class="sk">async with self.locks[pid]:</span>             <span class="cm"># 鎖呢個 piece_id</span>
+                <span class="sk">ok = self.move_piece(timestamp, pid, direction)</span>  <span class="cm"># call L2</span>
+            <span class="sk">results.append(ok)</span>                      <span class="cm"># 記返結果</span>
+        <span class="sk">elif op_type ==</span> <span class="str">"remove"</span><span class="sk">:</span>                  <span class="cm"># remove 類型</span>
+            <span class="sk">pid = op[</span><span class="str">"piece_id"</span><span class="sk">]</span>                  <span class="cm"># 攞 piece_id</span>
+            <span class="sk">async with self.locks[pid]:</span>             <span class="cm"># 鎖呢個 piece_id</span>
+                <span class="sk">ok = self.remove_piece(timestamp, pid)</span>  <span class="cm"># call L1</span>
+            <span class="sk">results.append(ok)</span>                      <span class="cm"># 記返結果</span>
+        <span class="sk">else:</span>                                      <span class="cm"># 其他 type 唔 support</span>
+            <span class="sk">results.append(False)</span>                   <span class="cm"># 一律 False</span>
+    <span class="sk">return results</span>                                 <span class="cm"># 返一個同 input 一樣長嘅 list</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">L5 嘅 __init__：</div>
+<pre><code>def __init__(self, rows, cols):
+    self.rows = rows
+    self.cols = cols
+    self.board = [[0]*cols for _ in range(rows)]
+    self.pieces = {}
+    self.piece_counter = 0
+    self.score = 0
+    self.history = []
+    self.locks = defaultdict(asyncio.Lock)</code></pre>
+
+<div class="label">L5 嘅 data structure：</div>
+<pre><code>self.locks = {
+    "p1": &lt;asyncio.Lock&gt;,    # defaultdict 一 access 就自動造
+    "p2": &lt;asyncio.Lock&gt;,
+}
+
+# 每個 piece_id 一把獨立鎖
+# 兩個 op 鎖唔同 piece → 可以並行
+# 兩個 op 鎖同一個 piece → 後嗰個會等</code></pre>
+
+<div class="label">L5 要加/改邊啲 function：</div>
+<pre><code>新加：
+  batch_operations(timestamp, ops)  ← async
+init 多咗：
+  self.locks = defaultdict(asyncio.Lock)
+無改 L1/L2/L3/L4 嘅 sync method（batch 入面 call 返佢哋）</code></pre>
+
+<div class="label">同 Gym 嘅 L5 比較：</div>
+<pre><code># Gym：op key = member_id
+# Tetris：op key = piece_id
+# Pattern 一樣：for loop + async with lock[key] + call sync method
+# 唯一分別：place 嘅 lock key 係預計嘅 pid（因為 place 前未有 id）</code></pre>
+</div></div>
+
+<!-- ============ TETRIS L6 ============ -->
+<h2 id="tetris-l6">L6 — Rate-Limited Sync</h2>
+<p class="note">sync_boards = 將積木 transfer 去另一塊板 &nbsp; semaphore = 限制同時做嘅 transfer 數 &nbsp; fail-fast = piece 唔存在即走</p>
+<div class="split">
+<div class="split-left">
+<pre><code><span class="sk">async def</span> <span class="ch">sync_boards</span><span class="sk">(self, timestamp, transfers, max_concurrent):</span>  <span class="cm"># 並行做一堆 transfer，限 N 個 concurrent</span>
+    <span class="sk">sem = asyncio.Semaphore(max_concurrent)</span>        <span class="cm"># 開一個 N 位嘅 semaphore</span>
+    <span class="sk">tasks = []</span>                                     <span class="cm"># 暫存所有 coroutine task</span>
+    <span class="sk">for transfer in transfers:</span>                     <span class="cm"># 逐個 transfer 包做一個 task</span>
+        <span class="sk">task = self._do_one_sync(timestamp, transfer, sem)</span>  <span class="cm"># 起 coroutine（未 await）</span>
+        <span class="sk">tasks.append(task)</span>                          <span class="cm"># 入 list</span>
+    <span class="sk">results = await asyncio.gather(*tasks)</span>         <span class="cm"># 並發跑，等全部完，保留順序</span>
+    <span class="sk">final = []</span>                                     <span class="cm"># 轉做正常 list</span>
+    <span class="sk">for r in results:</span>                              <span class="cm"># 逐個 copy 過</span>
+        <span class="sk">final.append(r)</span>                             <span class="cm"># 入 list</span>
+    <span class="sk">return final</span>                                   <span class="cm"># 返一個同 transfers 一樣長嘅 list[bool]</span>
+
+&nbsp;
+<span class="sk">async def</span> <span class="ch">_do_one_sync</span><span class="sk">(self, timestamp, transfer, sem):</span>  <span class="cm"># 做單一 transfer（async helper）</span>
+    <span class="sk">pid = transfer[</span><span class="str">"piece_id"</span><span class="sk">]</span>                    <span class="cm"># 攞 piece_id</span>
+    <span class="sk">dest = transfer[</span><span class="str">"destination"</span><span class="sk">]</span>                <span class="cm"># 攞目的地（另一塊板）</span>
+    <span class="cm"># fail-fast：未攞 semaphore 之前已經 check（唔阻住其他 task）</span>
+    <span class="sk">if pid not in self.</span><span class="ch">pieces</span><span class="sk">:</span>                   <span class="cm"># piece 唔存在</span>
+        <span class="sk">return False</span>                                <span class="cm"># 即刻 False，唔 acquire semaphore</span>
+    <span class="sk">async with sem:</span>                                <span class="cm"># 過咗 fail-fast 先攞 semaphore（限速）</span>
+        <span class="sk">await asyncio.sleep(0.01)</span>                  <span class="cm"># 模擬 transfer 嘅延遲（10ms）</span>
+        <span class="sk">info = self.</span><span class="ch">pieces</span><span class="sk">[pid]</span>                  <span class="cm"># 攞積木資料</span>
+        <span class="sk">self._erase(info[</span><span class="str">"shape"</span><span class="sk">], info[</span><span class="str">"row"</span><span class="sk">], info[</span><span class="str">"col"</span><span class="sk">])</span>  <span class="cm"># 從本板擦走</span>
+        <span class="sk">del self.</span><span class="ch">pieces</span><span class="sk">[pid]</span>                      <span class="cm"># 刪走 piece</span>
+        <span class="sk">self.</span><span class="ch">history</span><span class="sk">.append(</span><span class="str">"synced:"</span> <span class="sk">+ pid +</span> <span class="str">"->"</span> <span class="sk">+ dest)</span>  <span class="cm"># 記入歷史</span>
+        <span class="sk">return True</span>                                <span class="cm"># transfer 成功</span></code></pre>
+</div><div class="resizer"></div><div class="split-right">
+<div class="label">L6 嘅 __init__：</div>
+<pre><code>def __init__(self, rows, cols):
+    self.rows = rows
+    self.cols = cols
+    self.board = [[0]*cols for _ in range(rows)]
+    self.pieces = {}
+    self.piece_counter = 0
+    self.score = 0
+    self.history = []
+    self.locks = defaultdict(asyncio.Lock)
+# semaphore 喺 method 入面開（per-call）</code></pre>
+
+<div class="label">L6 嘅 data structure：</div>
+<pre><code>self.pieces = {
+    "p1": {"shape": [(0,0),(0,1)], "row": 0, "col": 2},
+}
+# 同前完全一樣
+# semaphore 唔放入 self（每次 sync_boards 都重新開一個 N 位）</code></pre>
+
+<div class="label">L6 要加/改邊啲 function：</div>
+<pre><code>新加：
+  _do_one_sync(timestamp, transfer, sem)  ← async helper
+  sync_boards(timestamp, transfers, max_concurrent)  ← async public
+特別注意：
+  fail-fast check 寫喺 acquire sem 之前
+  唔好 acquire 咗 sem 先 check，否則「失敗嘅 task」都會白佔位
+  transfer 成功後要 erase + del piece（離開本板）</code></pre>
+
+<div class="label">L6 Pattern = Fail-Fast + Sleep：</div>
+<pre><code># 同 Gym/Bank/FS 完全一樣嘅 pattern：
+# 1. fail-fast check（sem 外面）
+# 2. async with sem:（限速）
+# 3. await asyncio.sleep(0.01)（模擬延遲）
+# 4. 做嘢 + return True
+#
+# 唯一分別：
+# Gym: checkout member（改 field）
+# Tetris: erase + del piece（從棋盤移除）</code></pre>
+</div></div>
+
+</div><!-- end sys-tetris -->
+
+
 
 
 <script>

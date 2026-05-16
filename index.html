@@ -30,7 +30,7 @@ table { width: 100%; border-collapse: collapse; margin: 12px 0 24px 0; font-size
 th { background: #161b22; color: #58a6ff; text-align: left; padding: 12px; border: 1px solid #30363d; }
 td { padding: 12px; border: 1px solid #30363d; }
 .resizable-table { table-layout: fixed; }
-.resizable-table tr:first-child > * { position: relative; }
+.resizable-table th, .resizable-table td { position: relative; }
 .col-resize-handle { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 4; user-select: none; -webkit-user-select: none; }
 .col-resize-handle:hover, .col-resize-handle.active { background: rgba(88, 166, 255, 0.22); }
 body.resizing-cols { cursor: col-resize; user-select: none; -webkit-user-select: none; }
@@ -89,16 +89,76 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 .mock-answer p { font-size: 19px; margin-bottom: 8px; }
 .hl-kw { background: #f0c040; color: #111111; padding: 0 3px; border-radius: 3px; font-weight: bold; }
 .table-scroll { overflow-x: auto; margin: 12px 0 24px 0; }
-.concept-table { min-width: 1500px; }
+.concept-table { min-width: 1700px; }
 .concept-table td, .concept-table th { vertical-align: top; }
 .concept-table pre { margin: 0; white-space: pre-wrap; font-size: 16px; line-height: 1.25; }
-.concept-table th:nth-child(1), .concept-table td:nth-child(1) { width: 14%; }
-.concept-table th:nth-child(2), .concept-table td:nth-child(2) { width: 17%; }
-.concept-table th:nth-child(3), .concept-table td:nth-child(3) { width: 31%; min-width: 260px; }
-.concept-table th:nth-child(4), .concept-table td:nth-child(4) { width: 38%; min-width: 320px; }
+.numbered-concepts th:nth-child(1), .numbered-concepts td:nth-child(1) { width: 34%; min-width: 320px; }
+.numbered-concepts th:nth-child(2), .numbered-concepts td:nth-child(2) { width: 66%; min-width: 480px; }
+.numbered-concepts.compact-concepts th:nth-child(1), .numbered-concepts.compact-concepts td:nth-child(1) { width: 20%; min-width: 250px; }
+.numbered-concepts.compact-concepts th:nth-child(2), .numbered-concepts.compact-concepts td:nth-child(2) { width: 80%; min-width: 1240px; }
 .concept-table td:last-child, .concept-table th:last-child { background: #0f141c; }
+.concept-visual { display: block; }
+.concept-tile-columns, .concept-hidden-columns { display: grid; grid-template-columns: repeat(2, minmax(360px, 1fr)); gap: 12px; align-items: start; }
+.concept-tile-column, .concept-hidden-column { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.concept-hidden-tiles { margin-top: 8px; }
 .concept-visual p { font-size: 18px; margin-bottom: 6px; }
 .concept-visual pre { margin: 6px 0 10px 0; }
+.concept-visual > .concept-visual-more { margin-top: 12px; }
+.concept-ref-block { margin-top: 10px; padding-top: 8px; border-top: 1px dashed #30363d; }
+.concept-ref-title { color: #8b949e; font-size: 15px; margin-bottom: 6px; font-weight: bold; }
+.concept-ref-block .jump-link { display: inline; }
+.concept-slot-picker { margin-top: 8px; }
+.concept-slot-controls { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.concept-slot-label { display: flex; flex-direction: column; gap: 4px; }
+.concept-slot-label-text { color: #79c0ff; font-size: 14px; font-weight: 700; }
+.concept-slot-select { width: 100%; background: #161b22; color: #e6edf3; border: 1px solid #30363d; border-radius: 6px; padding: 6px 8px; font-size: 14px; }
+.concept-howto { margin-top: 12px; padding-top: 10px; border-top: 1px solid #30363d; }
+.concept-howto-title { color: #f0c040; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.concept-howto-steps { list-style: none; margin: 0; padding: 0; }
+.concept-howto-steps li { margin: 0 0 8px 0; font-size: 16px; line-height: 1.5; color: #c9d1d9; }
+.concept-howto-step { color: #79c0ff; font-weight: 700; margin-right: 8px; }
+.concept-merge-block { margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #30363d; }
+.concept-level-badge { display: inline-flex; align-items: center; margin: 0 0 10px 0; padding: 3px 10px; border-radius: 999px; background: rgba(121, 192, 255, 0.12); border: 1px solid rgba(121, 192, 255, 0.35); color: #79c0ff; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.concept-merge-title { color: #e6edf3; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.concept-merge-title code { color: #f0c040; font-size: 17px; }
+.concept-example-tile { border: 2px solid #2f81f7; border-radius: 9px; padding: 10px 12px; margin: 0; background: linear-gradient(180deg, rgba(22,27,34,0.96) 0%, rgba(15,20,28,0.96) 100%); box-shadow: inset 0 0 0 1px rgba(121,192,255,0.12); }
+.concept-example-tile p:last-child, .concept-example-tile pre:last-child { margin-bottom: 0; }
+.concept-card-title { display: block; margin-bottom: 8px; font-size: 18px; font-weight: 700; }
+.concept-card-title a { color: #79c0ff; text-decoration: none; }
+.concept-card-title a:hover { text-decoration: underline; }
+.concept-summary-tile { border-style: dashed; }
+.concept-slot-grid { display: grid; grid-template-columns: repeat(2, minmax(360px, 1fr)); gap: 12px; align-items: start; }
+.concept-slot-empty { border: 2px dashed #30363d; border-radius: 9px; padding: 14px 12px; color: #8b949e; min-height: 88px; background: rgba(22,27,34,0.65); }
+.concept-visual-more { margin-top: 8px; }
+.concept-visual-more summary { cursor: pointer; color: #8b949e; font-size: 15px; }
+.concept-visual-more summary:hover { color: #79c0ff; }
+.concept-visual-links { margin-top: 8px; line-height: 1.5; }
+.concept-visual .copy-btn, .concept-visual .line-copy { display: none !important; }
+.concept-focus-line { background: rgba(240, 192, 64, 0.08); border-left: 3px solid #f0c040; padding-left: 6px; margin-left: -6px; }
+.concept-focus-chip { display: inline-block; margin-left: 10px; padding: 1px 7px; border-radius: 999px; background: #3d2e00; color: #f0c040; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; vertical-align: middle; }
+.concept-visual .hljs-comment { color: #8b949e; }
+.concept-inline-note { margin-top: 8px; color: #8b949e; font-size: 15px; line-height: 1.45; }
+.concept-inline-note code { color: #f0c040; font-size: 15px; }
+.compare-shell { display: flex; flex-direction: column; gap: 16px; }
+.compare-toolbar { display: grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap: 12px; }
+.compare-slot { display: flex; flex-direction: column; gap: 6px; }
+.compare-slot-label { color: #79c0ff; font-size: 16px; font-weight: 700; }
+.compare-slot-select { width: 100%; background: #161b22; color: #e6edf3; border: 1px solid #30363d; border-radius: 8px; padding: 8px 10px; font-size: 16px; }
+.compare-note { color: #8b949e; font-size: 16px; margin: 0; }
+.compare-levels { display: flex; flex-direction: column; gap: 18px; }
+.compare-level-block { background: linear-gradient(180deg, rgba(22,27,34,0.96) 0%, rgba(15,20,28,0.96) 100%); border: 1px solid #30363d; border-radius: 10px; padding: 14px; }
+.compare-level-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: baseline; margin-bottom: 12px; }
+.compare-level-kicker { color: #f0c040; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.compare-level-title { color: #e6edf3; font-size: 20px; font-weight: 700; }
+.compare-level-hint { color: #8b949e; font-size: 15px; }
+.compare-level-grid { display: grid; grid-template-columns: repeat(2, minmax(360px, 1fr)); gap: 12px; align-items: start; }
+.compare-column-title { color: #58a6ff; font-size: 16px; font-weight: 700; padding: 0 2px 2px 2px; }
+.compare-row-label { grid-column: 1 / -1; color: #f0c040; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; padding: 2px 2px 0 2px; margin-top: 4px; }
+.compare-level-grid .line-copy { display: none !important; }
+.compare-cheatsheet summary { cursor: pointer; color: #79c0ff; font-size: 16px; font-weight: 700; }
+.compare-cheatsheet summary:hover { color: #a5d6ff; }
+.code-line { display: block; }
+.code-gap-before { margin-top: 0.58em; }
 .numbered-concepts { counter-reset: concept-row; }
 .numbered-concepts tr:not(:first-child) > td:first-child::before {
     counter-increment: concept-row;
@@ -106,8 +166,8 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
     color: #f0c040;
     font-weight: bold;
 }
-.concept-check-row { display: block; }
-.concept-check-controls { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 8px; }
+.concept-check-row { display: flex; flex-direction: column; gap: 10px; }
+.concept-check-controls { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 4px; }
 .concept-check-item { display: inline-flex; align-items: center; gap: 3px; }
 .concept-check-emoji { font-size: 15px; line-height: 1; user-select: none; -webkit-user-select: none; }
 .concept-mastery { width: 18px; height: 18px; margin-top: 0.1em; flex-shrink: 0; cursor: pointer; accent-color: #3fb950; }
@@ -117,6 +177,7 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 .concept-needs-attention > td { background: rgba(248, 81, 73, 0.16); }
 .jump-link { color: #79c0ff; text-decoration: none; }
 .jump-link:hover { text-decoration: underline; }
+@media (max-width: 1100px) { .concept-slot-grid, .compare-toolbar, .compare-level-grid, .concept-tile-columns, .concept-hidden-columns { grid-template-columns: 1fr; } }
 @media (max-width: 768px) { #side-nav { display: none; } body { margin-left: 0; padding: 10px; } .split { flex-direction: column; } }
 </style>
 </head>
@@ -124,9 +185,6 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 
 <div id="nav-resizer"></div>
 <div id="side-nav">
-<button class="sys-btn" onclick="switchSystem('roadmap')" style="background:#1f6feb;color:white;border-color:#1f6feb">📋 分類圖</button>
-<button class="sys-btn" onclick="switchSystem('variants')">📖 Variants</button>
-<div class="nav-divider"></div>
 <div style="color:#3fb950;font-size:10px;padding:2px 0;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">A: Flat+Lazy ▾</div>
 <div>
 <button class="sys-btn" onclick="switchSystem('bank')"> ├ Bank ✅</button>
@@ -181,7 +239,7 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 <button class="sys-btn" onclick="switchSystem('keywordmap')">Keyword Map</button>
 <button class="sys-btn" onclick="switchSystem('compare')">Compare</button>
 <div class="nav-divider"></div>
-<a href="#inmemdb-init" class="nav-level" data-variants="var-l1" data-bank="bank-init" data-hotel="hotel-imports" data-inmemdb="inmemdb-init" data-hashring="hr-init" data-taskqueue="tq-init" data-gym="gym-init" data-tetris="tetris-init" data-elevator="elev-init" data-restaurant="rest-init" data-parking="pk-init" data-domains="">Init</a>
+<a href="#inmemdb-init" class="nav-level" data-variants="var-l1" data-bank="bank-init" data-hotel="h-init" data-inmemdb="inmemdb-init" data-hashring="hr-init" data-taskqueue="tq-init" data-gym="gym-init" data-tetris="tetris-init" data-elevator="elev-init" data-restaurant="rest-init" data-parking="pk-init" data-domains="">Init</a>
 <a href="#inmemdb-l1" class="nav-level" data-variants="var-l1" data-bank="l1" data-hotel="hotel-l1" data-inmemdb="inmemdb-l1" data-hashring="hr-l1" data-taskqueue="tq-l1" data-gym="gym-l1" data-tetris="tetris-l1" data-elevator="elev-l1" data-restaurant="rest-l1" data-parking="pk-l1" data-domains="">L1 CRUD</a>
 <a href="#inmemdb-l2" class="nav-level" data-variants="var-l2" data-bank="l2" data-hotel="hotel-l2" data-inmemdb="inmemdb-l2" data-hashring="hr-l2" data-taskqueue="tq-l2" data-gym="gym-l2" data-tetris="tetris-l2" data-elevator="elev-l2" data-restaurant="rest-l2" data-parking="pk-l2" data-domains="">L2 Sort</a>
 <a href="#inmemdb-l3" class="nav-level" data-variants="var-l3" data-bank="l3" data-hotel="hotel-l3" data-inmemdb="inmemdb-l3" data-hashring="hr-l3" data-taskqueue="tq-l3" data-gym="gym-l3" data-tetris="tetris-l3" data-elevator="elev-l3" data-restaurant="rest-l3" data-parking="pk-l3" data-domains="">L3 TTL</a>
@@ -248,7 +306,30 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 </div>
 
 <div id="sys-compare" class="sys-section">
-<h2 id="pair-compare">Pair Compare — 一樣同唔同</h2>
+<h2 id="pair-compare">Comparison — 左右對照搵相似骨架</h2>
+<div class="compare-shell">
+<div class="tip">
+<p><b>用法：</b>左右各揀一個 domain，下面會自動拆成 <code>Init</code> + <code>L1</code> 至 <code>L6</code>。</p>
+<p><b>對位規則：</b>同一行只會放語意對得上嘅 function；冇對應就留空，唔會夾硬拉郎配。</p>
+</div>
+
+<div class="compare-toolbar">
+<label class="compare-slot">
+<span class="compare-slot-label">左邊 Slot</span>
+<select class="compare-slot-select" data-compare-slot="left"></select>
+</label>
+<label class="compare-slot">
+<span class="compare-slot-label">右邊 Slot</span>
+<select class="compare-slot-select" data-compare-slot="right"></select>
+</label>
+</div>
+
+<p class="compare-note">例：<code>Bank</code> 左邊配 <code>Hotel</code> 右邊，就會見到 <code>create_account ↔ add_room</code>、<code>top_spenders ↔ top_rooms</code> 呢啲同骨架 function 排返同一行。</p>
+
+<div class="compare-levels" data-compare-levels="1"></div>
+
+<details class="compare-cheatsheet">
+<summary>舊版 quick pair cheat sheet</summary>
 <table>
 <tr><th>Pair</th><th>一樣</th><th>最重要差異</th></tr>
 <tr><td>Hashring ↔ ChatRoute</td><td>ring、clockwise route、virtual nodes、topology change 後 reroute、L5 lock per request_id、L6 多數 fail-fast</td><td>ChatRoute load 係 <code>size_mb</code>；L4 eviction 按 memory；L6 多 bandwidth check</td></tr>
@@ -256,10 +337,7 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 <tr><td>TaskQueue ↔ Workflow</td><td>state machine、status transition、dependency flavour、L6 lifecycle / dispatch 味道近</td><td>TaskQueue 有 retry/backoff + worker pool；Workflow 更似 multi-step transitions / rollback</td></tr>
 <tr><td>Bank ↔ FileSystem</td><td>flat dict base、L2 sort/filter/format、L5 單 key / 雙 key lock、L6 fail-fast 常見</td><td>Bank L3 係 scheduled cashback；FileSystem L3 係 TTL expiry；FileSystem 有 copy overwrite 同 quota</td></tr>
 </table>
-
-<div class="tip">
-<p><b>你而家嘅學法係啱</b>：先揀一條 base，再用第二條題只記 delta。臨場如果唔記得，唔好由頭讀晒個 domain，先問自己：</p>
-<p>1. 呢條題係邊個 base？ 2. 邊個 field / return type 改咗名？ 3. L3 真正 pattern 係 helper、inline TTL、capacity，定 transfer？ 4. L6 係 fail-fast 定 all-sleep？</p>
+</details>
 </div>
 </div>
 
@@ -434,6 +512,26 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 </table>
 </div>
 
+<h3>Init</h3>
+<div class="table-scroll">
+<table class="concept-table numbered-concepts">
+<tr><th>你會撞到咩</th><th>你要點樣認</th><th>你腦入面要有嘅畫面（用 mock）</th><th>去邊個 mock / level 睇返</th></tr>
+<tr>
+  <td><code>__init__ / base state</code></td>
+  <td>開場先睇個 system 一開始養緊咩 state。最值錢係：主 collection 叫乜、id counter 有冇、後面 level 預留咗咩 field。</td>
+  <td><div class="concept-visual"><p><b>你個腦要記：</b> 呢行唔係做 business logic，係定個 system 骨架。先睇主 dict / list / ring，再睇 counter / helper state。</p></div></td>
+  <td><a class="jump-link" href="#bank-init" onclick="jumpSystem('bank','bank-init'); return false;">Bank Init</a>、<a class="jump-link" href="#h-init" onclick="jumpSystem('hotel','h-init'); return false;">Hotel Init</a>、<a class="jump-link" href="#fs-init" onclick="jumpSystem('filesystem','fs-init'); return false;">FS Init</a>、<a class="jump-link" href="#lb-init" onclick="jumpSystem('leaderboard','lb-init'); return false;">Leaderboard Init</a><br><a class="jump-link" href="#inmemdb-init" onclick="jumpSystem('inmemdb','inmemdb-init'); return false;">InMemDB Init</a>、<a class="jump-link" href="#dns-init" onclick="jumpSystem('dns','dns-init'); return false;">DNS Init</a>、<a class="jump-link" href="#hr-init" onclick="jumpSystem('hashring','hr-init'); return false;">Hashring Init</a>、<a class="jump-link" href="#cr-init" onclick="jumpSystem('chatroute','cr-init'); return false;">ChatRoute Init</a><br><a class="jump-link" href="#tq-init" onclick="jumpSystem('taskqueue','tq-init'); return false;">TaskQueue Init</a>、<a class="jump-link" href="#wf-init" onclick="jumpSystem('workflow','wf-init'); return false;">Workflow Init</a>、<a class="jump-link" href="#pkg-init" onclick="jumpSystem('packagemgr','pkg-init'); return false;">PkgMgr Init</a>、<a class="jump-link" href="#ob-init" onclick="jumpSystem('orderbook','ob-init'); return false;">OrderBook Init</a><br><a class="jump-link" href="#ps-init" onclick="jumpSystem('pubsub','ps-init'); return false;">PubSub Init</a>、<a class="jump-link" href="#chat-init" onclick="jumpSystem('chat','chat-init'); return false;">Chat Init</a>、<a class="jump-link" href="#log-init" onclick="jumpSystem('logagg','log-init'); return false;">LogAgg Init</a>、<a class="jump-link" href="#gym-init" onclick="jumpSystem('gym','gym-init'); return false;">Gym Init</a><p class="mini-note"><b>大約做法：</b>先圈住主 collection，例如 <code>self.accounts</code> / <code>self.rooms</code> / <code>self.data</code> / <code>self.tasks</code>；再睇有冇 <code>counter</code>、<code>history</code>、<code>locks</code> 呢啲之後 level 會加料嘅位；最後先將個 data shape 記做一句畫面。</p></td>
+</tr>
+<tr>
+  <td><code>future hooks</code></td>
+  <td>有啲 <code>__init__</code> 已經偷放咗後面 level 會用到嘅鉤，例如 <code>payment_counter</code>、<code>locks</code>、<code>history</code>、<code>pending queue</code>。</td>
+  <td><div class="concept-visual"><p><b>你個腦要記：</b> <code>Init</code> 唔係只睇「而家用緊乜」，仲要睇「之後可以插乜」。例如見到 <code>defaultdict(asyncio.Lock)</code> 就知 L5 / L6 會掂 async；見到 <code>counter</code> 就知可能有 auto-id。</p></div></td>
+  <td><a class="jump-link" href="#bank-init" onclick="jumpSystem('bank','bank-init'); return false;">Bank Init</a>、<a class="jump-link" href="#h-init" onclick="jumpSystem('hotel','h-init'); return false;">Hotel Init</a>、<a class="jump-link" href="#inmemdb-init" onclick="jumpSystem('inmemdb','inmemdb-init'); return false;">InMemDB Init</a>、<a class="jump-link" href="#tq-init" onclick="jumpSystem('taskqueue','tq-init'); return false;">TaskQueue Init</a><br><a class="jump-link" href="#ps-init" onclick="jumpSystem('pubsub','ps-init'); return false;">PubSub Init</a>、<a class="jump-link" href="#chat-init" onclick="jumpSystem('chat','chat-init'); return false;">Chat Init</a>、<a class="jump-link" href="#log-init" onclick="jumpSystem('logagg','log-init'); return false;">LogAgg Init</a><p class="mini-note"><b>大約做法：</b>Step 1 睇主 store；Step 2 睇有冇 auto-id counter；Step 3 睇有冇 history / pending / expiry 呢啲附屬 state；Step 4 睇有冇 locks / sem 呢啲 async primitive，順手估之後 level 會點長大。</p></td>
+</tr>
+</table>
+<div class="mini-note">Init 先問自己：個 system 第一眼養住邊個主 collection？有冇 counter？有冇 locks？後面好多 level 其實都係喺呢個骨架上面加 field。</div>
+</div>
+
 <h3>L1</h3>
 <div class="table-scroll">
 <table class="concept-table numbered-concepts">
@@ -445,6 +543,12 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
   "alice": {
     "balance": 500,
     "outgoing": 0
+  }
+}</code></pre><p><b>Hotel L1：</b><code>room_id → room info</code></p><pre><code>self.rooms = {
+  "r1": {
+    "price_per_night": 100,
+    "guest_name": "",
+    "total_revenue": 0
   }
 }</code></pre><p><b>FS L1：</b><code>path → file info</code></p><pre><code>self.files = {
   "/foo.txt": {"size_kb": 100}
@@ -516,15 +620,93 @@ details.domain-answer summary { cursor: pointer; color: #58a6ff; font-size: 19px
 <tr><th>你會撞到咩</th><th>你要點樣認</th><th>你腦入面要有嘅畫面（用 mock）</th><th>去邊個 mock / level 睇返</th></tr>
 <tr>
   <td><code>sort / format</code></td>
-  <td>呢層好多時唔係新 data structure，只係將 L1 嘅資料拎出嚟排序同格式化。</td>
-  <td><div class="concept-visual"><p><b>Bank L2：</b><code>top_spenders</code> 類型，通常係 sort by 數字 desc，再用字串做 tie-break。</p><pre><code>items.sort(key=lambda x: (-x[1], x[0]))</code></pre><p><b>FS L2：</b><code>"/foo.txt(100)"</code> 呢種 format string 亦係 L2 常客。</p></div></td>
+  <td>
+    <p><b>每個 L2 sort function 都係呢個流程：</b></p>
+    <p><b>Step 1：</b>call lazy helper（如果有）</p>
+    <p><b>Step 2：</b>開個空 list，for loop 將每個 item 砌做 tuple<br>
+    例如 <code>items.append((name, value))</code></p>
+    <p><b>Step 3：</b>sort — 用 tuple sort key 控制排序<br>
+    <code>items.sort(key=lambda x: (-x[1], x[0]))</code><br>
+    負號 = 大嘅排先；字串 = 字母升序 tie-break</p>
+    <p><b>Step 4：</b>砌 format string<br>
+    <code>parts.append(f"{name}({value})")</code><br>
+    <code>return ", ".join(parts)</code></p>
+    <p><b>across domain 都係同一個流程：</b><br>
+    Bank: 排 outgoing desc → "alice(300)"<br>
+    FS: 排 size desc → "/foo.txt(100)"<br>
+    Hashring: 排 load desc → "node_a(5)"<br>
+    ChatRoute: 排 MB desc → "srv_a(80)"</p>
+  </td>
+  <td><div class="concept-visual"><p><b>Bank L2：</b><code>top_spenders(timestamp, n)</code>。param = <code>(timestamp, n)</code>，helper = <code>_process_cashbacks</code>，return = <code>["alice(300)", ...]</code></p><pre><code>def top_spenders(self, timestamp, n):
+    self._process_cashbacks(timestamp)
+    sorted_items = dict(sorted(
+        self.accounts.items(),
+        key=lambda x: (-x[1]["outgoing"], x[0])
+    ))
+    result = []
+    for account_id, acc in sorted_items.items():
+        result.append(f"{account_id}({acc['outgoing']})")
+    return result[:n]</code></pre><p><b>Hotel L2：</b><code>top_rooms(timestamp, n)</code> + <code>find_available(timestamp, min_price, max_price)</code>。多咗一條 range/filter 線，helper = <code>_process_late_fee</code></p><pre><code>def top_rooms(self, timestamp, n):
+    self._process_late_fee(timestamp)
+    sorted_items = dict(sorted(
+        self.rooms.items(),
+        key=lambda x: (-x[1]["total_revenue"], x[0])
+    ))
+    result = []
+    for room_id, room in sorted_items.items():
+        result.append(f"{room_id}({room['total_revenue']})")
+    return result[:n]
+
+def find_available(self, timestamp, min_price, max_price):
+    self._process_late_fee(timestamp)
+    sorted_items = dict(sorted(
+        self.rooms.items(),
+        key=lambda x: (x[1]["price_per_night"], x[0])
+    ))
+    result = []
+    for room_id, room in sorted_items.items():
+        if min_price &lt;= room["price_per_night"] &lt;= max_price and room["guest_name"] == "":
+            result.append(room_id)
+    return result</code></pre><p><b>FS L2：</b><code>list_files(timestamp, sort_by)</code> + <code>total_size(timestamp)</code>。helper = <code>_purge_expired</code>，同一級有 sort 題 + accumulate 題</p><pre><code>def list_files(self, timestamp, sort_by):
+    self._purge_expired(timestamp)
+    items = []
+    for path, info in self.files.items():
+        items.append((path, info["size_kb"]))
+    if sort_by == "size":
+        items.sort(key=lambda x: (-x[1], x[0]))
+    else:
+        items.sort(key=lambda x: x[0])
+    parts = []
+    for path, size in items:
+        parts.append(path + "(" + str(size) + ")")
+    return ", ".join(parts)
+
+def total_size(self, timestamp):
+    self._purge_expired(timestamp)
+    total = 0
+    for path, info in self.files.items():
+        total += info["size_kb"]
+    return total</code></pre><p><b>你個腦要記：</b>呢 3 條都係由 <code>L1 data</code> 直接拉資料出嚟做 <code>sort/filter/format</code>；分別只係 <code>metric</code>、<code>parameter</code>、同埋最後 return shape。</p></div></td>
   <td><a class="jump-link" href="#l2" onclick="jumpSystem('bank','l2'); return false;">Bank L2</a>、<a class="jump-link" href="#h-l2" onclick="jumpSystem('hotel','h-l2'); return false;">Hotel L2</a>、<a class="jump-link" href="#fs-l2" onclick="jumpSystem('filesystem','fs-l2'); return false;">FS L2</a>、<a class="jump-link" href="#lb-l2" onclick="jumpSystem('leaderboard','lb-l2'); return false;">Leaderboard L2</a><br><a class="jump-link" href="#nf-l2" onclick="jumpSystem('notification','nf-l2'); return false;">Notification L2</a>、<a class="jump-link" href="#sm-l2" onclick="jumpSystem('session','sm-l2'); return false;">Session L2</a>、<a class="jump-link" href="#es-l2" onclick="jumpSystem('scheduler','es-l2'); return false;">Scheduler L2</a>、<a class="jump-link" href="#wf-l2" onclick="jumpSystem('workflow','wf-l2'); return false;">Workflow L2</a><br><a class="jump-link" href="#pkg-l2" onclick="jumpSystem('packagemgr','pkg-l2'); return false;">PkgMgr L2</a>、<a class="jump-link" href="#ob-l2" onclick="jumpSystem('orderbook','ob-l2'); return false;">OrderBook L2</a>、<a class="jump-link" href="#ps-l2" onclick="jumpSystem('pubsub','ps-l2'); return false;">PubSub L2</a>、<a class="jump-link" href="#chat-l2" onclick="jumpSystem('chat','chat-l2'); return false;">Chat L2</a><br><a class="jump-link" href="#log-l2" onclick="jumpSystem('logagg','log-l2'); return false;">LogAgg L2</a>、<a class="jump-link" href="#gym-l2" onclick="jumpSystem('gym','gym-l2'); return false;">Gym L2</a></td>
 </tr>
 <tr>
   <td><code>top-N vs range filter</code></td>
   <td>見到 <code>top</code> / <code>highest</code> / <code>ranked</code> 多數係排完攞頭幾個。見到 <code>between</code> / <code>above</code> / <code>threshold</code> 多數係 range filter。</td>
-  <td><div class="concept-visual"><p><b>Bank L2：</b><code>top_spenders</code> 係排完攞前 <code>n</code> 個。</p><pre><code>return result[:n]</code></pre><p><b>TaskQueue / Hashring variants：</b>係問「邊啲 item 符合條件」，唔一定只攞頭幾個。</p><pre><code>if min_load &lt;= load &lt;= max_load:
-    result.append(node_id)</code></pre><p><b>你個腦要記：</b><code>top-N</code> = 排名題；<code>range</code> = filter 題。</p></div></td>
+  <td><div class="concept-visual"><p><b>Bank L2：</b><code>top_spenders(timestamp, n)</code> = 純 top-N。</p><pre><code>items.sort(key=lambda x: (-x[1], x[0]))
+return result[:n]</code></pre><p><b>Leaderboard L2：</b><code>top_players(timestamp, n)</code> 同 <code>players_above(timestamp, min_score)</code> 兩隻一齊出。</p><pre><code>items.sort(key=lambda x: (-x[1], x[0]))
+for pid, sc in items[:n]:
+    result.append(f"{pid}({sc})")
+
+if pd["score"] &gt;= min_score:
+    items.append((pid, pd["score"]))</code></pre><p><b>Hashring L2：</b><code>get_load(timestamp, node_id)</code> + <code>top_loaded(timestamp, n)</code>。</p><pre><code>for node_id in self.keys.values():
+    loads[node_id] += 1
+items = sorted(loads.items(), key=lambda x: (-x[1], x[0]))
+result.append(f"{nid}({load})")</code></pre><p><b>TaskQueue L2：</b><code>get_queue_length(timestamp)</code> + <code>get_tasks_by_status(timestamp, status)</code> = status filter / count query。</p><pre><code>if task["status"] == "QUEUED":
+    count += 1
+
+if task["status"] == status:
+    result.append(tid)
+result.sort()</code></pre><p><b>你個腦要記：</b><code>top-N</code> = 排完 cut 頭幾個；<code>range / status filter</code> = 符合條件就留低，未必切頭。</p></div></td>
   <td><a class="jump-link" href="#l2" onclick="jumpSystem('bank','l2'); return false;">Bank L2</a>、<a class="jump-link" href="#lb-l2" onclick="jumpSystem('leaderboard','lb-l2'); return false;">Leaderboard L2</a>、<a class="jump-link" href="#hr-l2" onclick="jumpSystem('hashring','hr-l2'); return false;">Hashring L2</a>、<a class="jump-link" href="#tq-l2" onclick="jumpSystem('taskqueue','tq-l2'); return false;">TaskQueue L2</a></td>
 </tr>
 <tr>
@@ -542,22 +724,29 @@ total = total + self.request_sizes[req_id]</code></pre><p><b>你個腦要記：<
 <tr>
   <td><code>search / filter keyword</code></td>
   <td>見到 <code>search</code>、<code>contains</code>、<code>matching</code>、<code>top</code> 呢類字，通常係喺 L1 資料上面做文字 filter 或 count filter。</td>
-  <td><div class="concept-visual"><p><b>Chat L2：</b>messages / channels 按 keyword 搵。</p><pre><code>if keyword in msg["content"]:
-    results.append(msg)</code></pre><p><b>FS L2：</b><code>largest matching files</code> 呢類都係同一味：先 filter，再 sort。</p></div></td>
+  <td><div class="concept-visual"><p><b>Chat L2：</b><code>list_channels()</code>、<code>top_channels(n)</code>、<code>search_messages(channel_id, keyword)</code>。</p><pre><code>if keyword_lower in msg["content"].lower():
+    matched.append((msg["timestamp"], msg["msg_id"]))
+
+result.sort()</code></pre><p><b>FS / Notification 類：</b>先 filter，再 sort，再 format。</p><pre><code>if condition_match:
+    items.append((id, metric))
+items.sort(key=lambda x: (-x[1], x[0]))</code></pre><p><b>你個腦要記：</b><code>search</code> = 先搵中邊啲；<code>top</code> = 再決定點排佢哋。</p></div></td>
   <td><a class="jump-link" href="#chat-l2" onclick="jumpSystem('chat','chat-l2'); return false;">Chat L2</a>、<a class="jump-link" href="#fs-l2" onclick="jumpSystem('filesystem','fs-l2'); return false;">FS L2</a>、<a class="jump-link" href="#nf-l2" onclick="jumpSystem('notification','nf-l2'); return false;">Notification L2</a></td>
 </tr>
 <tr>
   <td><code>prefix scan</code></td>
   <td>只搵開頭係某幾個字嘅項目。見到 <code>prefix</code>、<code>scan</code>、<code>list by prefix</code> 就要醒。</td>
-  <td><div class="concept-visual"><p><b>InMemDB L2：</b>掃同一個 key 入面所有 field。</p><pre><code>for f in self.data[key]:
+  <td><div class="concept-visual"><p><b>InMemDB L2：</b><code>scan(key)</code> + <code>scan_by_prefix(key, prefix)</code>。</p><pre><code>fields = sorted(self.data[key])
+for f in self.data[key]:
     if f.startswith(prefix):
-        fields.append(f)</code></pre><p><b>DNS L2：</b>味道一樣，只係 field 變 record / subdomain。</p></div></td>
+        fields.append(f)</code></pre><p><b>DNS L2：</b><code>scan_records(timestamp, domain)</code> + <code>list_domains(timestamp)</code>。</p><pre><code>types = sorted(self.records[domain])
+parts.append(t + "(" + ip + ")")
+result = sorted(self.records)</code></pre><p><b>你個腦要記：</b>prefix 題通常都係 <code>collect -&gt; sort -&gt; format</code>，只係 key 名唔同。</p></div></td>
   <td><a class="jump-link" href="#inmemdb-l2" onclick="jumpSystem('inmemdb','inmemdb-l2'); return false;">InMemDB L2</a>、<a class="jump-link" href="#fs-l2" onclick="jumpSystem('filesystem','fs-l2'); return false;">FS L2</a>、<a class="jump-link" href="#dns-l2" onclick="jumpSystem('dns','dns-l2'); return false;">DNS L2</a>、<a class="jump-link" href="#pkg-l2" onclick="jumpSystem('packagemgr','pkg-l2'); return false;">PkgMgr L2</a>、<a class="jump-link" href="#chat-l2" onclick="jumpSystem('chat','chat-l2'); return false;">Chat L2</a></td>
 </tr>
 <tr>
   <td><code>state machine</code></td>
   <td>同一件嘢會喺幾個 status 之間轉。見到 <code>QUEUED / PROCESSING / COMPLETED</code> 呢類字就要轉去呢個腦區。</td>
-  <td><div class="concept-visual"><p><b>TaskQueue L2：</b>task 本身開始帶住 status。</p><pre><code>self.tasks = {
+  <td><div class="concept-visual"><p><b>TaskQueue L2：</b><code>start_task</code>、<code>complete_task</code>、<code>fail_task</code>、<code>get_queue_length</code>、<code>get_tasks_by_status</code>。</p><pre><code>self.tasks = {
   "單1": {
     "priority": 3,
     "status": "QUEUED",
@@ -568,7 +757,11 @@ total = total + self.request_sizes[req_id]</code></pre><p><b>你個腦要記：<
     "status": "PROCESSING",
     "added_order": 2,
   },
-}</code></pre><p><b>Workflow L3 / L4：</b>都係同一個 core，只係多咗 transition rule 同 rollback。</p></div></td>
+}
+
+if task["status"] != "QUEUED":
+    return False
+self.tasks[task_id]["status"] = "PROCESSING"</code></pre><p><b>Workflow / OrderBook variants：</b>都係同一個 core，只係多咗 transition rule、dependency、rollback 或 fill/cancel 規矩。</p></div></td>
   <td><a class="jump-link" href="#tq-l2" onclick="jumpSystem('taskqueue','tq-l2'); return false;">TaskQueue L2</a>、<a class="jump-link" href="#tq-l3" onclick="jumpSystem('taskqueue','tq-l3'); return false;">TaskQueue L3</a>、<a class="jump-link" href="#tq-l4" onclick="jumpSystem('taskqueue','tq-l4'); return false;">TaskQueue L4</a><br><a class="jump-link" href="#wf-l3" onclick="jumpSystem('workflow','wf-l3'); return false;">Workflow L3</a>、<a class="jump-link" href="#wf-l4" onclick="jumpSystem('workflow','wf-l4'); return false;">Workflow L4</a>、<a class="jump-link" href="#ob-l3" onclick="jumpSystem('orderbook','ob-l3'); return false;">OrderBook L3</a></td>
 </tr>
 </table>
@@ -582,12 +775,47 @@ total = total + self.request_sizes[req_id]</code></pre><p><b>你個腦要記：<
 <tr>
   <td><code>TTL + inline check</code></td>
   <td>一見到 <code>ttl</code>、<code>expires_at</code>、<code>strictly less than</code>，就知呢層係講時間。最重要係即刻分到：係 `先 purge`，定 `read 嗰下 inline check`。</td>
-  <td><div class="concept-visual"><p><b>FS L3 / Session L3：</b>先 purge，再當件嘢唔存在。</p><pre><code>self._purge_expired(timestamp)
-if path not in self.files:
-    return -1</code></pre><p><b>InMemDB L3 / DNS L3：</b>件嘢仲擺喺度，但 read 嗰下 inline check。</p><pre><code>rec = self.data[key][field]
-if rec["expiry"] is not None and timestamp >= rec["expiry"]:
-    return ""</code></pre><p><b>你個腦要分到：</b><code>FS / Session</code> 係「清走佢」，<code>InMemDB / DNS</code> 係「留喺度但當佢死咗」。</p></div></td>
-  <td><a class="jump-link" href="#inmemdb-l3" onclick="jumpSystem('inmemdb','inmemdb-l3'); return false;">InMemDB L3</a>、<a class="jump-link" href="#dns-l3" onclick="jumpSystem('dns','dns-l3'); return false;">DNS L3</a>、<a class="jump-link" href="#fs-l3" onclick="jumpSystem('filesystem','fs-l3'); return false;">FS L3</a>、<a class="jump-link" href="#sm-l3" onclick="jumpSystem('session','sm-l3'); return false;">Session L3</a><br><a class="jump-link" href="#perm-l3" onclick="jumpSystem('permission','perm-l3'); return false;">Permission L3</a>、<a class="jump-link" href="#lru-l3" onclick="jumpSystem('lrucache','lru-l3'); return false;">LRU L3</a>、<a class="jump-link" href="#pkg-l3" onclick="jumpSystem('packagemgr','pkg-l3'); return false;">PkgMgr L3</a>、<a class="jump-link" href="#ob-l3" onclick="jumpSystem('orderbook','ob-l3'); return false;">OrderBook L3</a><br><a class="jump-link" href="#ps-l3" onclick="jumpSystem('pubsub','ps-l3'); return false;">PubSub L3</a>、<a class="jump-link" href="#chat-l3" onclick="jumpSystem('chat','chat-l3'); return false;">Chat L3</a>、<a class="jump-link" href="#log-l3" onclick="jumpSystem('logagg','log-l3'); return false;">LogAgg L3</a>、<a class="jump-link" href="#gym-l3" onclick="jumpSystem('gym','gym-l3'); return false;">Gym L3</a><p class="mini-note"><b>大約做法：</b>先決定你係 <code>purge</code> family 定 <code>inline check</code> family。<code>inline</code> 就寫 <code>_is_alive(rec, ts)</code> / <code>_visible(...)</code>，再喺 <code>get/scan/delete_at</code> 呢啲 read path 每次先 check；<code>purge</code> family 就另外寫 <code>_purge_expired(ts)</code>，再喺 public methods 開頭 call。</p></td>
+  <td><div class="concept-visual"><p><b>Inline check family（InMemDB / DNS）：</b>件嘢仲擺喺 dict 入面，但每次用之前先問一句：佢而家仲活唔活？</p><pre><code>def _is_alive(self, rec, timestamp):       # 守門員：呢格此刻仲見唔見得人？
+    return rec["expiry"] is None or timestamp &lt; rec["expiry"]
+
+def get(self, timestamp, key, field):     # read path：拎之前先問仲活唔活
+    rec = self.data[key][field]
+    if not self._is_alive(rec, timestamp):
+        return ""
+    return rec["value"]
+
+def scan(self, timestamp, key):           # visibility path：scan 只列活嘅
+    parts = []
+    for f in sorted(self.data[key]):
+        if self._is_alive(self.data[key][f], timestamp):
+            parts.append(f)
+    return parts
+
+def delete_at(self, timestamp, key, field):  # delete path：死咗就當本來已經冇
+    if not self._is_alive(self.data[key][field], timestamp):
+        return False</code></pre><p><b>Purge family（FS / Session / Permission）：</b>過期嘅要真係清走，所以先掃垃圾，再當件嘢唔存在。</p><pre><code>def _purge_expired(self, timestamp):       # 清潔工：行晒 store，見到過期就 del
+    expired = []
+    for path, info in self.files.items():
+        if info["expiry"] is not None and timestamp &gt;= info["expiry"]:
+            expired.append(path)
+    for path in expired:
+        del self.files[path]
+
+def add_file(self, timestamp, path, size):    # create/add 入口都要先清
+    self._purge_expired(timestamp)
+
+def get_file_size(self, timestamp, path):     # get/read 前先清
+    self._purge_expired(timestamp)
+
+def delete_file(self, timestamp, path):       # delete 前先清
+    self._purge_expired(timestamp)
+
+def list_files(self, timestamp, sort_by):     # list/scan 前先清
+    self._purge_expired(timestamp)
+
+def total_size(self, timestamp):              # aggregate/report 前都要先清
+    self._purge_expired(timestamp)</code></pre><p><b>你個腦要分到：</b><code>inline</code> = 「留喺度，但 read 嗰下當佢死咗」；<code>purge</code> = 「一入門口先清走佢，之後全世界都當冇」。</p></div></td>
+  <td><a class="jump-link" href="#inmemdb-l3" onclick="jumpSystem('inmemdb','inmemdb-l3'); return false;">InMemDB L3</a>、<a class="jump-link" href="#dns-l3" onclick="jumpSystem('dns','dns-l3'); return false;">DNS L3</a>、<a class="jump-link" href="#fs-l3" onclick="jumpSystem('filesystem','fs-l3'); return false;">FS L3</a>、<a class="jump-link" href="#sm-l3" onclick="jumpSystem('session','sm-l3'); return false;">Session L3</a><br><a class="jump-link" href="#perm-l3" onclick="jumpSystem('permission','perm-l3'); return false;">Permission L3</a>、<a class="jump-link" href="#lru-l3" onclick="jumpSystem('lrucache','lru-l3'); return false;">LRU L3</a>、<a class="jump-link" href="#pkg-l3" onclick="jumpSystem('packagemgr','pkg-l3'); return false;">PkgMgr L3</a>、<a class="jump-link" href="#ob-l3" onclick="jumpSystem('orderbook','ob-l3'); return false;">OrderBook L3</a><br><a class="jump-link" href="#ps-l3" onclick="jumpSystem('pubsub','ps-l3'); return false;">PubSub L3</a>、<a class="jump-link" href="#chat-l3" onclick="jumpSystem('chat','chat-l3'); return false;">Chat L3</a>、<a class="jump-link" href="#log-l3" onclick="jumpSystem('logagg','log-l3'); return false;">LogAgg L3</a>、<a class="jump-link" href="#gym-l3" onclick="jumpSystem('gym','gym-l3'); return false;">Gym L3</a><p class="mini-note"><b>大約做法：</b>Step 1 先問 spec：過期後係「仲留喺 store，但當 invisible」定「應該真係刪走」？前者就係 <code>inline check</code>，後者就係 <code>purge</code>。Step 2 如果係 <code>inline</code>，先寫 <code>_is_alive(rec, ts)</code> / <code>_visible(...)</code> helper；之後插去 <code>get</code>、<code>resolve</code>、<code>scan</code>、<code>delete_at</code> 呢啲 read / visibility path。即係件貨仲擺喺倉，但每次拎之前都要問守門員。Step 3 如果係 <code>purge</code>，先寫 <code>_purge_expired(ts)</code>；之後好似 lazy helper 咁，喺所有外面會直接 call 嘅 public methods 開頭先 call 一次。最常見就係 <code>add/create</code>、<code>get/read</code>、<code>delete</code>、<code>list/scan</code>、<code>total/report</code>、<code>backup/export</code>。即係一開門先掃垃圾，之後成個 method 就當過期貨從來冇存在過。Step 4 所以 yes，<code>purge</code> 係有少少似 <code>lazy helper</code>：兩者都係 helper 放入口位；分別係 <code>lazy helper</code> 係補做「到期事件」，<code>purge</code> 係清走「到期垃圾」；<code>inline</code> 就係完全唔刪，只係每次 read 嗰下先問「仲活唔活」。</p></td>
 </tr>
 <tr>
   <td><code>lazy helper</code></td>
@@ -606,15 +834,39 @@ task["status"] = "RETRY_SCHEDULED"</code></pre><p><b>你個腦要記：</b>呢�
 </tr>
 <tr>
   <td><code>expiry flips status</code></td>
-  <td>有啲 L3 過期唔係刪走件嘢，而係改佢 status。見到 <code>DEPRECATED</code>、<code>EXPIRED</code> 呢類字就要醒。</td>
-  <td><div class="concept-visual"><p><b>PkgMgr L3：</b>到期後 package 變 <code>DEPRECATED</code>。</p><pre><code>if now >= deprecation_time:
-    pkg["status"] = "DEPRECATED"</code></pre><p><b>OrderBook L3：</b>order 到期後變 <code>EXPIRED</code>，唔會再 match。</p></div></td>
-  <td><a class="jump-link" href="#pkg-l3" onclick="jumpSystem('packagemgr','pkg-l3'); return false;">PkgMgr L3</a>、<a class="jump-link" href="#ob-l3" onclick="jumpSystem('orderbook','ob-l3'); return false;">OrderBook L3</a></td>
+  <td>
+    <p><b>同 Lazy TTL Delete 一樣嘅做法，但過期唔刪，改 status。</b></p>
+    <p><b>Step 1：</b>__init__ 開個 field 記過期時間（<code>expires_at = timestamp + ttl_ms</code>）</p>
+    <p><b>Step 2：</b>寫一個 lazy helper，每次被 call 就 scan 全部 item，過期嘅改 status（唔係 del）<br>
+    例如 <code>info["status"] = "DEPRECATED"</code>（唔係 <code>del self.xxx[key]</code>）</p>
+    <p><b>Step 3：</b>每個 public method 開頭都 call 一次呢個 helper</p>
+    <p><b>同 Lazy TTL Delete 嘅分別：</b><br>
+    Delete：過期 → <code>del</code> → 物件消失<br>
+    Flip：過期 → 改 status → 物件仲在，但唔畀做某啲操作（例如唔畀 install）</p>
+    <p><b>across domain：</b><br>
+    PkgMgr：過期 → <code>DEPRECATED</code> → 唔畀 install<br>
+    OrderBook：過期 → <code>EXPIRED</code> → 唔畀 match<br>
+    Auction：過期 → <code>CLOSED</code> → 要結算邊個贏</p>
+  </td>
+  <td></td>
+  <td><a class="jump-link" href="#pkg-l3" onclick="jumpSystem('packagemgr','pkg-l3'); return false;">PkgMgr L3</a>、<a class="jump-link" href="#ob-l3" onclick="jumpSystem('orderbook','ob-l3'); return false;">OrderBook L3</a>、<a class="jump-link" href="#auction-l3" onclick="jumpSystem('auction','auction-l3'); return false;">Auction L3</a></td>
 </tr>
 <tr>
   <td><code>auto-trigger / dual timer</code></td>
-  <td>見到 <code>trigger</code>、<code>inactive</code>、<code>deadline</code>、<code>two TTLs</code> 呢類字，就知同一個 system 可能有兩條時間線一齊跑。</td>
-  <td><div class="concept-visual"><p><b>Workflow / Scheduler：</b>到條件就自動推下一步。</p><pre><code>self._process_triggers(...)</code></pre><p><b>Chat L3：</b>同時有 <code>message_ttl_ms</code> 同 <code>inactive_ttl_ms</code> 兩條 timer。</p><pre><code>def __init__(self, message_ttl_ms=None, inactive_ttl_ms=None):</code></pre></div></td>
+  <td>
+    <p><b>同 lazy helper 一樣嘅做法，但 trigger 嘅唔係「過期清走」，係「推下一步」。</b></p>
+    <p><b>Step 1：</b>寫一個 helper（例如 <code>_process_triggers</code>），scan 成個 list</p>
+    <p><b>Step 2：</b>helper 入面搵「上一個 COMPLETED → 下一個 PENDING」，將 PENDING 推上 READY</p>
+    <p><b>Step 3：</b>每個 public method 尾段都 call 一次呢個 helper</p>
+    <p><b>across domain：</b><br>
+    Workflow：complete_step → trigger 下一個 step 變 READY<br>
+    Scheduler：event 到時間 → trigger 執行<br>
+    Notification：deadline 到 → trigger 升級 severity</p>
+    <p><b>Dual timer variant（Chat）：</b>同一個 system 有兩條時間線<br>
+    message_ttl = 幾耐後 message 過期<br>
+    inactive_ttl = user 幾耐冇動作就踢走</p>
+  </td>
+  <td></td>
   <td><a class="jump-link" href="#wf-l3" onclick="jumpSystem('workflow','wf-l3'); return false;">Workflow L3</a>、<a class="jump-link" href="#es-l3" onclick="jumpSystem('scheduler','es-l3'); return false;">Scheduler L3</a>、<a class="jump-link" href="#chat-l3" onclick="jumpSystem('chat','chat-l3'); return false;">Chat L3</a>、<a class="jump-link" href="#nf-l3" onclick="jumpSystem('notification','nf-l3'); return false;">Notification L3</a></td>
 </tr>
 <tr>
@@ -661,12 +913,23 @@ info["expires_at"] = timestamp + remaining</code></pre><p><b>你個腦要再加�
   <td><a class="jump-link" href="#l4" onclick="jumpSystem('bank','l4'); return false;">Bank L4</a>、<a class="jump-link" href="#inmemdb-l4" onclick="jumpSystem('inmemdb','inmemdb-l4'); return false;">InMemDB L4</a>、<a class="jump-link" href="#dns-l4" onclick="jumpSystem('dns','dns-l4'); return false;">DNS L4</a>、<a class="jump-link" href="#wf-l4" onclick="jumpSystem('workflow','wf-l4'); return false;">Workflow L4</a></td>
 </tr>
 <tr>
-  <td><code>history / rollback / historical query</code></td>
-  <td>見到 <code>history</code>、<code>get_at_time</code>、<code>rollback</code>、<code>snapshot</code> 呢類字，就知 L4 唔只係而家個 state，仲要問返以前或者退返轉頭。</td>
-  <td><div class="concept-visual"><p><b>Bank L4：</b>會查某個時間點嘅資料。</p><pre><code>for item in reversed(history):
-    if item["timestamp"] <= time_at:
-        return item</code></pre><p><b>Workflow L4：</b>一 fail 就 rollback，將完成咗嘅 step 退返做 pending。</p><pre><code>if step_failed:
-    rollback_completed_steps()</code></pre></div></td>
+  <td><code>history / rollback</code></td>
+  <td>
+    <p><b>History = 記低每次變更，之後可以查返。</b></p>
+    <p><b>Step 1：</b>__init__ 開 <code>self.history = defaultdict(list)</code></p>
+    <p><b>Step 2：</b>每次 status 變更都 append 一條記錄<br>
+    <code>self.history[id].append(f"{step}: {old}->{new}")</code></p>
+    <p><b>Step 3：</b>get_history return 個 list（copy 一份出嚟）</p>
+    <p><b>Rollback = fail 嗰陣將之前做完嘅嘢退翻。</b></p>
+    <p><b>Step 1：</b>將出事嗰個 item mark 做 FAILED</p>
+    <p><b>Step 2：</b>scan 全部 item，COMPLETED 嘅退翻 PENDING</p>
+    <p><b>Step 3：</b>每次退都要記 history</p>
+    <p><b>across domain：</b><br>
+    Workflow：fail_step → 所有 COMPLETED step 退翻 PENDING<br>
+    Notification：merge 失敗 → 可能要 undo<br>
+    FS：rollback(timestamp) → 還原到某個 snapshot</p>
+  </td>
+  <td></td>
   <td><a class="jump-link" href="#l4" onclick="jumpSystem('bank','l4'); return false;">Bank L4</a>、<a class="jump-link" href="#wf-l4" onclick="jumpSystem('workflow','wf-l4'); return false;">Workflow L4</a>、<a class="jump-link" href="#nf-l4" onclick="jumpSystem('notification','nf-l4'); return false;">Notification L4</a>、<a class="jump-link" href="#log-l4" onclick="jumpSystem('logagg','log-l4'); return false;">LogAgg L4</a></td>
 </tr>
 <tr>
@@ -678,10 +941,22 @@ info["expires_at"] = timestamp + remaining</code></pre><p><b>你個腦要再加�
   <td><a class="jump-link" href="#es-l4" onclick="jumpSystem('scheduler','es-l4'); return false;">Scheduler L4</a></td>
 </tr>
 <tr>
-  <td><code>merge / move / upgrade</code></td>
-  <td>見到 <code>merge</code>、<code>upgrade</code>、<code>move</code>、<code>copy into</code> 呢類字，就知 L4 會考兩份 state 點樣合埋同埋舊 reference 點處理。</td>
-  <td><div class="concept-visual"><p><b>Bank L4：</b>merge 兩個 account。</p><pre><code>balance_a += balance_b
-del self.accounts[b]</code></pre><p><b>Hotel / Chat：</b>upgrade room 或 merge channel，本質都係搬 state 去另一邊。</p></div></td>
+  <td><code>merge / move / copy</code></td>
+  <td>
+    <p><b>兩個 item 嘅 state 合埋做一個。</b></p>
+    <p><b>Step 1：</b>Check 兩個都存在（source + dest）</p>
+    <p><b>Step 2：</b>將 source 嘅 data 搬去 dest<br>
+    Bank：balance 加埋<br>
+    Notification：severity 取 max，message 串接<br>
+    FS：overwrite dest 嘅 size + TTL</p>
+    <p><b>Step 3：</b>Delete source（Bank/Notification）或保留（FS copy）</p>
+    <p><b>Step 4：</b>記 history（如果有）</p>
+    <p><b>要小心嘅位：</b><br>
+    merge 自己（source == dest）→ 通常 return False<br>
+    TTL 點處理 → copy remaining TTL（唔係 original TTL）<br>
+    async L5 要 lock 兩個 key → sorted order 避 deadlock</p>
+  </td>
+  <td></td>
   <td><a class="jump-link" href="#l4" onclick="jumpSystem('bank','l4'); return false;">Bank L4</a>、<a class="jump-link" href="#h-l4" onclick="jumpSystem('hotel','h-l4'); return false;">Hotel L4</a>、<a class="jump-link" href="#chat-l4" onclick="jumpSystem('chat','chat-l4'); return false;">Chat L4</a>、<a class="jump-link" href="#fs-l4" onclick="jumpSystem('filesystem','fs-l4'); return false;">FS L4</a></td>
 </tr>
 <tr>
@@ -1041,400 +1316,6 @@ In the first part, support creating and canceling <span class="hl-kw">bookings</
 <p><b>最似真場景嘅練法：</b> 先只睇 long mock 左邊第一段。未睇 Part 1/2/3 前，先估 family。之後再睇後面 levels，先估 L3 / L5 / L6 variant。</p>
 </div>
 </div><!-- end sys-domaintest -->
-
-<div id="sys-roadmap" class="sys-section">
-
-<h2>5 大類 × 19 個 Domain</h2>
-<p class="note">每類第一個詳細學，之後嘅 fast drill（focus 唔同嘅 20-30%）。望住呢個圖去讀。</p>
-
-<pre><code><span class="ok">Group A: Flat Dict + Lazy Helper</span>
-<span class="ok">base = Bank ✅ 已學</span>
-
-  Bank ✅ ─────── 已詳細學
-  Hotel ✅ ────── 已詳細學（唔同：booking ID, upgrade 搬人）
-  File System ── 已有 tab（唔同：copy_file 覆蓋 dest）
-  Leaderboard ── fast drill（唔同：score decay 定時扣分）
-  Notification ─ fast drill（唔同：auto-escalate severity）
-  Session Mgr ── fast drill（唔同：max concurrent sessions per user）
-  Event Sched ── fast drill（唔同：recurring events）</code></pre>
-
-<pre><code><span class="ok">Group B: Nested Dict + Inline TTL</span>
-<span class="ok">base = InMemDB ✅ 已學</span>
-
-  InMemDB ✅ ─── 已詳細學
-  DNS/Routing ── fast drill（唔同：wildcard matching *.example.com）
-  Permission ─── fast drill（唔同：role inheritance）</code></pre>
-
-<pre><code><span class="ok">Group C: Ring/Routing + Capacity</span>
-<span class="ok">base = Hashring 🔄 而家學緊</span>
-
-  Hashring 🔄 ── 而家學緊
-  Load Balancer ─ fast drill（唔同：round-robin, weighted, health check）
-  LRU Cache ──── fast drill（唔同：成個 system 都係 cache + eviction）</code></pre>
-
-<pre><code><span class="warn">Group D: State Machine + Dependencies</span>
-<span class="warn">base = TaskQueue ⚠️ 要詳細學（最多新 pattern）</span>
-
-  TaskQueue ──── 要詳細學（state machine, backoff, DAG, worker pool）
-  Workflow ───── fast drill（唔同：multi-step rollback）
-  Package Mgr ── fast drill（唔同：dependency tree）
-  Order Book ─── fast drill（唔同：buy/sell matching）</code></pre>
-
-<pre><code><span class="warn">Group E: Multi-Collection</span>
-<span class="warn">base = Inventory ⚠️ 要詳細學</span>
-
-  Inventory ──── 要詳細學（items + warehouses, transfer, computed metric）
-  Pub-Sub ────── fast drill（唔同：topic + subscriber + offset）
-  Chat System ── fast drill（唔同：channel + thread + unread）
-  Log Aggregator  fast drill（唔同：level filter + aggregate count）</code></pre>
-
-<h2>學習順序</h2>
-<pre><code>
- 步驟    做咩                          狀態
-─────────────────────────────────────────────
-  1     Bank（Group A base）           ✅ 已學
-  2     Hotel（Group A drill）         ✅ 已學
-  3     InMemDB（Group B base）        ✅ 已學
-  4     Hashring（Group C base）       🔄 而家
-  5     TaskQueue（Group D base）      ⏳ 下一個
-  6     Inventory（Group E base）      ⏳ 之後
-─────────────────────────────────────────────
-  7+    所有 fast drill（13 個）        ⏳ agents 出緊
-        讀 spec + 讀 code = 每個 5-10 min
-        唔寫 code，只睇 pattern
-</code></pre>
-
-<h2>每類嘅核心分別</h2>
-<pre><code>
- Group │ Data 結構      │ L3 TTL 點做     │ L4 特色           │ L6 類型
-───────┼────────────────┼─────────────────┼───────────────────┼──────────
-   A   │ flat dict      │ lazy helper     │ merge/history     │ fail-fast
-       │ data[id]={..}  │ 真刪            │ deepcopy backup   │
-───────┼────────────────┼─────────────────┼───────────────────┼──────────
-   B   │ nested dict    │ inline check    │ backup +          │ all-sleep
-       │ data[k][f]={.} │ 唔真刪          │ remaining_ttl     │
-───────┼────────────────┼─────────────────┼───────────────────┼──────────
-   C   │ ring + routing │ capacity        │ LRU eviction      │ fail-fast
-       │ positions list │ 唔係 TTL        │                   │
-───────┼────────────────┼─────────────────┼───────────────────┼──────────
-   D   │ flat dict +    │ state machine   │ DAG dependencies  │ fail-fast
-       │ status field   │ + backoff       │                   │
-───────┼────────────────┼─────────────────┼───────────────────┼──────────
-   E   │ 多個 dict      │ lazy helper     │ cross-collection  │ 混合
-       │ items+places   │                 │ transfer          │
-</code></pre>
-
-</div><!-- end sys-roadmap -->
-
-<div id="sys-variants" class="sys-section">
-
-<h2 id="var-init">__init__ / Data Structure Variants</h2>
-
-<pre><code><span class="cm"># ── Variant 1: Flat dict（一層）──</span>
-<span class="cm"># 用喺：Bank, Hotel, FS, Hashring, TaskQueue, Inventory</span>
-<span class="cm"># 一個 key 對一個 dict</span>
-<span class="sk">self.data = {}</span>  <span class="cm"># 開主表；之後每個 entity 都靠個 key 掛喺呢度</span>
-<span class="cm"># data["alice"] = {"balance": 500, "outgoing": 100}</span>
-<span class="cm"># data["r1"]    = {"price": 100, "guest": "Alice"}</span></code></pre>
-
-<pre><code><span class="cm"># ── Variant 2: Nested dict（兩層）──</span>
-<span class="cm"># 用喺：InMemDB</span>
-<span class="cm"># 一個 key 入面有好多 fields，每個 field 有 value + expiry</span>
-<span class="sk">self.data = {}</span>  <span class="cm"># 先開外層殼；第二層 field 之後先逐格塞入去</span>
-<span class="cm"># data["user1"]["name"]    = {"value": "alice", "expiry": None}</span>
-<span class="cm"># data["user1"]["session"] = {"value": "abc",   "expiry": 60}</span></code></pre>
-
-<pre><code><span class="cm"># ── 全部 mock 都有嘅 init ──</span>
-<span class="sk">def __init__(self):</span>
-    <span class="sk">self.data = {}</span>                                   <span class="cm"># 主倉庫；大部分 CRUD 都係摸呢格</span>
-    <span class="sk">self.counter = 0</span>                                <span class="cm"># 自動編號器；要派 booking/payment id 就靠佢遞增</span>
-    <span class="sk">self.pending = {}</span>                               <span class="cm"># 待處理區；到鐘先做嘅嘢會先擺喺呢度等</span>
-    <span class="sk">self.backups = []</span>                               <span class="cm"># 快照相簿；L4 影相同還原都喺呢度攞</span>
-    <span class="sk">self.locks = defaultdict(asyncio.Lock)</span>            <span class="cm"># 每條 key 自己一把鎖；async 線撞埋嚟都唔會互踩</span></code></pre>
-
-<h2 id="var-l1">L1 — CRUD Variants</h2>
-<p class="note">Spec 嘅字眼話你知用邊個 variant。</p>
-
-<pre><code><span class="cm"># ── Variant 1: 重複 reject（最常見）──</span>
-<span class="cm"># Spec: "Returns False if exists"</span>
-<span class="cm"># 用喺：Bank create_account, FS add_file, Hotel add_room</span>
-<span class="sk">if id in self.data:</span>  <span class="cm"># 門口先擋重複；同名 key 唔畀開第二格</span>
-    <span class="sk">return False</span>  <span class="cm"># 照 spec 回覆 caller：今次冇開成</span>
-<span class="sk">self.data[id] = {...}</span>  <span class="cm"># 真正開新格；之後所有讀寫都靠呢個 key 入去</span>
-<span class="sk">return True</span></code></pre>  <span class="cm"># 開倉成功，外面可以當佢存在</span>
-
-<pre><code><span class="cm"># ── Variant 2: 重複覆蓋 ──</span>
-<span class="cm"># Spec: "If exists, overwrite"</span>
-<span class="cm"># 用喺：InMemDB set（永遠覆蓋，唔 return）</span>
-<span class="sk">self.data[key][field] = {...}</span></code></pre>  <span class="cm"># 唔問舊值，成格蓋過；好似新貼紙直接遮住舊貼紙</span>
-
-<pre><code><span class="cm"># ── Variant 3: 重複累加 ──</span>
-<span class="cm"># Spec: "If exists, ADD to quantity"</span>
-<span class="cm"># 用喺：Inventory add_item</span>
-<span class="sk">if id in self.data:</span>  <span class="cm"># 有舊貨就唔另開格，直接喺原位加上去</span>
-    <span class="sk">self.</span><span class="ch">data</span><span class="sk">[id][</span><span class="ch">"qty"</span><span class="sk">] +=</span> <span class="ch">qty</span>  <span class="cm"># 舊數量疊新數量；個倉越堆越高</span>
-<span class="sk">else:</span>  <span class="cm"># 第一次見到呢個 id</span>
-    <span class="sk">self.</span><span class="ch">data</span><span class="sk">[id] = {</span><span class="ch">"qty": qty</span><span class="sk">}</span></code></pre>  <span class="cm"># 冇舊貨就先開第一格，當起始存貨</span>
-
-<pre><code><span class="cm"># ── Variant 4: Return ID ──</span>
-<span class="cm"># Spec: "Returns booking_id" / "Returns payment_id"</span>
-<span class="cm"># 用喺：Hotel book_room, Bank pay</span>
-<span class="sk">self.counter += 1</span>  <span class="cm"># 先推個號碼機一步；確保今次編號同上次唔撞</span>
-<span class="ch">id</span> <span class="sk">= f"</span><span class="ch">booking</span><span class="sk">{self.counter}"</span>  <span class="cm"># 用固定 prefix + 流水號砌出一個可追蹤嘅單號</span>
-<span class="sk">return</span> <span class="ch">id</span></code></pre>  <span class="cm"># 將新單號交返畀 caller；之後查單就靠佢</span>
-
-<pre><code><span class="cm"># ── Variant 5: Return new value ──</span>
-<span class="cm"># Spec: "Returns new balance"</span>
-<span class="cm"># 用喺：Bank deposit</span>
-<span class="ch">acc</span><span class="sk">[</span><span class="ch">"balance"</span><span class="sk">] +=</span> <span class="ch">amount</span>  <span class="cm"># 先改戶口入面嗰個真數；唔好另外維持第二份影子值</span>
-<span class="sk">return</span> <span class="ch">acc</span><span class="sk">[</span><span class="ch">"balance"</span><span class="sk">]</span></code></pre>  <span class="cm"># 即場答返最新餘額；caller 唔使再多查一次</span>
-
-<pre><code><span class="cm"># ── Variant 6: Return None on fail ──</span>
-<span class="cm"># Spec: "Returns None if insufficient funds" / "Returns None if not found"</span>
-<span class="cm"># 用喺：Bank transfer, Bank deposit</span>
-<span class="sk">if id not in self.data:</span>  <span class="cm"># 入口已經斷線；再做落去只會越改越錯</span>
-    <span class="sk">return None</span></code></pre>  <span class="cm"># 用 None 表示「今次冇答案」，唔係數值 0</span>
-
-<pre><code><span class="cm"># ── Variant 7: Return "" on fail ──</span>
-<span class="cm"># Spec: "Returns empty string if not found"</span>
-<span class="cm"># 用喺：InMemDB get</span>
-<span class="sk">if key not in self.data:</span>  <span class="cm"># 搵唔到嗰格；spec 要你交空殼唔係交 None</span>
-    <span class="sk">return</span> <span class="str">""</span></code></pre>  <span class="cm"># 空字串即係「查過，但個位係空白」</span>
-
-<h2 id="var-l2">L2 — Sort / Search Variants</h2>
-
-<pre><code><span class="cm"># ── Variant 1: Top N desc by value, asc by name tie ──</span>
-<span class="cm"># Spec: "top N by outgoing/revenue/score descending, ties alphabetical"</span>
-<span class="cm"># 用喺：Bank top_spenders, Hotel top_rooms</span>
-<span class="sk">items = []</span>  <span class="cm"># 先拉一張排行榜草稿；未排序前所有人都堆喺呢度</span>
-<span class="sk">for id, entry in self.data.items():</span>  <span class="cm"># 行晒主表，逐個抽出「名字 + 用嚟比大小嘅分數」</span>
-    <span class="sk">items.append((id, entry[</span><span class="ch">"metric"</span><span class="sk">]))</span>  <span class="cm"># 將比較所需資料壓平做 tuple，方便一次 sort</span>
-<span class="sk">items.sort(key=lambda x: (-x[1], x[0]))</span>  <span class="cm"># 先比分數高低；同分再用名字決定先後，避免結果飄嚟飄去</span>
-<span class="sk">result = []</span>  <span class="cm"># 正式輸出另一張 list；只留頭 N 個</span>
-<span class="sk">for id, val in items[:n]:</span>  <span class="cm"># 排完之後先切頭 N 個，唔好未排就亂截</span>
-    <span class="sk">result.append(f"</span><span class="ch">{id}({val})</span><span class="sk">")</span>  <span class="cm"># 砌成 spec 要嘅展示字串，方便直接對答案</span>
-<span class="sk">return result</span>                              <span class="cm"># 交返排好嘅名單；caller 唔使再加工</span></code></pre>
-
-<pre><code><span class="cm"># ── Variant 2: Sorted fields join string ──</span>
-<span class="cm"># Spec: "Return as field(value), field(value)"</span>
-<span class="cm"># 用喺：InMemDB scan</span>
-<span class="sk">fields = sorted(self.data[key])</span>          <span class="cm"># 先將 field 名排好；之後 scan 先會穩定，每次答案都同一個次序</span>
-<span class="sk">parts = []</span>  <span class="cm"># 零件箱；每個 field 先砌成一小段字</span>
-<span class="sk">for f in fields:</span>  <span class="cm"># 順住排好嘅 field 行，避免 dict 原生順序搞亂答案</span>
-    <span class="sk">parts.append(f"{f}({self.data[key][f][</span><span class="str">'value'</span><span class="sk">]})")</span>  <span class="cm"># 將 field 同 value 綁埋，變成可直接展示嘅一塊</span>
-<span class="sk">return</span> <span class="str">", "</span><span class="sk">.join(parts)</span>                  <span class="cm"># 最後用逗號串成一條線；好似將珠仔逐粒穿埋一齊</span></code></pre>
-
-<pre><code><span class="cm"># ── Variant 3: Prefix filter ──</span>
-<span class="cm"># Spec: "starts with prefix"</span>
-<span class="cm"># 用喺：InMemDB scan_by_prefix</span>
-<span class="sk">for f in self.data[key]:</span>  <span class="cm"># 行晒成排 field 名，好似逐塊招牌睇字頭</span>
-    <span class="sk">if f.startswith(prefix):</span>  <span class="cm"># 只收字頭啱嘅；prefix 就係入場券</span>
-        <span class="sk">fields.append(f)</span></code></pre>  <span class="cm"># 合格先放入候選名單；之後再統一排序/格式化</span>
-
-<pre><code><span class="cm"># ── Variant 4: Range filter ──</span>
-<span class="cm"># Spec: "balance between min and max"</span>
-<span class="cm"># 用喺：Bank accounts_in_range</span>
-<span class="sk">if</span> <span class="ch">min_val</span> <span class="sk">&lt;=</span> <span class="ch">entry</span><span class="sk">[</span><span class="ch">"balance"</span><span class="sk">] &lt;=</span> <span class="ch">max_val</span><span class="sk">:</span>  <span class="cm"># 呢格數值要夾喺左右兩條欄杆中間先算過關</span>
-    <span class="sk">result.append(</span><span class="ch">id</span><span class="sk">)</span></code></pre>  <span class="cm"># 收下呢個 id；最後 caller 要嘅通常係名單唔係完整資料</span>
-
-<pre><code><span class="cm"># ── Variant 5: Computed metric ──</span>
-<span class="cm"># Spec: "ranked by value = qty * price"</span>
-<span class="cm"># 用喺：Inventory, Hotel revenue_per_night</span>
-<span class="sk">metric =</span> <span class="ch">entry</span><span class="sk">[</span><span class="ch">"qty"</span><span class="sk">] *</span> <span class="ch">entry</span><span class="sk">[</span><span class="ch">"price"</span><span class="sk">]</span>  <span class="cm"># 真正用嚟比賽嘅唔係原欄位，而係現場算出嚟嘅綜合分</span>
-<span class="sk">items.sort(key=lambda x: (-x[1], x[0]))</span></code></pre>  <span class="cm"># 有咗 metric 先跟返標準排行榜骨架去排</span>
-
-<h2 id="var-l3">L3 — TTL / Scheduled Variants</h2>
-
-<pre><code><span class="cm"># ── Variant 1: Lazy helper（真刪）──</span>
-<span class="cm"># Spec: "cashback deposited 24 hours later" / "late fee applied after checkout"</span>
-<span class="cm"># 用喺：Bank cashback, Hotel late_fee</span>
-<span class="cm"># 每個 method 第一行 call helper，helper 真正 delete/apply 到期嘅嘢</span>
-<span class="sk">def _process_pending(self, timestamp):</span>  <span class="cm"># lazy 清單員；有人入門口先順手巡一次到期格</span>
-    <span class="sk">for item in self.pending:</span>  <span class="cm"># 行晒待辦區，逐件睇而家係咪到鐘</span>
-        <span class="sk">if timestamp &gt;= item[</span><span class="ch">"due_time"</span><span class="sk">]:</span>  <span class="cm"># 時間追到 due_time 先真係落手做</span>
-            <span class="cm"># apply 呢個 event（加錢、扣錢等）</span>
-            <span class="sk">item[</span><span class="ch">"done"</span><span class="sk">] = True</span>  <span class="cm"># 標記做完；下次巡樓唔好再重複算多次</span>
-
-<span class="cm"># 每個 public method 第一行：</span>
-<span class="sk">self._process_pending(timestamp)</span></code></pre>  <span class="cm"># 每次入正門先巡一轉，確保後面見到嘅資料已經追到最新時間</span>
-
-<pre><code><span class="cm"># ── Variant 2: Inline TTL check（唔真刪）──</span>
-<span class="cm"># Spec: "field expires after ttl" / "alive when ts &lt; ts + ttl"</span>
-<span class="cm"># 用喺：InMemDB, FS TTL files</span>
-<span class="cm"># 唔 call helper，每次 check 嗰陣先跳過死嘅</span>
-<span class="sk">def _is_alive(self, field_data, timestamp):</span>  <span class="cm"># 守門員；每次有人讀先臨場判生死</span>
-    <span class="sk">if field_data[</span><span class="str">"expiry"</span><span class="sk">] is None:</span>  <span class="cm"># 冇 expiry 即係長住證；永遠唔會畀人趕走</span>
-        <span class="sk">return True</span>  <span class="cm"># 直接放行</span>
-    <span class="sk">if timestamp &lt; field_data[</span><span class="str">"expiry"</span><span class="sk">]:</span>    <span class="cm"># 仲未到界線；留意大部分題用嚴格小於</span>
-        <span class="sk">return True</span>  <span class="cm"># 仲生勾勾，可以畀 caller 睇到</span>
-    <span class="sk">return False</span></code></pre>  <span class="cm"># 到鐘就當死；唔使真刪都要當佢透明</span>
-
-<pre><code><span class="cm"># ── Variant 3: Recurring scheduled（多次觸發）──</span>
-<span class="cm"># Spec: "every N seconds, deduct amount, count times"</span>
-<span class="cm"># 用喺：Bank schedule_recurring, Hotel scheduled_discount</span>
-<span class="sk">def _process_recurring(self, timestamp):</span>  <span class="cm"># 巡 recurring 清單；一個 subscription 可能要補做幾次</span>
-    <span class="sk">for sub in self.subscriptions.values():</span>  <span class="cm"># 逐條訂閱睇，邊條到鐘就處理邊條</span>
-        <span class="sk">while sub[</span><span class="ch">"count"</span><span class="sk">] &gt; 0 and timestamp &gt;= sub[</span><span class="ch">"next_due"</span><span class="sk">]:</span>  <span class="cm"># 卡住太耐時，要用 while 補返漏咗嘅每一期</span>
-            <span class="cm"># apply 一次（扣錢等）</span>
-            <span class="sk">sub[</span><span class="ch">"next_due"</span><span class="sk">] += sub[</span><span class="ch">"interval"</span><span class="sk">]</span>  <span class="cm"># 日曆向後推一格；約下一次時間</span>
-            <span class="sk">sub[</span><span class="ch">"count"</span><span class="sk">] -= 1</span></code></pre>  <span class="cm"># 次數存貨扣一件；扣到 0 就唔再排</span>
-
-<pre><code><span class="cm"># ── TTL boundary 口訣 ──</span>
-<span class="cm"># "strictly less than" → ts &lt; expiry（到期嗰秒算死）</span>
-<span class="cm"># "less than or equal" → ts &lt;= expiry（到期嗰秒仲活）</span>
-<span class="cm"># 大部分題用 strictly less than</span></code></pre>
-
-<h2 id="var-l4">L4 — Backup / History / Merge Variants</h2>
-
-<pre><code><span class="cm"># ── Variant 1: Backup deepcopy（冇 TTL）──</span>
-<span class="cm"># Spec: "snapshot the state" / "backup and restore"</span>
-<span class="cm"># 用喺：Bank, Hotel, FS（冇 TTL 嘅題）</span>
-<span class="sk">import copy</span>
-
-<span class="sk">def backup(self, timestamp):</span>  <span class="cm"># 影快照；將而家個倉原封不動封箱</span>
-    <span class="sk">state = copy.deepcopy(self.data)</span>  <span class="cm"># 深拷貝先真係似影相；之後原倉再郁都唔會穿返落張相</span>
-    <span class="sk">self.backups.append((timestamp, state))</span>  <span class="cm"># 將時間戳同張相一齊收埋，之後先知揀邊個版本</span>
-    <span class="sk">return len(self.data)</span>  <span class="cm"># 常見 spec 會要你答當刻有幾多格資料</span>
-
-<span class="sk">def restore(self, timestamp, backup_timestamp):</span>  <span class="cm"># 時光機模式；搵目標時間之前最近嗰張相</span>
-    <span class="sk">best = None</span>  <span class="cm"># 暫存目前最貼近目標時間嘅候選快照</span>
-    <span class="sk">for ts, state in self.backups:</span>  <span class="cm"># 快照相簿逐張翻；唔係第一張啱就即停</span>
-        <span class="sk">if ts &lt;= backup_timestamp:</span>  <span class="cm"># 只可以揀目標時間或之前嘅版本；之後嘅未來相唔算</span>
-            <span class="sk">if best is None or ts &gt; best[0]:</span>  <span class="cm"># 候選入面揀最新嗰張，咁先最貼近目標時刻</span>
-                <span class="sk">best = (ts, state)</span>  <span class="cm"># 更新為而家手上最好嘅版本</span>
-    <span class="sk">if best is None:</span>  <span class="cm"># 一張都揀唔到，代表根本冇合資格快照</span>
-        <span class="sk">return False</span>  <span class="cm"># 還原失敗；唔好亂清現況</span>
-    <span class="sk">self.data = copy.deepcopy(best[1])</span>  <span class="cm"># 用深拷貝重建現況；避免改到相簿原件</span>
-    <span class="sk">return True</span></code></pre>  <span class="cm"># 時光機落地成功；主倉庫已回到舊版本</span>
-
-<pre><code><span class="cm"># ── Variant 2: Backup with remaining_ttl（有 TTL）──</span>
-<span class="cm"># Spec: "store remaining lifespan" / "recalculate TTL on restore"</span>
-<span class="cm"># 用喺：InMemDB</span>
-<span class="cm"># 睇 InMemDB tab 嘅 L4，太長唔重複</span></code></pre>
-
-<pre><code><span class="cm"># ── Variant 3: History query ──</span>
-<span class="cm"># Spec: "balance at time_at" / "value at historical timestamp"</span>
-<span class="cm"># 用喺：Bank get_balance</span>
-<span class="sk">for ts, val in reversed(</span><span class="ch">entry</span><span class="sk">[</span><span class="ch">"history"</span><span class="sk">]):</span>  <span class="cm"># 由最新往回掃；通常最近嗰筆最快中</span>
-    <span class="sk">if ts &lt;=</span> <span class="ch">time_at</span><span class="sk">:</span>  <span class="cm"># 第一筆唔晏過目標時間嘅，就係當時世界線應有嘅值</span>
-        <span class="sk">return val</span></code></pre>  <span class="cm"># 直接交返歷史瞬間嘅答案；唔使再望更舊記錄</span>
-
-<pre><code><span class="cm"># ── Variant 4: Merge ──</span>
-<span class="cm"># Spec: "merge A into B" / "combine balances" / "redirect pending"</span>
-<span class="cm"># 用喺：Bank merge_accounts, FS merge_users</span>
-<span class="ch">acc1</span><span class="sk">[</span><span class="ch">"balance"</span><span class="sk">] +=</span> <span class="ch">acc2</span><span class="sk">[</span><span class="ch">"balance"</span><span class="sk">]</span>       <span class="cm"># 先將 source 錢包倒落 dest；值要先搬，唔好未搬就刪</span>
-<span class="sk">del self.data[</span><span class="ch">id2</span><span class="sk">]</span>                        <span class="cm"># 搬完就拆 source 嗰間房；之後全世界只認 dest</span></code></pre>
-
-<pre><code><span class="cm"># ── Variant 5: Upgrade（搬 entity）──</span>
-<span class="cm"># Spec: "move guest from room A to room B"</span>
-<span class="cm"># 用喺：Hotel upgrade_room</span>
-<span class="ch">to_room</span><span class="sk">[</span><span class="ch">"guest"</span><span class="sk">] =</span> <span class="ch">from_room</span><span class="sk">[</span><span class="ch">"guest"</span><span class="sk">]</span>   <span class="cm"># 先將人搬去新房；唔好中途搞到兩邊都空</span>
-<span class="ch">from_room</span><span class="sk">[</span><span class="ch">"guest"</span><span class="sk">] =</span> <span class="str">""</span>                  <span class="cm"># 舊房清空，代表 upgrade 已經正式生效</span></code></pre>
-
-<h2 id="var-l5">L5 — Concurrent Batch Variants</h2>
-
-<pre><code><span class="cm"># ── Variant 1: Lock 1 個 key（最常見）──</span>
-<span class="cm"># Spec: 操作只涉及 1 個 key</span>
-<span class="cm"># 用喺：InMemDB set/get/delete, Bank deposit/pay, Hotel book/checkout</span>
-<span class="sk">async def execute_op(op):</span>  <span class="cm"># 處理單一 op（async inner function）</span>
-    <span class="sk">key = op[</span><span class="ch">"key"</span><span class="sk">]</span>  <span class="cm"># 先認清今次係郁邊格資料；鎖都係按呢個門牌去攞</span>
-    <span class="sk">async with self.locks[key]:</span>  <span class="cm"># 關門先做；同一條 key 嘅 op 要排隊，先後次序先穩</span>
-        <span class="sk">return self.method(</span><span class="ch">...</span><span class="sk">)</span></code></pre>  <span class="cm"># 真正工作交返俾同步 method；鎖只負責保護入口</span>
-
-<pre><code><span class="cm"># ── Variant 2: Lock 2 個 key（sorted 防 deadlock）──</span>
-<span class="cm"># Spec: 操作涉及 2 個 key（transfer, upgrade, copy）</span>
-<span class="cm"># 用喺：Bank transfer, Hotel upgrade, FS copy</span>
-<span class="sk">keys = sorted([</span><span class="ch">key1</span><span class="sk">,</span> <span class="ch">key2</span><span class="sk">])</span>              <span class="cm"># 先排門牌號；所有人都照同一方向鎖門，先唔會你等我我等你</span>
-<span class="sk">async with self.locks[keys[0]]:</span>  <span class="cm"># 先鎖細門牌；呢步就係統一規矩</span>
-    <span class="sk">async with self.locks[keys[1]]:</span>  <span class="cm"># 再鎖第二把；到呢度先算正式攞齊兩邊控制權</span>
-        <span class="sk">return self.method(</span><span class="ch">...</span><span class="sk">)</span></code></pre>  <span class="cm"># 兩邊都安全先搬資料；做完先一齊放鎖</span>
-
-<pre><code><span class="cm"># ── Variant 3: Worker pool ──</span>
-<span class="cm"># Spec: "N workers process a queue" / "num_workers"</span>
-<span class="cm"># 用喺：TaskQueue run_workers</span>
-<span class="sk">async def run_workers(self, num_workers):</span>  <span class="cm"># 開 N 個 worker 並發做單</span>
-    <span class="sk">lock = asyncio.Lock()</span>  <span class="cm"># 共用總閘；邊個 worker 攞 task / 改 status 都要經呢度</span>
-
-    <span class="sk">async def worker():</span>  <span class="cm"># worker coroutine — 一個工人反覆攞單、做單、交單</span>
-        <span class="cm"># 第一步：喺共用 queue 度安全拎一張 ready task</span>
-        <span class="sk">while True:</span>  <span class="cm"># 只要仲有單，工人就一直轉</span>
-            <span class="sk">async with lock:</span>                     <span class="cm"># 先鎖住 queue；避免兩個工人攞中同一張單</span>
-                <span class="ch">task</span> <span class="sk">= self.</span><span class="ch">_get_next_ready</span><span class="sk">()</span>    <span class="cm"># 抽下一張可以做嘅單；未 ready 嘅先唔郁</span>
-                <span class="sk">if</span> <span class="ch">task</span> <span class="sk">is None:</span>                  <span class="cm"># 抽唔到代表成個池暫時冇工開</span>
-                    <span class="sk">return</span>                           <span class="cm"># 呢個 worker 收工；唔好空轉燒 CPU</span>
-                <span class="sk">self.</span><span class="ch">_mark_processing</span><span class="sk">(</span><span class="ch">task</span><span class="sk">)</span>      <span class="cm"># 先插支旗：呢張單已經有人接咗，其他 worker 唔好再碰</span>
-            <span class="cm"># 第二步：放開大閘後先做工，等其他 worker 可以同時攞下一張單</span>
-            <span class="sk">await asyncio.sleep(0.01)</span>            <span class="cm"># 呢度只係模擬實際工作時間；真 code 可能係 I/O 或 heavy work</span>
-            <span class="cm"># 第三步：返嚟更新 status，話俾世界知張單已經完工</span>
-            <span class="sk">async with lock:</span>                     <span class="cm"># status update 亦都要鎖；避免完成標記互相踩爛</span>
-                <span class="sk">self.</span><span class="ch">_mark_completed</span><span class="sk">(</span><span class="ch">task</span><span class="sk">)</span>      <span class="cm"># 收尾蓋章；之後其他流程先會見到呢張單已完成</span>
-
-    <span class="sk">tasks = []</span>  <span class="cm"># 工人名單；先召集晒 coroutine，再一齊開工</span>
-    for _ in range(num_workers):
-        tasks.append(worker())
-    <span class="sk">await asyncio.gather(*tasks)</span></code></pre>
-
-<pre><code><span class="cm"># ── 點分用邊個 ──</span>
-<span class="cm"># spec 講 "process these operations" → gather（Variant 1 或 2）</span>
-<span class="cm"># spec 講 "N workers" / "worker pool" → Variant 3</span>
-<span class="cm"># 操作涉及 2 個 key → Variant 2</span></code></pre>
-
-<h2 id="var-l6">L6 — Rate Limited Variants</h2>
-
-<pre><code><span class="cm"># ── Variant 1: Fail-fast ──</span>
-<span class="cm"># Spec: "failed should return False WITHOUT simulating"</span>
-<span class="cm">#       "skip missing without I/O"</span>
-<span class="cm"># 用喺：Bank process_external, Hotel send_notifications, FS sync_files</span>
-<span class="cm">#</span>
-<span class="cm"># invalid request → 即 return False，唔入 sem，唔 sleep</span>
-<span class="cm"># 20 個 invalid，total time ≈ 0s</span>
-<span class="sk">async def</span> <span class="ch">process_external</span><span class="sk">(self, timestamp,</span> <span class="ch">requests</span><span class="sk">, max_concurrent):</span>  <span class="cm"># 並發處理外部 request（semaphore）</span>
-    <span class="sk">sem = asyncio.Semaphore(max_concurrent)</span>  <span class="cm"># 外部閘口；同一時間只畀 N 張 request 真正出街</span>
-
-    <span class="sk">async def do_one(</span><span class="ch">req</span><span class="sk">):</span>  <span class="cm"># 處理單一 item</span>
-        <span class="cm"># 第一步：先喺本地驗身；唔合格嘅 request 唔好浪費外部名額</span>
-        <span class="sk">async with self.locks[</span><span class="ch">req</span><span class="sk">[</span><span class="ch">"id"</span><span class="sk">]]:</span>        <span class="cm"># 先鎖住本地資料，避免 validate 同 mutate 中間被第二條線插隊</span>
-            <span class="sk">if not self.</span><span class="ch">_is_valid</span><span class="sk">(</span><span class="ch">req</span><span class="sk">):</span>        <span class="cm"># validate 唔過就即刻出局；連排隊都唔使排</span>
-                <span class="sk">return False</span>                     <span class="cm"># fail-fast 嘅核心：即走，唔 sleep</span>
-            <span class="sk">self.</span><span class="ch">_mutate</span><span class="sk">(</span><span class="ch">req</span><span class="sk">)</span>                    <span class="cm"># 本地 state 先改好；之後外部 call 只係通知/同步</span>
-        <span class="cm"># 第二步：合格先去搶外部閘口</span>
-        <span class="sk">async with sem:</span>                          <span class="cm"># acquire 到名額先可以出街；唔會一窩蜂打爆外部系統</span>
-            <span class="sk">await asyncio.sleep(0.01)</span>            <span class="cm"># 呢段 sleep 就係模擬真正外部 I/O 時間</span>
-        <span class="sk">return True</span>  <span class="cm"># 本地過關、外部又做完，今單先算真成功</span>
-
-    <span class="sk">tasks = []</span>  <span class="cm"># coroutine 清單；逐單包好再一次過 gather</span>
-    <span class="sk">for r in requests:</span>  <span class="cm"># 行 input 順序，保證 gather 結果對得返原單</span>
-        <span class="sk">tasks.append(do_one(r))</span>  <span class="cm"># 先掛起等跑；呢刻仲未真正執行</span>
-    <span class="sk">results = await asyncio.gather(*tasks)</span>  <span class="cm"># 全部一齊開跑；有效 request 先會去爭 semaphore</span>
-    <span class="sk">return list(results)</span></code></pre>  <span class="cm"># gather 交返 tuple/list-like 結果；轉正規 list 比 caller 食</span>
-
-<pre><code><span class="cm"># ── Variant 2: All-sleep ──</span>
-<span class="cm"># Spec: "scan all keys" / "every request must attempt the API"</span>
-<span class="cm">#       冇講 "skip" 或 "without simulating"</span>
-<span class="cm"># 用喺：InMemDB batch_scan</span>
-<span class="cm">#</span>
-<span class="cm"># 全部 request 都入 sem、都 sleep，冇 skip</span>
-<span class="cm"># 20 個 invalid，total time ≈ 0.2s（全部都 sleep）</span>
-<span class="sk">async def</span> <span class="ch">batch_scan</span><span class="sk">(self,</span> <span class="ch">keys</span><span class="sk">, max_concurrent):</span>  <span class="cm"># 批量 scan（semaphore）</span>
-    <span class="sk">sem = asyncio.Semaphore(max_concurrent)</span>  <span class="cm"># 外部窗口得 N 個位；但今次人人都要排隊入去</span>
-
-    <span class="sk">async def do_one(</span><span class="ch">key</span><span class="sk">):</span>  <span class="cm"># 處理單一 item</span>
-        <span class="cm"># 第一步：唔好預先 check；spec 要求每條 request 都要真係走一轉外部流程</span>
-        <span class="sk">async with sem:</span>                          <span class="cm"># 無論 key 靚唔靚都一律排隊入窗口；呢個就係 all-sleep 精神</span>
-            <span class="sk">await asyncio.sleep(0.01)</span>            <span class="cm"># 人人都要瞓一陣；就算最後查到空都照樣消耗時間</span>
-            <span class="sk">return (</span><span class="ch">key</span><span class="sk">, self.</span><span class="ch">scan</span><span class="sk">(</span><span class="ch">key</span><span class="sk">))</span>       <span class="cm"># 真正答案由 scan 自己判；helper 只負責排隊同節流</span>
-
-    <span class="sk">tasks = []</span>  <span class="cm"># coroutine 籃；每條 key 先包裝成一個待跑工作</span>
-    <span class="sk">for k in keys:</span>  <span class="cm"># 每個 key 都要做，冇人可以 fail-fast 甩身</span>
-        <span class="sk">tasks.append(do_one(k))</span>  <span class="cm"># 放入待跑清單；順序之後會由 gather 幫你保住</span>
-    <span class="sk">results = await asyncio.gather(*tasks)</span>  <span class="cm"># 逐批入窗口；就算 invalid key 亦照樣排隊 + sleep</span>
-    <span class="sk">return dict(results)</span>                         <span class="cm"># 最後重砌成 dict；方便 key 對 answer 直接查表</span></code></pre>
-
-<pre><code><span class="cm"># ── 點分用邊個 ──</span>
-<span class="cm"># spec 講 "skip" / "without simulating" / "failed should not sleep" → fail-fast</span>
-<span class="cm"># spec 冇講 skip / 講 "all keys" / "every request" → all-sleep</span></code></pre>
-
-</div><!-- end sys-variants -->
 
 <div id="sys-bank" class="sys-section">
 
@@ -2332,7 +2213,7 @@ if room["guest_name"] == "":  ← available</code></pre>
 <div class="split">
 <div class="split-left">
 <pre><code><span class="sk">def</span> <span class="ch">top_rooms</span><span class="sk">(self, timestamp,</span> <span class="ch">n</span><span class="sk">):</span>  <span class="cm"># 排頭 N 間最多收入嘅房</span>
-    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>  <span class="cm"># 先處理到期 fee</span>
+    <span class="sk">self._process_</span><span class="ch">late_fee</span><span class="sk">(timestamp)</span>  <span class="cm"># 先處理到期 fee</span>
 
     <span class="sk">sorted_items = dict(sorted(</span>  <span class="cm"># 排序：revenue 大排先，同分按房名 asc</span>
         <span class="sk">self.</span><span class="ch">rooms</span><span class="sk">.items(),</span>  <span class="cm"># 將全部房間攤平畀 sorted 排收入榜；之後先切頭 N 間</span>
@@ -2341,12 +2222,12 @@ if room["guest_name"] == "":  ← available</code></pre>
 
     <span class="sk">result = []</span>  <span class="cm"># 準備裝 format 完嘅 string</span>
     <span class="sk">for</span> <span class="ch">room_id</span><span class="sk">, room in sorted_items.items():</span>  <span class="cm"># 逐間房行</span>
-        <span class="sk">result.append(f"</span><span class="ch">{room_id}({room['revenue']})</span><span class="sk">")</span>  <span class="cm"># 格式化成 "房名(收入)"</span>
+        <span class="sk">result.append(f"</span><span class="ch">{room_id}({room['total_revenue']})</span><span class="sk">")</span>  <span class="cm"># 格式化成 "房名(收入)"</span>
 
     <span class="sk">return result[:</span><span class="ch">n</span><span class="sk">]</span>  <span class="cm"># 淨攞頭 N 個</span></code></pre>
 
 <pre><code><span class="sk">def</span> <span class="ch">find_available</span><span class="sk">(self, timestamp,</span> <span class="ch">min_price, max_price</span><span class="sk">):</span>  <span class="cm"># 搵有空嘅房</span>
-    <span class="sk">self._process_</span><span class="ch">fees</span><span class="sk">(timestamp)</span>  <span class="cm"># 先處理到期 fee</span>
+    <span class="sk">self._process_</span><span class="ch">late_fee</span><span class="sk">(timestamp)</span>  <span class="cm"># 先處理到期 fee</span>
 
     <span class="sk">sorted_items = dict(sorted(</span>  <span class="cm"># 按價錢排（平排先）</span>
         <span class="sk">self.</span><span class="ch">rooms</span><span class="sk">.items(),</span>  <span class="cm"># 將全部房資料交畀 sorted 排價錢；之後先慢慢篩有冇人住</span>
@@ -2361,11 +2242,44 @@ if room["guest_name"] == "":  ← available</code></pre>
     <span class="sk">return result</span>  <span class="cm"># 回傳所有符合嘅房</span></code></pre>
 </div><div class="resizer"></div><div class="split-right">
 <button onclick="showBaseCode(this)" data-base="bank" data-level="l2" style="background:#21262d;color:#3fb950;border:1px solid #3fb950;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px;margin-bottom:8px">▼ 睇 bank 版</button>
+<div class="label">L2 嘅 data structure：</div>
+<pre><code>self.rooms = {
+  "r1": {"price_per_night": 100, "guest_name": "Alice", "total_revenue": 200},
+  "r2": {"price_per_night": 150, "guest_name": "",      "total_revenue": 450},
+  "r3": {"price_per_night": 80,  "guest_name": "",      "total_revenue": 0}
+}
+
+top_rooms 用：
+room["total_revenue"] + room_id
+
+find_available 用：
+room["price_per_night"] + room["guest_name"]</code></pre>
+<div class="label">top_rooms(1, 2) 點排 revenue：</div>
+<pre><code>self.rooms.items() 出嚟嘅 x：
+x = ("r1", {"total_revenue": 200, "price_per_night": 100})
+x = ("r2", {"total_revenue": 450, "price_per_night": 150})
+x = ("r3", {"total_revenue": 0,   "price_per_night": 80})
+
+x[0] = "r1"                    # room_id
+x[1] = {"total_revenue": 200}  # 成個 room dict
+x[1]["total_revenue"] = 200    # 攞收入
+
+key=lambda x: (-x[1]["total_revenue"], x[0])
+              #                         #
+         -450 排先(desc)          同分按房名排(asc)
+
+排完：
+(-450, "r2")
+(-200, "r1")
+(0,    "r3")
+
+result = ["r2(450)", "r1(200)", "r3(0)"]
+result[:2] = ["r2(450)", "r1(200)"]</code></pre>
 <div class="label">find_available sort by price asc：</div>
 <pre><code>rooms = {
-  "r1": {"price": 100, "guest": "Alice"},
-  "r2": {"price": 150, "guest": ""},
-  "r3": {"price": 80,  "guest": ""}
+  "r1": {"price_per_night": 100, "guest_name": "Alice"},
+  "r2": {"price_per_night": 150, "guest_name": ""},
+  "r3": {"price_per_night": 80,  "guest_name": ""}
 }
 find_available(1, 50, 200)
 → ["r3", "r2"]
@@ -2429,13 +2343,13 @@ fee 等到 3600100 先加去 revenue</code></pre>
 #    checkout guest + schedule fee
 #    要 return fee amount
 
-# 3. _process_fees check fee > 0
+# 3. _process_late_fee check fee > 0
 #    唔好 check guest_name
 #    因為 guest 已經走咗但 fee 未收
 if pf["fee"] > 0:     ✅
 if guest_name != "":  ❌ guest 已經走咗
 
-# 4. _process_fees 唔加 history
+# 4. _process_late_fee 唔加 history
 #    history 已經喺 checkout 加咗</code></pre>
 </div>
 </div>
@@ -5043,11 +4957,6 @@ self.locks = defaultdict(asyncio.Lock)     per-path 鎖（L5 先加）</code></p
     <span class="sk">return total</span>                                <span class="cm"># 返總和</span></code></pre>
 </div><div class="resizer"></div><div class="split-right">
 <button onclick="showBaseCode(this)" data-base="bank" data-level="l2" style="background:#21262d;color:#3fb950;border:1px solid #3fb950;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px;margin-bottom:8px">▼ 睇 bank 版</button>
-<div class="label">L2 嘅 __init__：</div>
-<pre><code>def __init__(self):
-    self.files = {}
-# 同 L1 一樣，冇加新 field</code></pre>
-
 <div class="label">L2 嘅 data structure：</div>
 <pre><code>self.files = {                             所有檔案（path → info dict）
     "/foo.txt": {"size_kb": 100, "expires_at": None},
@@ -5057,34 +4966,39 @@ self.locks = defaultdict(asyncio.Lock)     per-path 鎖（L5 先加）</code></p
 
 self.locks = defaultdict(asyncio.Lock)     per-path 鎖（L5 先加）</code></pre>
 
-<div class="label">sort_by="size" 嘅 sort key 點 work：</div>
-<pre><code># items.sort(key=lambda x: (-x[1], x[0]))
-#
-# lambda x: (-x[1], x[0]) 做咩？
-#   x 係一個 tuple，例如 ("/foo.txt", 100)
-#   x[1] = 100 （size）
-#   -x[1] = -100（加負號 → 大嘅變最細 → 排最前）
-#   x[0] = "/foo.txt"（path 字串，tie-break 用）
-#
-# 即係 return 一個新 tuple：(-size, path)
-# sort 默認細嘅排先 →
-#   -size 最細 = size 最大 → 大嘅 file 排先
-#   同 size → 按 path 字母升序 tie-break
+<div class="label">list_files(sort_by="size") 點排：</div>
+<pre><code>self.files.items() 出嚟嘅 x：
+x = ("/foo.txt", {"size_kb": 100, "expires_at": None})
+x = ("/bar.log", {"size_kb": 50,  "expires_at": None})
+x = ("/abc.txt", {"size_kb": 100, "expires_at": None})
 
-# 每個 tuple 嘅 sort key：
-#   ("/foo.txt", 100) → (-100, "/foo.txt")
-#   ("/bar.log", 50)  → (-50,  "/bar.log")
-#   ("/abc.txt", 100) → (-100, "/abc.txt")
+x[0] = "/foo.txt"                           # path
+x[1] = {"size_kb": 100, "expires_at": None} # 成個 info dict
+x[1]["size_kb"] = 100                       # 攞 size
 
-# sort 後：
-items = [
-    ("/abc.txt", 100),    # -100, "/abc" ← 最細（a 排先）
-    ("/foo.txt", 100),    # -100, "/foo" ← 同 -100，f 排後
-    ("/bar.log", 50),     # -50          ← size 細排尾
+items.append((path, info["size_kb"]))
+→ items = [
+    ("/foo.txt", 100),
+    ("/bar.log", 50),
+    ("/abc.txt", 100)
 ]
 
-# 最終 output：
-→ "/abc.txt(100), /foo.txt(100), /bar.log(50)"</code></pre>
+items.sort(key=lambda x: (-x[1], x[0]))
+              #         #       #
+              #   size desc   同 size 按 path asc
+
+排完：
+("/abc.txt", 100)
+("/foo.txt", 100)
+("/bar.log", 50)
+
+parts = ["/abc.txt(100)", "/foo.txt(100)", "/bar.log(50)"]
+", ".join(parts)
+→ "/abc.txt(100), /foo.txt(100), /bar.log(50)"
+
+如果 sort_by="path"：
+items.sort(key=lambda x: x[0])
+→ 純 path 字母升序</code></pre>
 
 <div class="label">L2 用嘅 helper：</div>
 <pre><code>_purge_expired(timestamp)
@@ -14770,7 +14684,7 @@ L6: async external_transfer → semaphore</code></pre>
 L2: top_rooms / find_available(min,max) + check occupied
 
 L3: late_checkout→fee after 3600000ms
-    _process_fees check fee>0 唔係 check guest
+    _process_late_fee check fee>0 唔係 check guest
 
 L4: get_booking_history→return tuple唔係string
     upgrade_room→搬guest唔係merge
@@ -19023,7 +18937,16 @@ function initResizableTables(root = document) {
         }
         colgroup.innerHTML = '';
 
-        const widths = firstRowCells.map(cell => Math.max(140, Math.round(cell.getBoundingClientRect().width || cell.offsetWidth || 160)));
+        const isCompactConceptTable = table.classList.contains('compact-concepts') && firstRowCells.length === 2;
+        const widths = isCompactConceptTable
+            ? (() => {
+                const baseWidth = Math.max(wrapper.clientWidth || 0, 1700);
+                return [
+                    Math.max(250, Math.round(baseWidth * 0.20)),
+                    Math.max(1240, Math.round(baseWidth * 0.80)),
+                ];
+            })()
+            : firstRowCells.map(cell => Math.max(140, Math.round(cell.getBoundingClientRect().width || cell.offsetWidth || 160)));
         widths.forEach(width => {
             const col = document.createElement('col');
             col.style.width = width + 'px';
@@ -19039,7 +18962,8 @@ function initResizableTables(root = document) {
         table._syncResizableWidth = syncTableWidth;
         syncTableWidth();
 
-        firstRowCells.forEach((cell, index) => {
+        function attachHandle(cell, index) {
+            if (!cell || cell.querySelector(':scope > .col-resize-handle')) return;
             const handle = document.createElement('div');
             handle.className = 'col-resize-handle';
             handle.title = 'Drag to resize column';
@@ -19071,6 +18995,10 @@ function initResizableTables(root = document) {
             });
 
             cell.appendChild(handle);
+        }
+
+        Array.from(table.rows).forEach(row => {
+            Array.from(row.cells).forEach((cell, index) => attachHandle(cell, index));
         });
 
         if (typeof ResizeObserver !== 'undefined') {
@@ -19100,7 +19028,8 @@ function initConceptCheckboxes(root = document) {
             const firstCell = row.cells[0];
             if (!firstCell || firstCell.dataset.masteryReady === '1') return;
 
-            const conceptText = firstCell.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
+            const conceptAnchor = firstCell.querySelector('.concept-merge-block') || firstCell;
+            const conceptText = conceptAnchor.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
             const storageKey = `pfm:concept:${heading}:${rowIndex}:${conceptText}`;
             const watchKey = `${storageKey}:watch`;
 
@@ -19136,7 +19065,15 @@ function initConceptCheckboxes(root = document) {
 
             const content = document.createElement('div');
             content.className = 'concept-check-label';
-            content.innerHTML = firstCell.innerHTML;
+
+            while (firstCell.firstChild) {
+                content.appendChild(firstCell.firstChild);
+            }
+
+            const levelBadge = document.createElement('div');
+            levelBadge.className = 'concept-level-badge';
+            levelBadge.textContent = getConceptLevelLabelFromHeading(heading);
+            content.insertBefore(levelBadge, content.firstChild);
 
             function sync() {
                 row.classList.toggle('concept-mastered', checkbox.checked);
@@ -19152,15 +19089,14 @@ function initConceptCheckboxes(root = document) {
             checkbox.addEventListener('change', sync);
             watchbox.addEventListener('change', sync);
 
-            firstCell.innerHTML = '';
             masteryWrap.appendChild(masteryEmoji);
             masteryWrap.appendChild(checkbox);
             watchWrap.appendChild(watchEmoji);
             watchWrap.appendChild(watchbox);
             controls.appendChild(masteryWrap);
             controls.appendChild(watchWrap);
-            wrapper.appendChild(content);
             wrapper.appendChild(controls);
+            wrapper.appendChild(content);
             firstCell.appendChild(wrapper);
             firstCell.dataset.masteryReady = '1';
             sync();
@@ -19168,13 +19104,1822 @@ function initConceptCheckboxes(root = document) {
     });
 }
 
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function guessSortNames(text) {
+    if (/self\.rooms|room_id|price_per_night|total_revenue/.test(text)) return ['"r1"', '"r2"', '"r3"'];
+    if (/self\.nodes|node_id|loads|positions/.test(text)) return ['"node_a"', '"node_b"', '"node_c"'];
+    if (/self\.files|path|size_kb/.test(text)) return ['"/abc.txt"', '"/foo.txt"', '"/bar.log"'];
+    if (/self\.channels|channel_id|message_ids/.test(text)) return ['"#alpha"', '"#beta"', '"#gamma"'];
+    if (/self\.players|player_id|score/.test(text)) return ['"alice"', '"bob"', '"charlie"'];
+    if (/self\.tasks|task_id|priority|status/.test(text)) return ['"task_a"', '"task_b"', '"task_c"'];
+    return ['"alice"', '"bob"', '"charlie"'];
+}
+
+function guessSortIdLabel(text) {
+    if (/room_id|self\.rooms/.test(text)) return 'room id';
+    if (/node_id|self\.nodes|loads/.test(text)) return 'node id';
+    if (/path|self\.files/.test(text)) return 'path';
+    if (/channel_id|self\.channels/.test(text)) return 'channel id';
+    if (/player_id|self\.players/.test(text)) return 'player id';
+    if (/task_id|self\.tasks/.test(text)) return 'task id';
+    return 'name / id';
+}
+
+function guessSortValues(field, isDesc) {
+    if (/price|created|execute_at|time|timestamp|added_order|row/.test(field)) {
+        return isDesc ? [30, 10, 30] : [10, 30, 10];
+    }
+    if (/size|duration|score|load|count|outgoing|revenue|severity|checkins|borrow_count|amount|priority/.test(field)) {
+        return isDesc ? [300, 100, 300] : [100, 300, 100];
+    }
+    return isDesc ? [300, 100, 300] : [10, 30, 10];
+}
+
+function guessSourceExpr(text) {
+    const sourceMatch = text.match(/([A-Za-z0-9_.\[\]"]+)\.items\(\)/);
+    if (sourceMatch) return sourceMatch[1] + '.items()';
+    if (/sorted\(self\.[A-Za-z0-9_]+\)/.test(text)) {
+        const dictMatch = text.match(/sorted\((self\.[A-Za-z0-9_]+)\)/);
+        if (dictMatch) return dictMatch[1];
+    }
+    if (/sorted\([^)]*\.keys\(\)\)/.test(text)) {
+        const keysMatch = text.match(/sorted\(([^)]*\.keys\(\))\)/);
+        if (keysMatch) return keysMatch[1];
+    }
+    if (/items\.sort\(/.test(text) || /items\.sort\(\)/.test(text)) return 'items';
+    return 'items';
+}
+
+function conceptTileDomainFromText(text) {
+    const lower = (text || '').toLowerCase();
+    if (lower.includes('bank')) return 'bank';
+    if (lower.includes('hotel')) return 'hotel';
+    if (lower.includes('fs')) return 'fs';
+    if (lower.includes('leaderboard')) return 'leaderboard';
+    if (lower.includes('hashring')) return 'hashring';
+    if (lower.includes('chatroute')) return 'chatroute';
+    if (lower.includes('inmemdb')) return 'inmemdb';
+    if (lower.includes('dns')) return 'dns';
+    if (lower.includes('taskqueue')) return 'taskqueue';
+    if (lower.includes('workflow')) return 'workflow';
+    if (lower.includes('chat')) return 'chat';
+    if (lower.includes('你個腦要記')) return 'note';
+    return 'note';
+}
+
+function initConceptTiles(root = document) {
+    root.querySelectorAll('.concept-visual').forEach(box => {
+        if (box.dataset.tiled === '1') return;
+        const kids = Array.from(box.children);
+        if (!kids.length) return;
+
+        const frag = document.createDocumentFragment();
+        let tile = null;
+
+        kids.forEach(child => {
+            if (child.tagName === 'P') {
+                tile = document.createElement('div');
+                tile.className = 'concept-example-tile';
+                const headingText = child.querySelector('b') ? child.querySelector('b').textContent : child.textContent;
+                tile.dataset.tileDomain = conceptTileDomainFromText(headingText);
+                frag.appendChild(tile);
+            }
+            if (!tile) {
+                tile = document.createElement('div');
+                tile.className = 'concept-example-tile';
+                tile.dataset.tileDomain = 'note';
+                frag.appendChild(tile);
+            }
+            tile.appendChild(child);
+        });
+
+        box.innerHTML = '';
+        box.appendChild(frag);
+        box.dataset.tiled = '1';
+    });
+}
+
+function collapseConceptVisualTiles(root = document) {
+    root.querySelectorAll('.concept-visual[data-tiled="1"]').forEach(box => {
+        if (box.dataset.compactCardsReady === '1') return;
+        const tiles = Array.from(box.children).filter(child => child.classList && child.classList.contains('concept-example-tile'));
+        const compactEnough = tiles.length <= 4 && tiles.every(tile => {
+            const code = tile.querySelector('pre code');
+            if (!code) return true;
+            const raw = (code.textContent || '').trim();
+            const lines = raw ? raw.split('\n').filter(line => line.trim()).length : 0;
+            return lines <= 8 && raw.length <= 480;
+        });
+        const forcedVisible = parseInt(box.dataset.forceVisibleCount || '0', 10) || 0;
+        let visibleLimit = compactEnough ? Math.min(4, tiles.length) : Math.min(2, tiles.length);
+        if (forcedVisible > 0) visibleLimit = Math.max(visibleLimit, Math.min(forcedVisible, tiles.length));
+        if (tiles.length > visibleLimit) {
+            const details = document.createElement('details');
+            details.className = 'concept-visual-more';
+            const summary = document.createElement('summary');
+            summary.textContent = `其餘 ${tiles.length - visibleLimit} 張`;
+            details.appendChild(summary);
+
+            const hiddenWrap = document.createElement('div');
+            hiddenWrap.className = 'concept-hidden-tiles';
+            tiles.slice(visibleLimit).forEach(tile => hiddenWrap.appendChild(tile));
+            details.appendChild(hiddenWrap);
+            box.appendChild(details);
+        }
+        box.dataset.compactCardsReady = '1';
+    });
+}
+
+function getConceptSnippetLineCount(snippet) {
+    return snippet && snippet.code ? snippet.code.split('\n').length : 0;
+}
+
+function scoreSupplementalSnippetForConcept(conceptText, snippet) {
+    const concept = (conceptText || '').toLowerCase();
+    const name = (snippet.name || '').toLowerCase();
+    const code = (snippet.code || '').toLowerCase();
+    const lines = getConceptSnippetLineCount(snippet);
+    let score = 0;
+
+    if (lines <= 18) score += 30;
+    else if (lines <= 28) score += 20;
+    else if (lines <= 36) score += 8;
+    else score -= 24;
+
+    if (!name.startsWith('_')) score += 12;
+    else score -= 4;
+
+    if (concept.includes('lazy helper')) {
+        if (/self\._process_/.test(code)) score += 120;
+        if (/_process_/.test(name)) score += 45;
+        if (/cashback|late_fee|escalation|trigger|due/.test(code)) score += 20;
+    }
+
+    if (/ttl|inline check/.test(concept)) {
+        if (/self\._purge_expired|self\._is_alive/.test(code)) score += 120;
+        if (/_purge_expired|_is_alive/.test(name)) score += 60;
+        if (/expiry|ttl|expires|strictly less/.test(code)) score += 24;
+    }
+
+    if (/retry|backoff|next_due/.test(concept)) {
+        if (/retry|backoff|attempt|next_due|retry_time/.test(code)) score += 120;
+        if (/retry|fail|complete|start/.test(name)) score += 25;
+    }
+
+    if (/virtual nodes|replicas/.test(concept)) {
+        if (/virtual|replica|hash|ring|position/.test(code)) score += 120;
+        if (/add_node|route|store|_hash/.test(name)) score += 20;
+    }
+
+    if (/health|availability/.test(concept)) {
+        if (/heartbeat|healthy|timeout|availability/.test(code)) score += 120;
+    }
+
+    if (/history|historical query/.test(concept)) {
+        if (/reversed\(history\)|snapshot|restore|backup/.test(code)) score += 120;
+    }
+
+    if (/worker pool/.test(concept)) {
+        if (/async def worker|await|queue|worker/.test(code)) score += 120;
+    }
+
+    if (/fail-fast|all-sleep/.test(concept)) {
+        if (/async with sem|await asyncio\.sleep|return false|continue/.test(code)) score += 120;
+    }
+
+    return score;
+}
+
+function buildSupplementalConceptCard(item, snippet) {
+    const tile = document.createElement('div');
+    tile.className = 'concept-example-tile concept-supplemental-tile';
+    tile.appendChild(cloneConceptCardTitle(item, snippet.name));
+
+    if (shouldInlineConceptSnippets([snippet])) {
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.textContent = snippet.code;
+        pre.appendChild(code);
+        tile.appendChild(pre);
+        return tile;
+    }
+
+    const note = document.createElement('div');
+    note.className = 'concept-inline-note';
+    note.innerHTML = `完整 function 太長（約 ${getConceptSnippetLineCount(snippet)} 行）。展開先睇，或者直接撳 title 跳去原 mock。`;
+    tile.appendChild(note);
+
+    const details = document.createElement('details');
+    details.className = 'concept-visual-more';
+    const summary = document.createElement('summary');
+    summary.textContent = `展開完整 function（約 ${getConceptSnippetLineCount(snippet)} 行）`;
+    details.appendChild(summary);
+    const pre = document.createElement('pre');
+    const code = document.createElement('code');
+    code.textContent = snippet.code;
+    pre.appendChild(code);
+    details.appendChild(pre);
+    tile.appendChild(details);
+    return tile;
+}
+
+function pickSupplementalSnippetForConcept(rowInfo, item) {
+    const basePool = extractFunctionSnippetsForItem(item);
+    const fallbackPool = extractSystemFunctionSnippetsForItem(item);
+    const pool = (basePool.length ? basePool : fallbackPool)
+        .filter(snippet => getConceptSnippetLineCount(snippet) <= 36);
+
+    if (!pool.length) return null;
+
+    const scored = pool
+        .map(snippet => ({ snippet, score: scoreSupplementalSnippetForConcept(rowInfo.conceptText, snippet) }))
+        .sort((a, b) => b.score - a.score || getConceptSnippetLineCount(a.snippet) - getConceptSnippetLineCount(b.snippet));
+
+    return scored[0] ? scored[0].snippet : null;
+}
+
+function supplementConceptVisualTiles(root = document) {
+    root.querySelectorAll('.concept-table.numbered-concepts tr').forEach((row, rowIndex) => {
+        if (rowIndex === 0) return;
+        const refBlock = row.querySelector('.concept-ref-block');
+        const visual = row.querySelector('.concept-visual');
+        if (!refBlock || !visual || visual.dataset.supplemented === '1') return;
+
+        const directTiles = Array.from(visual.children).filter(child => child.classList && child.classList.contains('concept-example-tile'));
+        if (!directTiles.length || directTiles.length >= 4) {
+            visual.dataset.supplemented = '1';
+            return;
+        }
+
+        const linkItems = extractConceptLinkItemsFromBlock(refBlock);
+        if (!linkItems.length) {
+            visual.dataset.supplemented = '1';
+            return;
+        }
+
+        const rowInfo = getConceptRowInfo(row, rowIndex);
+        const represented = new Set();
+        directTiles.forEach(tile => {
+            const titleAnchor = tile.querySelector('.concept-card-title a');
+            if (titleAnchor && titleAnchor.getAttribute('href')) {
+                represented.add(titleAnchor.getAttribute('href'));
+                return;
+            }
+            const matched = findConceptLinkForTile(tile, linkItems);
+            const normalized = normalizeConceptLinkItem(matched);
+            if (normalized && normalized.href) represented.add(normalized.href);
+        });
+
+        let totalVisible = directTiles.length;
+        for (const item of linkItems) {
+            if (totalVisible >= 4) break;
+            const normalized = normalizeConceptLinkItem(item);
+            if (!normalized || !normalized.href || represented.has(normalized.href)) continue;
+            const snippet = pickSupplementalSnippetForConcept(rowInfo, normalized);
+            if (!snippet) continue;
+            visual.appendChild(buildSupplementalConceptCard(normalized, snippet));
+            represented.add(normalized.href);
+            totalVisible += 1;
+        }
+
+        if (totalVisible > directTiles.length) visual.dataset.forceVisibleCount = String(Math.min(4, totalVisible));
+        visual.dataset.supplemented = '1';
+    });
+}
+
+function estimateConceptTileWeight(tile) {
+    const code = tile.querySelector('pre code');
+    const text = code ? getCleanCodeText(code) : '';
+    const lines = text ? text.split('\n').filter(line => line.trim()).length : 0;
+    const textBlocks = tile.querySelectorAll('p, .concept-inline-note').length;
+    const detailsCount = tile.querySelectorAll('details').length;
+    return 18 + (lines * 1.6) + (textBlocks * 8) + (detailsCount * 10);
+}
+
+function rebuildConceptTileColumns(container, wrapperClass, columnClass) {
+    const existing = Array.from(container.children).find(child => child.classList && child.classList.contains(wrapperClass));
+    if (existing) {
+        const after = existing.nextSibling;
+        const tiles = [];
+        Array.from(existing.children).forEach(col => tiles.push(...Array.from(col.children)));
+        existing.remove();
+        tiles.forEach(tile => container.insertBefore(tile, after));
+    }
+
+    const tiles = Array.from(container.children).filter(child => child.classList && child.classList.contains('concept-example-tile'));
+    if (tiles.length <= 1) return;
+
+    const insertBefore = Array.from(container.children).find(child => !(child.classList && child.classList.contains('concept-example-tile'))) || null;
+    tiles.forEach(tile => tile.remove());
+
+    const wrap = document.createElement('div');
+    wrap.className = wrapperClass;
+    const cols = [document.createElement('div'), document.createElement('div')];
+    cols.forEach(col => {
+        col.className = columnClass;
+        wrap.appendChild(col);
+    });
+
+    const heights = [0, 0];
+    tiles.forEach(tile => {
+        const idx = heights[0] <= heights[1] ? 0 : 1;
+        cols[idx].appendChild(tile);
+        heights[idx] += estimateConceptTileWeight(tile);
+    });
+
+    container.insertBefore(wrap, insertBefore);
+}
+
+function applyConceptMasonry(root = document) {
+    root.querySelectorAll('.concept-visual[data-tiled="1"]').forEach(box => rebuildConceptTileColumns(box, 'concept-tile-columns', 'concept-tile-column'));
+    root.querySelectorAll('.concept-hidden-tiles').forEach(box => rebuildConceptTileColumns(box, 'concept-hidden-columns', 'concept-hidden-column'));
+}
+
+function initConceptTableLayout(root = document) {
+    root.querySelectorAll('.concept-table.numbered-concepts').forEach(table => {
+        if (table.dataset.compactReady === '1') return;
+        Array.from(table.rows).forEach((row, rowIndex) => {
+            if (row.cells.length < 4) return;
+            const first = row.cells[0];
+            const second = row.cells[1];
+            const third = row.cells[2];
+            const fourth = row.cells[3];
+            if (!first || !second || !third || !fourth) return;
+
+            if (rowIndex === 0) {
+                second.innerHTML = '你會撞到咩 + 你要點樣認<div class="concept-ref-title">去邊個 mock / level 睇返</div>';
+            } else {
+                const merge = document.createElement('div');
+                merge.className = 'concept-merge-block';
+                merge.innerHTML = first.innerHTML;
+                second.insertBefore(merge, second.firstChild);
+
+                const block = document.createElement('div');
+                block.className = 'concept-ref-block';
+                block.innerHTML = `<div class="concept-ref-title">去邊個 mock / level 睇返：</div>${fourth.innerHTML}`;
+                second.appendChild(block);
+            }
+            row.deleteCell(3);
+            row.deleteCell(0);
+        });
+        table.classList.add('compact-concepts');
+        table.dataset.compactReady = '1';
+    });
+}
+
+function normalizeConceptLinkItem(item) {
+    if (!item) return null;
+    if (typeof item.text === 'string' && typeof item.href === 'string' && !item.getAttribute) {
+        return {
+            text: (item.text || '').trim(),
+            href: item.href || '',
+            onclick: item.onclick || '',
+        };
+    }
+    if (!item.getAttribute) return null;
+    return {
+        text: (item.textContent || '').trim(),
+        href: item.getAttribute('href') || '',
+        onclick: item.getAttribute('onclick') || '',
+    };
+}
+
+function dedupeConceptLinkItems(items) {
+    const seen = new Set();
+    return items
+        .map(normalizeConceptLinkItem)
+        .filter(Boolean)
+        .filter(item => {
+            const key = `${item.href}::${item.text}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+}
+
+function createConceptJumpAnchor(item) {
+    const normalized = normalizeConceptLinkItem(item);
+    if (!normalized) return null;
+    const anchor = document.createElement('a');
+    anchor.className = 'jump-link';
+    anchor.href = normalized.href;
+    anchor.textContent = normalized.text;
+    if (normalized.onclick) anchor.setAttribute('onclick', normalized.onclick);
+    return anchor;
+}
+
+function appendConceptRefLinks(container, items) {
+    items.forEach((item, index) => {
+        if (index > 0) container.appendChild(document.createTextNode('、'));
+        const anchor = createConceptJumpAnchor(item);
+        if (anchor) container.appendChild(anchor);
+    });
+}
+
+function getConceptTableHeading(table) {
+    return table.parentElement && table.parentElement.previousElementSibling
+        ? table.parentElement.previousElementSibling.textContent.trim()
+        : 'Concepts';
+}
+
+function getConceptLevelLabelFromHeading(heading) {
+    const text = (heading || '').trim();
+    const levelMatch = text.match(/\bL([1-6])\b/i);
+    if (levelMatch) return `L${levelMatch[1]}`;
+    if (/^init\b/i.test(text)) return 'Init';
+    return text || 'Concept';
+}
+
+function getConceptRowInfo(row, rowIndex) {
+    const table = row.closest('.numbered-concepts');
+    const heading = getConceptTableHeading(table);
+    const firstCell = row.cells[0];
+    const conceptAnchor = firstCell && firstCell.querySelector('.concept-merge-block') ? firstCell.querySelector('.concept-merge-block') : firstCell;
+    const conceptText = conceptAnchor ? conceptAnchor.textContent.replace(/\s+/g, ' ').trim().toLowerCase() : `row-${rowIndex}`;
+    const key = `${heading}:${rowIndex}:${conceptText}`;
+    return { heading, conceptText, key };
+}
+
+function splitHowToSteps(text) {
+    const cleaned = (text || '')
+        .replace(/^大約做法：?/, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    if (!cleaned) return [];
+
+    let normalized = cleaned
+        .replace(/；/g, '|||')
+        .replace(/。/g, '|||')
+        .replace(/，再/g, '|||再')
+        .replace(/，之後/g, '|||之後')
+        .replace(/，最後/g, '|||最後')
+        .replace(/，成功就/g, '|||成功就')
+        .replace(/，失敗就/g, '|||失敗就')
+        .replace(/，fail 就/g, '|||fail 就')
+        .replace(/，有就/g, '|||有就')
+        .replace(/，冇就/g, '|||冇就')
+        .replace(/，只有/g, '|||只有');
+
+    const steps = normalized
+        .split('|||')
+        .map(part => part.trim().replace(/^即係[:：]\s*/, '').replace(/^Step\s*\d+\s*/, ''))
+        .filter(Boolean);
+
+    return steps.length ? steps : [cleaned];
+}
+
+function buildConceptHowTo(noteText) {
+    const steps = splitHowToSteps(noteText);
+    if (!steps.length) return null;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'concept-howto';
+
+    const title = document.createElement('div');
+    title.className = 'concept-howto-title';
+    title.textContent = '大約做法';
+    wrap.appendChild(title);
+
+    const list = document.createElement('ol');
+    list.className = 'concept-howto-steps';
+
+    steps.forEach((step, index) => {
+        const item = document.createElement('li');
+        item.innerHTML = `<span class="concept-howto-step">Step ${index + 1}</span>${step}`;
+        list.appendChild(item);
+    });
+
+    wrap.appendChild(list);
+    return wrap;
+}
+
+function collapseConceptRefBlocks(root = document) {
+    root.querySelectorAll('.concept-ref-block').forEach(block => {
+        if (block.dataset.collapsedReady === '1') return;
+        const title = block.querySelector('.concept-ref-title');
+        const titleClone = title ? title.cloneNode(true) : null;
+        const linkItems = dedupeConceptLinkItems(Array.from(block.querySelectorAll('.jump-link')));
+        const howToNotes = Array.from(block.querySelectorAll('.mini-note'))
+            .map(note => note.textContent || '')
+            .filter(text => /大約做法/.test(text));
+        if (!titleClone) {
+            block.dataset.collapsedReady = '1';
+            return;
+        }
+
+        block.innerHTML = '';
+        block.appendChild(titleClone);
+        if (linkItems.length) {
+            block.dataset.linkItems = JSON.stringify(linkItems);
+
+            const quickLinks = document.createElement('div');
+            quickLinks.className = 'concept-visual-links';
+            appendConceptRefLinks(quickLinks, linkItems.slice(0, 4));
+            block.appendChild(quickLinks);
+
+            if (linkItems.length > 4) {
+                const moreDetails = document.createElement('details');
+                moreDetails.className = 'concept-visual-more';
+                const summary = document.createElement('summary');
+                summary.textContent = `其餘 ${linkItems.length - 4} 個`;
+                moreDetails.appendChild(summary);
+                const moreLinks = document.createElement('div');
+                moreLinks.className = 'concept-visual-links';
+                appendConceptRefLinks(moreLinks, linkItems.slice(4));
+                moreDetails.appendChild(moreLinks);
+                block.appendChild(moreDetails);
+            }
+
+        }
+        howToNotes.forEach(text => {
+            const howTo = buildConceptHowTo(text);
+            if (howTo) block.appendChild(howTo);
+        });
+        block.dataset.collapsedReady = '1';
+    });
+}
+
+function buildSortDecoderText(codeText) {
+    const text = (codeText || '').replace(/\u00a0/g, ' ');
+    const compact = text.replace(/\s+/g, ' ').trim();
+    const lambdaMatch = compact.match(/key=lambda\s+([A-Za-z_]\w*)\s*:\s*(.+)$/);
+    const varName = lambdaMatch ? lambdaMatch[1] : null;
+    const expr = lambdaMatch ? lambdaMatch[2].trim() : '';
+    const names = guessSortNames(text);
+    const idLabel = guessSortIdLabel(text);
+    const sourceExpr = guessSourceExpr(text);
+
+    const nestedFieldMatch = expr.match(new RegExp(varName ? `${varName}\\[1\\]\\["([^"]+)"\\]` : 'a^'));
+    if (lambdaMatch && /\.items\(\)/.test(text) && nestedFieldMatch) {
+        const field = nestedFieldMatch[1];
+        const isDesc = expr.includes(`-${varName}[1]["${field}"]`);
+        const values = guessSortValues(field, isDesc);
+        const tuples = names.map((name, i) => ({ name, value: values[i] }));
+        const sorted = tuples
+            .map(t => ({ key: isDesc ? -t.value : t.value, name: t.name }))
+            .sort((a, b) => a.key - b.key || a.name.localeCompare(b.name));
+
+        return [
+            `${sourceExpr} 出嚟嘅 ${varName}：`,
+            `${varName} = (${names[0]}, {"${field}": ${values[0]}})`,
+            `${varName} = (${names[1]}, {"${field}": ${values[1]}})`,
+            `${varName} = (${names[2]}, {"${field}": ${values[2]}})`,
+            '',
+            `${varName}[0] = ${names[0]}                # ${idLabel}`,
+            `${varName}[1] = {"${field}": ${values[0]}}    # 成個 dict`,
+            `${varName}[1]["${field}"] = ${values[0]}      # 攞排序值`,
+            '',
+            `key=lambda ${varName}: (${expr})`,
+            `              #${' '.repeat(Math.max(1, expr.length - 1))}#`,
+            `         ${isDesc ? '-' + values[0] + ' 排先(desc)' : values[0] + ' 細嘅排先(asc)'}    同分按名排(asc)`,
+            '',
+            '排完：',
+            ...sorted.map(s => `(${s.key}, ${s.name})`),
+        ].join('\n');
+    }
+
+    if (lambdaMatch && /\.items\(\)/.test(text) && expr.includes(`${varName}[1]`) && !nestedFieldMatch) {
+        const isDesc = expr.includes(`-${varName}[1]`);
+        const values = guessSortValues('count', isDesc);
+        const tuples = names.map((name, i) => ({ name, value: values[i] }));
+        const sorted = tuples
+            .map(t => ({ key: isDesc ? -t.value : t.value, name: t.name }))
+            .sort((a, b) => a.key - b.key || a.name.localeCompare(b.name));
+
+        return [
+            `${sourceExpr} 出嚟嘅 ${varName}：`,
+            `${varName} = (${names[0]}, ${values[0]})`,
+            `${varName} = (${names[1]}, ${values[1]})`,
+            `${varName} = (${names[2]}, ${values[2]})`,
+            '',
+            `${varName}[0] = ${names[0]}    # ${idLabel}`,
+            `${varName}[1] = ${values[0]}         # 呢個 item 嘅數值`,
+            '',
+            `key=lambda ${varName}: (${expr})`,
+            `         ${isDesc ? '-' + values[0] + ' 排先(desc)' : values[0] + ' 細嘅排先(asc)'}    同分按名排(asc)`,
+            '',
+            '排完：',
+            ...sorted.map(s => `(${s.key}, ${s.name})`),
+        ].join('\n');
+    }
+
+    if (lambdaMatch && /\bitems\.sort\(key=lambda\b/.test(text) && expr === `${varName}[0]`) {
+        const tuples = [
+            [names[1], 300],
+            [names[0], 100],
+            [names[2], 200],
+        ].sort((a, b) => a[0].localeCompare(b[0]));
+        return [
+            `items 入面每個 ${varName} 係一個 tuple：`,
+            `${varName} = (${names[1]}, 300)`,
+            `${varName} = (${names[0]}, 100)`,
+            `${varName} = (${names[2]}, 200)`,
+            '',
+            `${varName}[0] = ${names[0]}    # ${idLabel}`,
+            '',
+            `key=lambda ${varName}: ${varName}[0]`,
+            '即係只睇第 0 格，按字母升序排。',
+            '',
+            '排完：',
+            ...tuples.map(t => `(${t[0]}, ${t[1]})`),
+        ].join('\n');
+    }
+
+    if (/sorted\(\s*\[/.test(text) && !/key=lambda/.test(text)) {
+        return [
+            'sorted([a, b]) 點運作：',
+            '原本可能係 ["room_b", "room_a"]',
+            'sorted 之後會變 ["room_a", "room_b"]',
+            '',
+            '即係：',
+            '所有 worker 都先鎖細嗰個，再鎖大嗰個。',
+            '目的係 avoid deadlock，唔係做排行榜。'
+        ].join('\n');
+    }
+
+    if (/sorted\([^)]*\.keys\(\)\)/.test(text) || /return\s+sorted\(self\.[A-Za-z_][A-Za-z0-9_]*\)/.test(text) || /result\s*=\s*sorted\(self\.[A-Za-z_][A-Za-z0-9_]*\)/.test(text)) {
+        return [
+            `${sourceExpr} 出嚟通常係 keys list：`,
+            `${sourceExpr} -> ["c", "a", "b"]`,
+            'sorted(...) 之後：',
+            '["a", "b", "c"]',
+            '',
+            '即係：',
+            '冇 key=lambda = 直接按字母 asc 排 keys。',
+            '唔係排 value。'
+        ].join('\n');
+    }
+
+    if (/\.sort\(\)/.test(text) && !/key=lambda/.test(text)) {
+        return [
+            'items.sort() 點運作：',
+            '假設 items 目前係：',
+            '[(60, "node_b"), (20, "node_a"), (60, "node_a")]',
+            '',
+            'items.sort() 之後：',
+            '[(20, "node_a"), (60, "node_a"), (60, "node_b")]',
+            '',
+            'Python 會先比第 0 格，之後先比第 1 格。'
+        ].join('\n');
+    }
+
+    if (lambdaMatch && /\[[\'"][^\'"]+[\'"]\]/.test(expr)) {
+        const dictFieldMatch = expr.match(new RegExp(`-?${varName}\\["([^"]+)"\\]`));
+        const tieFieldMatch = expr.match(new RegExp(`${varName}\\["([^"]+)"\\]\\)?$`));
+        const mainField = dictFieldMatch ? dictFieldMatch[1] : 'value';
+        const tieField = tieFieldMatch ? tieFieldMatch[1] : 'title';
+        const isDesc = expr.includes(`-${varName}["${mainField}"]`);
+        return [
+            `${varName} 係 list 入面每一個 dict：`,
+            `${varName} = {"${mainField}": ${isDesc ? 300 : 100}, "${tieField}": "b"}`,
+            `${varName} = {"${mainField}": 100, "${tieField}": "a"}`,
+            `${varName} = {"${mainField}": ${isDesc ? 300 : 200}, "${tieField}": "c"}`,
+            '',
+            `${varName}["${mainField}"] = 主排序欄位`,
+            `${varName}["${tieField}"] = tie-break 欄位`,
+            '',
+            `key=lambda ${varName}: (${expr})`,
+            `即係先按 ${mainField} ${isDesc ? 'desc' : 'asc'}，再按 ${tieField} asc。`
+        ].join('\n');
+    }
+
+    if (lambdaMatch) {
+        return [
+            `key=lambda ${varName}: (${expr})`,
+            '左邊條件先比，右邊條件後比。',
+            '前面有負號 - = desc；冇負號 = asc。',
+            '如果係 tuple，就第二格通常係 tie-break。'
+        ].join('\n');
+    }
+
+    return '';
+}
+
+function initSortExplainers(root = document) {
+    root.querySelectorAll('.split').forEach(split => {
+        const left = split.querySelector('.split-left');
+        const right = split.querySelector('.split-right');
+        if (!left || !right) return;
+        if (right.querySelector('[data-sort-decoder="1"]')) return;
+
+        const codeText = left.textContent || '';
+        if (!/(key=lambda|\.sort\(|sorted\()/.test(codeText)) return;
+
+        const decoderText = buildSortDecoderText(codeText);
+        if (!decoderText) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.dataset.sortDecoder = '1';
+        wrapper.style.margin = '8px 0 12px 0';
+        wrapper.innerHTML = `<div class="label">sorted 點運作：</div><pre><code>${escapeHtml(decoderText)}</code></pre>`;
+
+        const firstLabel = right.querySelector('.label');
+        const firstButton = right.querySelector('button');
+        if (firstLabel) right.insertBefore(wrapper, firstLabel);
+        else if (firstButton && firstButton.nextSibling) right.insertBefore(wrapper, firstButton.nextSibling);
+        else right.insertBefore(wrapper, right.firstChild);
+    });
+}
+
+function extractConceptCardTargets(tile) {
+    const firstP = tile ? tile.querySelector('p') : null;
+    if (!firstP) return [];
+    const seen = new Set();
+    const targets = [];
+
+    Array.from(firstP.querySelectorAll('code')).forEach(code => {
+        const text = (code.textContent || '').trim();
+        const match = text.match(/^([A-Za-z_]\w*)\s*(?:\(|$)/);
+        if (!match) return;
+        const name = match[1];
+        if (/^[A-Z_][A-Z0-9_]*$/.test(name)) return;
+        if (/^(self|timestamp|value|prefix|status|min_score|max_price|size_mb|bandwidth_mb)$/.test(name)) return;
+        if (seen.has(name)) return;
+        seen.add(name);
+        targets.push(name);
+    });
+
+    const snippetCode = tile.querySelector('pre code');
+    if (snippetCode) {
+        (snippetCode.textContent || '').split('\n').forEach(line => {
+            const match = line.trim().match(/^(?:async\s+def|def)\s+([A-Za-z_]\w*)\s*\(/);
+            if (!match) return;
+            const name = match[1];
+            if (seen.has(name)) return;
+            seen.add(name);
+            targets.push(name);
+        });
+    }
+
+    return targets;
+}
+
+function findConceptLinkForTile(tile, linkItems) {
+    const firstP = tile ? tile.querySelector('p') : null;
+    const titleText = firstP ? (firstP.textContent || '').replace(/\s+/g, ' ').trim() : '';
+    if (!titleText) return null;
+    return linkItems.find(item => titleText.startsWith(item.text)) || null;
+}
+
+function normalizeConceptSnippetLine(line) {
+    return (line || '')
+        .replace(/#.*$/g, '')
+        .replace(/\.\.\./g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function extractConceptAnchorLines(tile) {
+    const code = tile.querySelector('pre code');
+    if (!code) return [];
+    const rawLines = code.querySelectorAll('.code-line').length
+        ? Array.from(code.querySelectorAll('.code-line')).map(line => line.textContent || '')
+        : (code.textContent || '').split('\n');
+    return rawLines
+        .map(normalizeConceptSnippetLine)
+        .filter(line => line && line !== 'def' && line !== 'return')
+        .filter(line => !/^[{}\])]+$/.test(line))
+        .slice(0, 5);
+}
+
+const CONCEPT_INLINE_MAX_LINES = 28;
+const CONCEPT_INLINE_MAX_CHARS = 2200;
+const conceptSearchStopwords = new Set([
+    'self', 'timestamp', 'return', 'none', 'true', 'false', 'with', 'from', 'that', 'this',
+    'then', 'when', 'else', 'elif', 'while', 'for', 'and', 'the', 'into', 'than', 'just',
+    'pure', 'line', 'same', 'item', 'items', 'todo', 'only', 'type', 'list', 'dict', 'data',
+    'flow', 'mock', 'code', 'left', 'right', 'value', 'values', 'info', 'time', 'level',
+    'short', 'long', 'there', 'their', 'after', 'before', 'under', 'using', 'used', 'your'
+]);
+
+function extractConceptSearchTokens(tile) {
+    const text = [tile.querySelector('p') ? tile.querySelector('p').textContent || '' : '', tile.querySelector('pre code') ? tile.querySelector('pre code').textContent || '' : '']
+        .join(' ')
+        .toLowerCase();
+    const seen = new Set();
+    return (text.match(/[a-z_][a-z0-9_]*/g) || [])
+        .map(token => token.replace(/^_+/, ''))
+        .filter(token => token.length >= 3)
+        .filter(token => !conceptSearchStopwords.has(token))
+        .filter(token => {
+            if (seen.has(token)) return false;
+            seen.add(token);
+            return true;
+        });
+}
+
+function scoreConceptSnippetForTile(tile, snippet) {
+    const snippetText = `${snippet.name}\n${snippet.code}`.toLowerCase();
+    const normalizedCode = snippet.code.split('\n').map(normalizeConceptSnippetLine).join('\n').toLowerCase();
+    let score = 0;
+
+    extractConceptCardTargets(tile).map(t => t.toLowerCase()).forEach(target => {
+        if (snippet.name.toLowerCase() === target) score += 140;
+        else if (snippet.name.toLowerCase().includes(target) || target.includes(snippet.name.toLowerCase())) score += 90;
+    });
+
+    extractConceptAnchorLines(tile).forEach(anchor => {
+        const lowerAnchor = anchor.toLowerCase();
+        if (normalizedCode.includes(lowerAnchor)) score += 45;
+        else {
+            const anchorTokens = lowerAnchor.match(/[a-z_][a-z0-9_]*/g) || [];
+            score += anchorTokens.filter(token => token.length >= 3 && snippetText.includes(token)).length * 6;
+        }
+    });
+
+    extractConceptSearchTokens(tile).forEach(token => {
+        if (snippetText.includes(token)) score += 3;
+    });
+
+    return score;
+}
+
+function getConceptSnippetBundleStats(snippets) {
+    const lines = snippets.reduce((sum, snippet) => sum + snippet.code.split('\n').length, 0);
+    const chars = snippets.reduce((sum, snippet) => sum + snippet.code.length, 0);
+    return { lines, chars };
+}
+
+function shouldInlineConceptSnippets(snippets) {
+    const stats = getConceptSnippetBundleStats(snippets);
+    return stats.lines <= CONCEPT_INLINE_MAX_LINES && stats.chars <= CONCEPT_INLINE_MAX_CHARS;
+}
+
+function buildLongConceptNote(item, snippets) {
+    const names = snippets.map(snippet => `<code>${snippet.name}()</code>`).join(' + ');
+    const stats = getConceptSnippetBundleStats(snippets);
+    return `完整 function 太長（約 ${stats.lines} 行）。撳上面 card title / 左邊 jump link 去原 mock 睇 ${names}。`;
+}
+
+function buildFullFunctionCodeForTile(tile, item) {
+    if (!item) return { code: '', snippets: [], tooLong: false, note: '' };
+    const picked = pickConceptSnippetsFromPool(tile, extractFunctionSnippetsForItem(item));
+    if (!picked.length) {
+        pickConceptSnippetsFromPool(tile, extractSystemFunctionSnippetsForItem(item)).forEach(snippet => picked.push(snippet));
+    }
+    if (!picked.length) return { code: '', snippets: [], tooLong: false, note: '' };
+    if (!shouldInlineConceptSnippets(picked)) {
+        return { code: picked.map(snippet => snippet.code.trimEnd()).join('\n\n'), snippets: picked, tooLong: true, note: buildLongConceptNote(item, picked) };
+    }
+    return { code: picked.map(snippet => snippet.code.trimEnd()).join('\n\n'), snippets: picked, tooLong: false, note: '' };
+}
+
+function expandConceptVisualFunctions(root = document) {
+    root.querySelectorAll('.concept-table.numbered-concepts tr').forEach((row, rowIndex) => {
+        if (rowIndex === 0) return;
+        const refBlock = row.querySelector('.concept-ref-block');
+        const visual = row.querySelector('.concept-visual');
+        if (!refBlock || !visual) return;
+        const linkItems = extractConceptLinkItemsFromBlock(refBlock);
+        if (!linkItems.length) return;
+
+        visual.querySelectorAll('.concept-example-tile').forEach(tile => {
+            if (tile.dataset.fullFnReady === '1') return;
+            const pre = tile.querySelector('pre');
+            if (!pre) {
+                tile.dataset.fullFnReady = '1';
+                return;
+            }
+
+            const item = findConceptLinkForTile(tile, linkItems);
+            let best = buildFullFunctionCodeForTile(tile, item);
+            let bestScore = best.snippets ? best.snippets.reduce((sum, snippet) => sum + scoreConceptSnippetForTile(tile, snippet), 0) : 0;
+            if (!best.code) {
+                for (const candidate of linkItems) {
+                    if (item && candidate.href === item.href && candidate.text === item.text) continue;
+                    const candidateResult = buildFullFunctionCodeForTile(tile, candidate);
+                    const candidateScore = candidateResult.snippets ? candidateResult.snippets.reduce((sum, snippet) => sum + scoreConceptSnippetForTile(tile, snippet), 0) : 0;
+                    if (candidateScore > bestScore) {
+                        best = candidateResult;
+                        bestScore = candidateScore;
+                    }
+                }
+            }
+            if (!best.code) {
+                tile.dataset.fullFnReady = '1';
+                return;
+            }
+            const originalPre = tile.querySelector('pre');
+            if (best.tooLong) {
+                if (originalPre) {
+                    const details = document.createElement('details');
+                    details.className = 'concept-visual-more';
+                    const summary = document.createElement('summary');
+                    summary.textContent = `展開完整 function（約 ${getConceptSnippetBundleStats(best.snippets).lines} 行）`;
+                    details.appendChild(summary);
+                    const freshPre = document.createElement('pre');
+                    const freshCode = document.createElement('code');
+                    freshCode.textContent = best.code;
+                    freshPre.appendChild(freshCode);
+                    details.appendChild(freshPre);
+                    const note = document.createElement('div');
+                    note.className = 'concept-inline-note';
+                    note.innerHTML = best.note;
+                    tile.appendChild(note);
+                    tile.appendChild(details);
+                }
+                tile.dataset.fullFnReady = '1';
+                return;
+            }
+
+            tile.querySelectorAll('pre').forEach(node => node.remove());
+            tile.querySelectorAll('.concept-inline-note').forEach(node => node.remove());
+            tile.querySelectorAll('details.concept-visual-more').forEach(node => node.remove());
+            const freshPre = document.createElement('pre');
+            const freshCode = document.createElement('code');
+            freshCode.textContent = best.code;
+            freshPre.appendChild(freshCode);
+
+            const firstP = tile.querySelector('p');
+            const insertBefore = firstP && firstP.nextSibling ? firstP.nextSibling : null;
+            if (insertBefore) tile.insertBefore(freshPre, insertBefore);
+            else tile.appendChild(freshPre);
+
+            tile.dataset.fullFnReady = '1';
+        });
+    });
+}
+
+function getConceptFocusChip(lineText) {
+    const text = (lineText || '').trim();
+    if (!text) return '';
+    if (/key=lambda/.test(text)) return 'SORT KEY';
+    if (/return result\[:n\]/.test(text)) return 'TOP-N CUT';
+    if (/if .*min_score|if .*min_price|startswith\(prefix\)|keyword_lower in|task\["status"\] == status/.test(text)) return 'FILTER';
+    if (/_process_cashbacks|_process_late_fee/.test(text)) return 'LAZY HELPER';
+    if (/_purge_expired/.test(text)) return 'PURGE TTL';
+    if (/timestamp >= rec\["expiry"\]|expiry/.test(text) && /return ""|rec\[/.test(text)) return 'INLINE TTL';
+    if (/2 \*\* attempt|retry_time =/.test(text)) return 'BACKOFF';
+    if (/copy\.deepcopy/.test(text)) return 'SNAPSHOT';
+    if (/reversed\(history\)/.test(text)) return 'HISTORY LOOKUP';
+    if (/sorted\(\[.*\]\)/.test(text)) return 'PAIR LOCK';
+    if (/tasks\.append\(do_one\(op\)\)|gather\(/.test(text)) return 'GATHER';
+    if (/async with sem/.test(text)) return 'SEMAPHORE';
+    if (/async with self\..*lock/.test(text)) return 'LOCK';
+    if (/results = \[None\] \*/.test(text)) return 'INPUT ORDER';
+    if (/mark_started/.test(text)) return 'LIFECYCLE';
+    return '';
+}
+
+function highlightConceptFocusLines(root = document) {
+    root.querySelectorAll('.concept-visual .concept-example-tile').forEach(tile => {
+        tile.querySelectorAll('.concept-focus-chip').forEach(chip => chip.remove());
+        tile.querySelectorAll('.concept-focus-line').forEach(line => line.classList.remove('concept-focus-line'));
+
+        tile.querySelectorAll('pre code .code-line').forEach(line => {
+            const chipText = getConceptFocusChip(line.textContent || '');
+            if (!chipText) return;
+            line.classList.add('concept-focus-line');
+            const chip = document.createElement('span');
+            chip.className = 'concept-focus-chip';
+            chip.textContent = chipText;
+            line.appendChild(chip);
+        });
+    });
+}
+
+function initCodeHighlight(root = document) {
+    root.querySelectorAll('pre code').forEach(block => {
+        if (block.dataset.hlReady === '1') return;
+        if (!/\blanguage-/.test(block.className)) block.classList.add('language-python');
+        hljs.highlightElement(block);
+        block.dataset.hlReady = '1';
+    });
+}
+
+function decodeCodeLine(lineHtml) {
+    const span = document.createElement('span');
+    span.innerHTML = lineHtml;
+    return (span.textContent || '').replace(/\u00a0/g, ' ');
+}
+
+function leadingIndentCount(text) {
+    const m = text.match(/^(\s*)/);
+    return m ? m[1].length : 0;
+}
+
+function isControlOpener(text) {
+    return /^(if |for |while |with |async with|try:|match |case )/.test(text);
+}
+
+function isControlCloser(text) {
+    return /^(else:|elif |except\b|finally:)/.test(text);
+}
+
+function shouldGapBefore(prevText, currText) {
+    if (!prevText || !currText) return false;
+    const prev = prevText.trim();
+    const curr = currText.trim();
+    if (!prev || !curr) return false;
+    if (isControlCloser(curr)) return false;
+
+    const prevIndent = leadingIndentCount(prevText);
+    const currIndent = leadingIndentCount(currText);
+
+    if (currIndent < prevIndent) return true;
+    if (currIndent === prevIndent && isControlOpener(curr)) return true;
+    if (currIndent === prevIndent && /^(return |yield |break$|continue$)/.test(curr)) return true;
+    return false;
+}
+
+function decorateCodeBlocks(root = document) {
+    root.querySelectorAll('pre code').forEach(code => {
+        if (code.dataset.linesReady === '1') return;
+
+        const isConcept = !!code.closest('.concept-visual');
+        const html = code.innerHTML;
+        const lines = html.split('\n');
+        let prevPlain = '';
+
+        const newLines = lines.map(line => {
+            const plain = decodeCodeLine(line);
+            const gapClass = shouldGapBefore(prevPlain, plain) ? ' code-gap-before' : '';
+
+            if (plain.trim() === '') {
+                prevPlain = plain;
+                return `<span class="code-line${gapClass}">${line}</span>`;
+            }
+
+            if (isConcept) {
+                prevPlain = plain;
+                return `<span class="code-line${gapClass}">${line}</span>`;
+            }
+
+            const clone = document.createElement('span');
+            clone.innerHTML = line;
+            clone.querySelectorAll('.line-copy').forEach(b => b.remove());
+            const plainText = clone.textContent.replace(/#\s*(L\d|←|----).*/g, '').trim();
+            if (plainText.trim() === '') {
+                prevPlain = plain;
+                return `<span class="code-line${gapClass}">${line}</span>`;
+            }
+            const escaped = plainText.replace(/\\/g, '\\\\').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            prevPlain = plain;
+            return `\x3Cspan class="code-line line-wrap${gapClass}"\x3E\x3Cbutton class="line-copy line-copy-l" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)"\x3Ecp\x3C/button\x3E${line}\x3Cbutton class="line-copy line-copy-r" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)"\x3Ecp\x3C/button\x3E\x3C/span\x3E`;
+        });
+
+        code.innerHTML = newLines.join('');
+        code.dataset.linesReady = '1';
+    });
+}
+
+function extractCodeBlocksForHeading(headingEl) {
+    const out = [];
+    let node = headingEl ? headingEl.nextElementSibling : null;
+    while (node) {
+        if (node.tagName === 'H2') break;
+        if (node.classList && node.classList.contains('split')) {
+            const codes = Array.from(node.querySelectorAll('.split-left pre code'));
+            if (codes.length) return codes;
+        }
+        node = node.nextElementSibling;
+    }
+    return out;
+}
+
+function extractConceptLinkItemsFromBlock(block) {
+    if (!block) return [];
+    if (block.dataset.linkItems) {
+        try {
+            return dedupeConceptLinkItems(JSON.parse(block.dataset.linkItems));
+        } catch (err) {}
+    }
+    return dedupeConceptLinkItems(Array.from(block.querySelectorAll('.jump-link')));
+}
+
+function cloneConceptCardTitle(item, functionName = '') {
+    const title = document.createElement('div');
+    title.className = 'concept-card-title';
+    const normalized = normalizeConceptLinkItem(item);
+    const anchor = createConceptJumpAnchor({
+        text: functionName ? `${normalized.text} — ${functionName}` : normalized.text,
+        href: normalized.href,
+        onclick: normalized.onclick,
+    });
+    title.appendChild(anchor);
+    return title;
+}
+
+function splitCodeTextIntoFunctions(codeText) {
+    const lines = (codeText || '').replace(/\u00a0/g, ' ').split('\n');
+    const parts = [];
+    let currentLines = [];
+    let currentName = '';
+    let seenFunction = false;
+
+    function pushCurrent() {
+        const trimmed = currentLines.join('\n').replace(/^\n+|\n+$/g, '').trimEnd();
+        if (!trimmed) return;
+        parts.push({
+            name: currentName || `Part ${parts.length + 1}`,
+            code: trimmed,
+        });
+    }
+
+    lines.forEach(line => {
+        const match = line.match(/^\s*(async\s+def|def)\s+([A-Za-z_]\w*)\s*\(/);
+        if (match) {
+            if (currentLines.length) pushCurrent();
+            currentLines = [line];
+            currentName = match[2];
+            seenFunction = true;
+            return;
+        }
+        if (seenFunction) currentLines.push(line);
+    });
+
+    if (currentLines.length) pushCurrent();
+    if (parts.length) return parts;
+
+    const fallback = (codeText || '').trim();
+    return fallback ? [{ name: 'main', code: fallback }] : [];
+}
+
+function getConceptFunctionGroup(name) {
+    const lower = (name || '').toLowerCase();
+    if (/^(create|add|register|grant|schedule|place)/.test(lower)) return 'create';
+    if (/^(deposit|update|set|store|assign|check_in|book|start|publish|play|touch|heartbeat|merge|copy|transfer|move|acknowledge)/.test(lower)) return 'mutate';
+    if (/^(get|list|find|top|scan|search|route|resolve|rank|load|available|next|peek|check)/.test(lower)) return 'query';
+    if (/^(delete|remove|end|revoke|cancel|check_out|uninstall)/.test(lower)) return 'delete';
+    if (/^(complete|fail|retry|execute|dispatch|download|sync|batch|push)/.test(lower)) return 'async';
+    return 'other';
+}
+
+function getConceptFunctionMatchKey(name) {
+    const lower = (name || '').toLowerCase();
+    if (lower === '__init__') return 'init';
+    if (/^(create|add|register)(_|$)/.test(lower)) return 'create-entity';
+    if (/^(top_|rank|get_highest)/.test(lower)) return 'query-top';
+    if (/^(find_|scan_|search_|players_above|list_|total_size|get_queue_length|get_tasks_by_status|get_pending_fees|get_load|get_server_load|get_room_info|get_balance|get_book|get_overdue_fee|resolve|route)/.test(lower)) return 'query-filter';
+    if (/^(get_|peek_|check_)/.test(lower)) return 'query-single';
+    if (/^(backup|restore|snapshot|get_history)/.test(lower)) return 'history';
+    if (/^(transfer|copy|upgrade|move|merge)/.test(lower)) return 'pair-op';
+    if (/^(batch_|dispatch_|execute|worker|sync_|run_|do_|fake_|propagate_|_single_)/.test(lower)) return 'concurrency';
+    if (/^(deposit|book|checkout|check_out|borrow|reserve|return_book|pay|publish|send|touch|heartbeat|assign|late_checkout|set_|store|update|play|place)/.test(lower)) return 'mutate-primary';
+    if (/^_process_/.test(lower)) return 'helper-process';
+    if (/^_purge_/.test(lower)) return 'helper-purge';
+    if (/^_get_next_/.test(lower)) return 'helper-next';
+    if (/^_deps_|^_has_|^_hash|^_route|^_record|^_export|^_remove|^_total_size/.test(lower)) return `helper-${lower}`;
+    return `${getConceptFunctionGroup(name)}:${lower}`;
+}
+
+function getCleanCodeText(code) {
+    if (!code) return '';
+    const clone = code.cloneNode(true);
+    clone.querySelectorAll('.line-copy').forEach(button => button.remove());
+    const lineEls = Array.from(clone.querySelectorAll('.code-line'));
+    if (lineEls.length) {
+        return lineEls
+            .map(line => (line.textContent || '').replace(/\u00a0/g, ' '))
+            .join('\n');
+    }
+    return (clone.textContent || '').replace(/\u00a0/g, ' ');
+}
+
+function extractFunctionSnippetsForItem(item) {
+    const normalized = normalizeConceptLinkItem(item);
+    const href = normalized.href || '';
+    const id = href.startsWith('#') ? href.slice(1) : href;
+    const heading = document.getElementById(id);
+    if (!heading) return [];
+    const codes = extractCodeBlocksForHeading(heading);
+    if (!codes.length) return [];
+
+    const snippets = [];
+    codes.forEach(code => {
+        const text = getCleanCodeText(code);
+        splitCodeTextIntoFunctions(text).forEach((part, index) => snippets.push({
+            ...part,
+            group: getConceptFunctionGroup(part.name),
+            matchKey: getConceptFunctionMatchKey(part.name),
+            sourceOrder: index,
+        }));
+    });
+    return snippets;
+}
+
+function extractSystemFunctionSnippetsForItem(item) {
+    const normalized = normalizeConceptLinkItem(item);
+    const href = normalized.href || '';
+    const id = href.startsWith('#') ? href.slice(1) : href;
+    const heading = document.getElementById(id);
+    if (!heading) return [];
+    const section = heading.closest('.sys-section');
+    if (!section) return [];
+
+    const seen = new Set();
+    const snippets = [];
+    section.querySelectorAll('.split-left pre code').forEach(code => {
+        const text = getCleanCodeText(code);
+        splitCodeTextIntoFunctions(text).forEach((part, index) => {
+            const key = `${part.name}::${part.code}`;
+            if (seen.has(key)) return;
+            seen.add(key);
+            snippets.push({
+                ...part,
+                group: getConceptFunctionGroup(part.name),
+                matchKey: getConceptFunctionMatchKey(part.name),
+                sourceOrder: index,
+            });
+        });
+    });
+    return snippets;
+}
+
+function pickConceptSnippetsFromPool(tile, snippets) {
+    if (!snippets.length) return [];
+    const scored = snippets
+        .map(snippet => ({ snippet, score: scoreConceptSnippetForTile(tile, snippet) }))
+        .filter(entry => entry.score > 0)
+        .sort((a, b) => b.score - a.score || a.snippet.sourceOrder - b.snippet.sourceOrder);
+
+    if (!scored.length) return [];
+
+    const picked = [scored[0].snippet];
+    const floor = Math.max(18, Math.floor(scored[0].score * 0.55));
+    scored.slice(1).forEach(entry => {
+        if (picked.length >= 2) return;
+        if (entry.score < floor) return;
+        if (picked.some(existing => existing.name === entry.snippet.name)) return;
+        picked.push(entry.snippet);
+    });
+
+    return picked;
+}
+
+function buildConceptFunctionCard(item, snippet) {
+    const tile = document.createElement('div');
+    tile.className = 'concept-example-tile';
+    tile.appendChild(cloneConceptCardTitle(item, snippet.name));
+
+    const pre = document.createElement('pre');
+    const code = document.createElement('code');
+    code.textContent = snippet.code;
+    pre.appendChild(code);
+    tile.appendChild(pre);
+    return tile;
+}
+
+function buildConceptEmptySlot(text) {
+    const empty = document.createElement('div');
+    empty.className = 'concept-slot-empty';
+    empty.textContent = text;
+    return empty;
+}
+
+function buildConceptVisualMore(linkItems, summaryCard) {
+    if (linkItems.length <= 2 && !summaryCard) return null;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'concept-visual-more';
+
+    if (linkItems.length > 2) {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = `全部 mock options (${linkItems.length})`;
+        details.appendChild(summary);
+        const links = document.createElement('div');
+        links.className = 'concept-visual-links';
+        appendConceptRefLinks(links, linkItems);
+        details.appendChild(links);
+        wrap.appendChild(details);
+    }
+
+    if (summaryCard) {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = '你個腦要記';
+        details.appendChild(summary);
+        details.appendChild(summaryCard);
+        wrap.appendChild(details);
+    }
+
+    return wrap;
+}
+
+function getDefaultConceptSlotValues(linkItems) {
+    const first = linkItems[0] ? linkItems[0].href : '';
+    let second = '';
+    for (let i = 1; i < linkItems.length; i += 1) {
+        if (linkItems[i].href !== first) {
+            second = linkItems[i].href;
+            break;
+        }
+    }
+    return [first, second];
+}
+
+function buildConceptComparePairs(leftSnippets, rightSnippets) {
+    const order = ['create', 'mutate', 'query', 'delete', 'async', 'other'];
+    const pairs = [];
+
+    order.forEach(group => {
+        const left = leftSnippets.filter(snippet => snippet.group === group);
+        const right = rightSnippets.filter(snippet => snippet.group === group);
+        const leftRemaining = [...left];
+        const rightRemaining = [...right];
+        const keyOrder = [];
+
+        [...left, ...right].forEach(snippet => {
+            const key = snippet.matchKey || `${group}:${snippet.name}`;
+            if (!keyOrder.includes(key)) keyOrder.push(key);
+        });
+
+        keyOrder.forEach(key => {
+            const leftMatches = leftRemaining.filter(snippet => (snippet.matchKey || `${group}:${snippet.name}`) === key);
+            const rightMatches = rightRemaining.filter(snippet => (snippet.matchKey || `${group}:${snippet.name}`) === key);
+            const size = Math.max(leftMatches.length, rightMatches.length);
+
+            for (let i = 0; i < size; i += 1) {
+                const leftSnippet = leftMatches[i] || null;
+                const rightSnippet = rightMatches[i] || null;
+                if (!leftSnippet && !rightSnippet) continue;
+                pairs.push([leftSnippet, rightSnippet]);
+            }
+
+            leftMatches.forEach(snippet => {
+                const idx = leftRemaining.indexOf(snippet);
+                if (idx >= 0) leftRemaining.splice(idx, 1);
+            });
+            rightMatches.forEach(snippet => {
+                const idx = rightRemaining.indexOf(snippet);
+                if (idx >= 0) rightRemaining.splice(idx, 1);
+            });
+        });
+
+        const remainderSize = Math.max(leftRemaining.length, rightRemaining.length);
+        for (let i = 0; i < remainderSize; i += 1) {
+            const leftSnippet = leftRemaining[i] || null;
+            const rightSnippet = rightRemaining[i] || null;
+            if (!leftSnippet && !rightSnippet) continue;
+            pairs.push([leftSnippet, rightSnippet]);
+        }
+    });
+
+    if (pairs.length) return pairs;
+
+    const fallbackSize = Math.max(leftSnippets.length, rightSnippets.length, 1);
+    const fallback = [];
+    for (let i = 0; i < fallbackSize; i += 1) {
+        fallback.push([leftSnippets[i] || null, rightSnippets[i] || null]);
+    }
+    return fallback;
+}
+
+function renderConceptSlotPicker(row, linkItems, selectedValues, onChange) {
+    const controls = row.querySelector('[data-slot-controls="1"]');
+    if (!controls || controls.dataset.ready === '1') return;
+
+    const blankNeeded = linkItems.length < 2;
+    controls.innerHTML = '';
+
+    [0, 1].forEach(slotIndex => {
+        const label = document.createElement('label');
+        label.className = 'concept-slot-label';
+
+        const labelText = document.createElement('span');
+        labelText.className = 'concept-slot-label-text';
+        labelText.textContent = `Slot ${slotIndex + 1}`;
+        label.appendChild(labelText);
+
+        const select = document.createElement('select');
+        select.className = 'concept-slot-select';
+
+        if (blankNeeded || slotIndex === 1) {
+            const blank = document.createElement('option');
+            blank.value = '';
+            blank.textContent = '留空';
+            select.appendChild(blank);
+        }
+
+        linkItems.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.href;
+            option.textContent = item.text;
+            select.appendChild(option);
+        });
+
+        select.value = selectedValues[slotIndex] || '';
+        select.addEventListener('change', () => onChange(slotIndex, select.value));
+        label.appendChild(select);
+        controls.appendChild(label);
+    });
+
+    controls.dataset.ready = '1';
+}
+
+function buildConceptSummaryCardFromVisual(visual) {
+    const noteParts = Array.from(visual.querySelectorAll('p'))
+        .filter(p => /你個腦要記|mental model|大約做法/i.test(p.textContent || ''))
+        .map(p => p.cloneNode(true));
+
+    if (!noteParts.length) return null;
+
+    const tile = document.createElement('div');
+    tile.className = 'concept-example-tile concept-summary-tile';
+
+    const title = document.createElement('div');
+    title.className = 'concept-card-title';
+    title.textContent = '你個腦要記';
+    tile.appendChild(title);
+
+    noteParts.forEach(p => tile.appendChild(p));
+    return tile;
+}
+
+function initConceptFullSkeletons(root = document) {
+    root.querySelectorAll('.concept-table.numbered-concepts tr').forEach((row, rowIndex) => {
+        if (rowIndex === 0) return;
+        const refBlock = row.querySelector('.concept-ref-block');
+        const linkItems = extractConceptLinkItemsFromBlock(refBlock);
+        if (!linkItems.length) return;
+        const visual = row.querySelector('.concept-visual');
+        if (!visual) return;
+        if (visual.dataset.fullSkeletonReady === '1') return;
+
+        const rowInfo = getConceptRowInfo(row, rowIndex);
+        const storageBase = `pfm:concept-slot:${rowInfo.key}`;
+        const defaultSlots = getDefaultConceptSlotValues(linkItems);
+        const selectedValues = [
+            localStorage.getItem(`${storageBase}:0`) || defaultSlots[0] || '',
+            localStorage.getItem(`${storageBase}:1`) || defaultSlots[1] || '',
+        ];
+        const summaryCard = buildConceptSummaryCardFromVisual(visual);
+
+        function renderVisual() {
+            visual.innerHTML = '';
+            const grid = document.createElement('div');
+            grid.className = 'concept-slot-grid';
+
+            const slotItems = selectedValues.map(value => linkItems.find(linkItem => linkItem.href === value) || null);
+            const slotSnippets = slotItems.map(item => item ? extractFunctionSnippetsForItem(item) : []);
+            const pairs = buildConceptComparePairs(slotSnippets[0], slotSnippets[1]);
+
+            pairs.forEach(([leftSnippet, rightSnippet]) => {
+                if (slotItems[0] && leftSnippet) grid.appendChild(buildConceptFunctionCard(slotItems[0], leftSnippet));
+                else grid.appendChild(buildConceptEmptySlot(slotItems[0] ? 'Slot 1 冇對應 function' : 'Slot 1 未揀 mock'));
+
+                if (slotItems[1] && rightSnippet) grid.appendChild(buildConceptFunctionCard(slotItems[1], rightSnippet));
+                else grid.appendChild(buildConceptEmptySlot(slotItems[1] ? 'Slot 2 冇對應 function' : 'Slot 2 未揀 mock'));
+            });
+
+            if (!pairs.length) {
+                grid.appendChild(buildConceptEmptySlot('Slot 1 未揀 mock'));
+                grid.appendChild(buildConceptEmptySlot('Slot 2 未揀 mock'));
+            }
+
+            visual.appendChild(grid);
+            const more = buildConceptVisualMore(linkItems, summaryCard ? summaryCard.cloneNode(true) : null);
+            if (more) visual.appendChild(more);
+            initCodeHighlight(visual);
+            decorateCodeBlocks(visual);
+        }
+
+        renderConceptSlotPicker(row, linkItems, selectedValues, (slotIndex, value) => {
+            selectedValues[slotIndex] = value;
+            if (value) localStorage.setItem(`${storageBase}:${slotIndex}`, value);
+            else localStorage.removeItem(`${storageBase}:${slotIndex}`);
+            renderVisual();
+        });
+
+        renderVisual();
+        visual.dataset.tiled = '1';
+        visual.dataset.fullSkeletonReady = '1';
+    });
+}
+
+const compareExcludedSystems = new Set(['compare', 'concepts', 'domaintest', 'l6patterns', 'exammode', 'keywordmap', 'domains']);
+const compareLevelDefs = [
+    { key: 'init', label: 'Init', title: 'System Skeleton', hint: '對 __init__ / 核心 data shape' },
+    { key: 'l1', label: 'L1', title: 'CRUD / Base Ops', hint: '最基本增刪查改 / 主操作' },
+    { key: 'l2', label: 'L2', title: 'Sort / Filter / Format', hint: '排行、篩選、format output' },
+    { key: 'l3', label: 'L3', title: 'Time / TTL / Lazy', hint: '時間、expiry、lazy processing' },
+    { key: 'l4', label: 'L4', title: 'History / Restore / Pair Ops', hint: '歷史查詢、backup、merge / upgrade / match' },
+    { key: 'l5', label: 'L5', title: 'Concurrent Batch', hint: 'lock、gather、worker / batch skeleton' },
+    { key: 'l6', label: 'L6', title: 'Rate Limit / External Flow', hint: 'semaphore、dispatch、external call' },
+];
+
+function cleanCompareSystemLabel(text) {
+    return (text || '')
+        .replace(/^[\s├└─]+/, '')
+        .replace(/[✅⚠️🎯🔄]+/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function inferCompareLevelKey(heading) {
+    if (!heading) return '';
+    const text = (heading.textContent || '').toLowerCase();
+    const id = (heading.id || '').toLowerCase();
+    if (/__init__/.test(text) || /(^|-)init$/.test(id) || /^init\b/.test(text)) return 'init';
+    const match = text.match(/\bl([1-6])\b/i) || id.match(/(?:^|-)l([1-6])$/i);
+    return match ? `l${match[1]}` : '';
+}
+
+function getCompareSystemButtonMeta() {
+    const meta = {};
+    document.querySelectorAll('.sys-btn').forEach(btn => {
+        const onclick = btn.getAttribute('onclick') || '';
+        const match = onclick.match(/switchSystem\('([^']+)'\)/);
+        if (!match) return;
+        meta[match[1]] = {
+            id: match[1],
+            label: cleanCompareSystemLabel(btn.textContent),
+        };
+    });
+    return meta;
+}
+
+function buildCompareCatalog() {
+    const buttonMeta = getCompareSystemButtonMeta();
+    const catalog = {};
+
+    document.querySelectorAll('.sys-section[id^="sys-"]').forEach(section => {
+        const sys = section.id.replace(/^sys-/, '');
+        if (compareExcludedSystems.has(sys)) return;
+
+        const levels = {};
+        const label = buttonMeta[sys] ? buttonMeta[sys].label : sys;
+        const headings = Array.from(section.querySelectorAll('h2[id]')).filter(heading => heading.closest('.sys-section') === section);
+
+        headings.forEach(heading => {
+            const levelKey = inferCompareLevelKey(heading);
+            if (!levelKey || levels[levelKey]) return;
+            const levelLabel = levelKey === 'init' ? 'Init' : levelKey.toUpperCase();
+            levels[levelKey] = {
+                headingId: heading.id,
+                title: (heading.textContent || '').replace(/\s+/g, ' ').trim(),
+                item: {
+                    text: `${label} ${levelLabel}`,
+                    href: `#${heading.id}`,
+                    onclick: `jumpSystem('${sys}', '${heading.id}'); return false;`,
+                },
+            };
+        });
+
+        if (!compareLevelDefs.some(levelDef => levels[levelDef.key])) return;
+        catalog[sys] = { id: sys, label, levels };
+    });
+
+    return catalog;
+}
+
+function getDefaultCompareSystemIds(catalog) {
+    const systemIds = Object.keys(catalog);
+    if (!systemIds.length) return ['', ''];
+
+    let left = localStorage.getItem('pfm:compare:left') || (catalog.bank ? 'bank' : systemIds[0]);
+    let right = localStorage.getItem('pfm:compare:right') || (catalog.hotel ? 'hotel' : systemIds.find(id => id !== left) || left);
+
+    if (!catalog[left]) left = systemIds[0];
+    if (!catalog[right]) right = systemIds.find(id => id !== left) || left;
+    return [left, right];
+}
+
+function getCompareFunctionMatchKey(name, levelKey) {
+    const lower = (name || '').toLowerCase();
+    if (lower === '__init__') return 'init';
+    if (/^_/.test(lower)) {
+        if (/^_process_/.test(lower)) return 'helper-process';
+        if (/^_purge_/.test(lower)) return 'helper-expire';
+        if (/^_is_alive/.test(lower)) return 'helper-ttl-check';
+        if (/^_route|^_hash|^_ring|^_track/.test(lower)) return 'helper-routing';
+        if (/^_get_next|^_next_/.test(lower)) return 'helper-next';
+        return `helper:${lower}`;
+    }
+    if (/^(backup|restore|snapshot)(_|$)/.test(lower)) return 'history-state';
+    if (/^(get_history|get_booking_history|get_balance|get_pending_fees)/.test(lower)) return 'history-query';
+    if (/^(transfer|copy|upgrade|merge|move)(_|$)/.test(lower)) return 'pair-op';
+    if (/^(checkout|check_out|return_|remove_|cancel|revoke|delete|end_)/.test(lower)) return 'close-action';
+    if (/^(create|add|register|grant|schedule)(_|$)/.test(lower)) return 'create-entity';
+    if (/^(top_|rank_|get_highest|match_orders)/.test(lower)) return 'query-top';
+    if (/^(find_|scan_|search_|list_|count_|export_|resolve|route|players_above|available|total_)/.test(lower)) return 'query-list';
+    if (/^(get_|peek_|next_)/.test(lower)) return levelKey === 'l4' ? 'history-query' : 'query-single';
+    if (/^(batch_|process_batch|batch_operations|process_|sync_|dispatch_|execute_|push_|download_|publish_batch|export_)/.test(lower)) {
+        return levelKey === 'l6' ? 'external-flow' : 'concurrency';
+    }
+    if (/^(deposit|book|borrow|pay|late_checkout|publish|send|assign|touch|heartbeat|park|place_bid|reserve|start|complete|fail|retry|consume|acknowledge|set_|store|update|add_log)/.test(lower)) {
+        return levelKey === 'l6' ? 'external-flow' : 'main-action';
+    }
+    return `${levelKey}:${lower}`;
+}
+
+function getCompareFunctionGroup(name, levelKey) {
+    const key = getCompareFunctionMatchKey(name, levelKey);
+    if (key === 'init' || key === 'create-entity') return 'create';
+    if (key.startsWith('query') || key.startsWith('history')) return 'query';
+    if (key === 'pair-op' || key === 'close-action') return 'delete';
+    if (key === 'concurrency' || key === 'external-flow') return 'async';
+    if (key.startsWith('helper')) return 'other';
+    return 'mutate';
+}
+
+function getCompareSnippetsForLevel(levelInfo, levelKey) {
+    if (!levelInfo) return [];
+    const seenNames = new Set();
+    return extractFunctionSnippetsForItem(levelInfo.item)
+        .filter(snippet => snippet && snippet.name)
+        .map((snippet, index) => ({
+            ...snippet,
+            group: getCompareFunctionGroup(snippet.name, levelKey),
+            matchKey: getCompareFunctionMatchKey(snippet.name, levelKey),
+            sourceOrder: index,
+        }))
+        .filter(snippet => {
+            const dedupeKey = (snippet.name || '').toLowerCase();
+            if (seenNames.has(dedupeKey)) return false;
+            seenNames.add(dedupeKey);
+            return true;
+        });
+}
+
+function buildComparePairs(leftLevel, rightLevel, levelKey) {
+    const leftSnippets = getCompareSnippetsForLevel(leftLevel, levelKey);
+    const rightSnippets = getCompareSnippetsForLevel(rightLevel, levelKey);
+    return {
+        leftSnippets,
+        rightSnippets,
+        pairs: buildConceptComparePairs(leftSnippets, rightSnippets),
+    };
+}
+
+function buildCompareColumnTitle(text) {
+    const title = document.createElement('div');
+    title.className = 'compare-column-title';
+    title.textContent = text;
+    return title;
+}
+
+function buildCompareRowLabel(levelDef, rowIndex) {
+    const label = document.createElement('div');
+    label.className = 'compare-row-label';
+    label.textContent = `${levelDef.label} · 第 ${rowIndex + 1} 行`;
+    return label;
+}
+
+function buildCompareLevelBlock(levelDef, leftSystem, rightSystem) {
+    const block = document.createElement('section');
+    block.className = 'compare-level-block';
+
+    const head = document.createElement('div');
+    head.className = 'compare-level-head';
+    head.innerHTML = `<div><div class="compare-level-kicker">${levelDef.label}</div><div class="compare-level-title">${levelDef.title}</div></div><div class="compare-level-hint">${levelDef.hint}</div>`;
+    block.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'compare-level-grid';
+
+    const leftLevel = leftSystem ? leftSystem.levels[levelDef.key] : null;
+    const rightLevel = rightSystem ? rightSystem.levels[levelDef.key] : null;
+    const leftTitle = leftLevel ? `${leftSystem.label} · ${leftLevel.title}` : `${leftSystem.label} · ${levelDef.label}`;
+    const rightTitle = rightLevel ? `${rightSystem.label} · ${rightLevel.title}` : `${rightSystem.label} · ${levelDef.label}`;
+
+    grid.appendChild(buildCompareColumnTitle(leftTitle));
+    grid.appendChild(buildCompareColumnTitle(rightTitle));
+
+    const { pairs } = buildComparePairs(leftLevel, rightLevel, levelDef.key);
+
+    pairs.forEach(([leftSnippet, rightSnippet], rowIndex) => {
+        grid.appendChild(buildCompareRowLabel(levelDef, rowIndex));
+
+        if (leftLevel && leftSnippet) grid.appendChild(buildConceptFunctionCard(leftLevel.item, leftSnippet));
+        else grid.appendChild(buildConceptEmptySlot(leftLevel ? '呢邊呢級冇對應 function' : `呢個 domain 暫時冇 ${levelDef.label}`));
+
+        if (rightLevel && rightSnippet) grid.appendChild(buildConceptFunctionCard(rightLevel.item, rightSnippet));
+        else grid.appendChild(buildConceptEmptySlot(rightLevel ? '呢邊呢級冇對應 function' : `呢個 domain 暫時冇 ${levelDef.label}`));
+    });
+
+    if (!pairs.length) {
+        grid.appendChild(buildCompareRowLabel(levelDef, 0));
+        grid.appendChild(buildConceptEmptySlot(leftLevel ? '呢級未抽到 function card' : `呢個 domain 暫時冇 ${levelDef.label}`));
+        grid.appendChild(buildConceptEmptySlot(rightLevel ? '呢級未抽到 function card' : `呢個 domain 暫時冇 ${levelDef.label}`));
+    }
+
+    block.appendChild(grid);
+    return block;
+}
+
+function renderComparisonTab() {
+    const section = document.getElementById('sys-compare');
+    if (!section) return;
+
+    const catalog = buildCompareCatalog();
+    const systemIds = Object.keys(catalog);
+    const levelsHost = section.querySelector('[data-compare-levels="1"]');
+    const leftSelect = section.querySelector('[data-compare-slot="left"]');
+    const rightSelect = section.querySelector('[data-compare-slot="right"]');
+    if (!levelsHost || !leftSelect || !rightSelect) return;
+
+    if (!systemIds.length) {
+        levelsHost.innerHTML = '';
+        levelsHost.appendChild(buildConceptEmptySlot('未搵到可比較嘅 domain section'));
+        return;
+    }
+
+    const [defaultLeft, defaultRight] = getDefaultCompareSystemIds(catalog);
+    const leftValue = catalog[leftSelect.value] ? leftSelect.value : defaultLeft;
+    const rightValue = catalog[rightSelect.value] ? rightSelect.value : defaultRight;
+
+    [leftSelect, rightSelect].forEach((select, index) => {
+        const currentValue = index === 0 ? leftValue : rightValue;
+        select.innerHTML = '';
+        systemIds.forEach(sys => {
+            const option = document.createElement('option');
+            option.value = sys;
+            option.textContent = catalog[sys].label;
+            select.appendChild(option);
+        });
+        select.value = currentValue;
+    });
+
+    localStorage.setItem('pfm:compare:left', leftSelect.value);
+    localStorage.setItem('pfm:compare:right', rightSelect.value);
+
+    const leftSystem = catalog[leftSelect.value];
+    const rightSystem = catalog[rightSelect.value];
+
+    levelsHost.innerHTML = '';
+    compareLevelDefs.forEach(levelDef => levelsHost.appendChild(buildCompareLevelBlock(levelDef, leftSystem, rightSystem)));
+
+    initCodeHighlight(section);
+    decorateCodeBlocks(section);
+}
+
+function initComparisonTab() {
+    const section = document.getElementById('sys-compare');
+    if (!section) return;
+
+    if (section.dataset.compareBound !== '1') {
+        const leftSelect = section.querySelector('[data-compare-slot="left"]');
+        const rightSelect = section.querySelector('[data-compare-slot="right"]');
+        if (leftSelect) leftSelect.addEventListener('change', renderComparisonTab);
+        if (rightSelect) rightSelect.addEventListener('change', renderComparisonTab);
+        section.dataset.compareBound = '1';
+    }
+
+    renderComparisonTab();
+}
+
+function getActiveSystem() {
+    const active = document.querySelector('.sys-section.active');
+    return active ? active.id.replace(/^sys-/, '') : null;
+}
+
+function tabHash(sys) {
+    return `tab=${sys}`;
+}
+
+function parseTabHash(hash) {
+    if (!hash) return null;
+    const clean = hash.replace(/^#/, '');
+    const m = clean.match(/^tab=(.+)$/);
+    return m ? m[1] : null;
+}
+
+function saveSystemScroll(sys, y = window.scrollY) {
+    if (!sys) return;
+    localStorage.setItem(`pfm:scroll:${sys}`, String(Math.max(0, Math.round(y))));
+}
+
+function loadSystemScroll(sys) {
+    if (!sys) return 0;
+    const raw = localStorage.getItem(`pfm:scroll:${sys}`);
+    return raw ? parseInt(raw, 10) || 0 : 0;
+}
+
+function findSystemForHash(hash) {
+    if (!hash) return null;
+    const el = document.getElementById(hash);
+    if (!el) return null;
+    const section = el.closest('.sys-section');
+    return section ? section.id.replace(/^sys-/, '') : null;
+}
+
+let scrollSaveTimer = null;
+function scheduleSaveCurrentScroll() {
+    const sys = getActiveSystem();
+    if (!sys) return;
+    if (scrollSaveTimer) clearTimeout(scrollSaveTimer);
+    scrollSaveTimer = setTimeout(() => saveSystemScroll(sys), 60);
+}
+
 // System switcher
-function switchSystem(sys) {
+function switchSystem(sys, options = {}) {
     const section = document.getElementById('sys-' + sys);
     if (!section) return;
+    const previousSys = getActiveSystem();
+    if (previousSys && previousSys !== sys) saveSystemScroll(previousSys);
     document.querySelectorAll('.sys-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.sys-btn').forEach(b => b.classList.remove('active'));
     section.classList.add('active');
+    localStorage.setItem('pfm:active-system', sys);
+    if (!options.keepHash) history.replaceState(null, '', '#' + tabHash(sys));
     const btn = document.querySelector('.sys-btn[onclick*="' + sys + '"]');
     if (btn) btn.classList.add('active');
     document.querySelectorAll('.nav-level').forEach(a => {
@@ -19183,6 +20928,18 @@ function switchSystem(sys) {
         else { a.style.display = 'none'; }
     });
     requestAnimationFrame(() => {
+        initConceptTableLayout(section);
+        collapseConceptRefBlocks(section);
+        initConceptTiles(section);
+        expandConceptVisualFunctions(section);
+        supplementConceptVisualTiles(section);
+        initSortExplainers(section);
+        initComparisonTab();
+        initCodeHighlight(section);
+        decorateCodeBlocks(section);
+        collapseConceptVisualTiles(section);
+        highlightConceptFocusLines(section);
+        applyConceptMasonry(section);
         initResizableTables(section);
         initConceptCheckboxes(section);
         refreshResizableTables(section);
@@ -19190,7 +20947,7 @@ function switchSystem(sys) {
 }
 
 function jumpSystem(sys, id) {
-    switchSystem(sys);
+    switchSystem(sys, { keepHash: true });
     requestAnimationFrame(() => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -19199,14 +20956,22 @@ function jumpSystem(sys, id) {
     });
 }
 
-// Syntax highlight right-side code blocks only
-document.querySelectorAll('.split-right pre code').forEach(block => {
-    block.className = 'language-python';
-    hljs.highlightElement(block);
-});
+initConceptTableLayout(document);
+collapseConceptRefBlocks(document);
+initConceptTiles(document);
+expandConceptVisualFunctions(document);
+supplementConceptVisualTiles(document);
+initSortExplainers(document);
+initComparisonTab();
+initCodeHighlight(document);
+decorateCodeBlocks(document);
+collapseConceptVisualTiles(document);
+highlightConceptFocusLines(document);
+applyConceptMasonry(document);
 
 // Block-level copy button
 document.querySelectorAll('pre').forEach(pre => {
+    if (pre.closest('.concept-visual')) return;
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.textContent = 'Copy All';
@@ -19228,25 +20993,6 @@ document.querySelectorAll('pre').forEach(pre => {
     pre.parentNode.insertBefore(wrapper, pre);
 });
 
-// Per-line copy button for skeleton lines
-document.querySelectorAll('pre code').forEach(code => {
-    const html = code.innerHTML;
-    const lines = html.split('\n');
-    const newLines = lines.map(line => {
-        if (line.trim() === '') return line;
-        // Extract plain text for clipboard
-        const temp = document.createElement('span');
-        temp.innerHTML = line;
-        const clone = document.createElement('span');
-        clone.innerHTML = line;
-        clone.querySelectorAll('.line-copy').forEach(b => b.remove());
-        const plainText = clone.textContent.replace(/#\s*(L\d|←|----).*/g, '').trim();
-        if (plainText.trim() === '') return line;
-        const escaped = plainText.replace(/\\/g, '\\\\').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-        return `\x3Cspan class="line-wrap"\x3E\x3Cbutton class="line-copy line-copy-l" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)"\x3Ecp\x3C/button\x3E${line}\x3Cbutton class="line-copy line-copy-r" onclick="event.stopPropagation();navigator.clipboard.writeText('${escaped}');this.textContent='✓';setTimeout(()=>this.textContent='cp',800)"\x3Ecp\x3C/button\x3E\x3C/span\x3E`;
-    });
-    code.innerHTML = newLines.join('\n');
-});
 </script>
 
 <!-- TIMER BAR -->
@@ -19431,26 +21177,38 @@ if (startTime) { toggleTimer(); updateTimer(); }
 // e.g. file:///.../index.html#inmemdb-l3
 (function() {
     const hash = location.hash.replace('#','');
-    if (hash) {
-        // extract tab name from hash: "inmemdb-l3" → "inmemdb", "hotel-l2" → "hotel", "l1" → "bank"
-        const parts = hash.split('-');
-        const tab = ['inmemdb','hotel','domains'].includes(parts[0]) ? parts[0] : 'bank';
-        switchSystem(tab);
-        setTimeout(() => {
+    const hashTab = parseTabHash(hash);
+    const hashSystem = hashTab || findSystemForHash(hash);
+    const savedSystem = localStorage.getItem('pfm:active-system');
+    const targetSystem = hashSystem || savedSystem || 'inmemdb';
+    switchSystem(targetSystem, { keepHash: true });
+
+    setTimeout(() => {
+        if (hash && !hashTab) {
             const el = document.getElementById(hash);
-            if (el) el.scrollIntoView({behavior: 'smooth'});
-        }, 100);
-    } else {
-        // default: inmemdb
-        switchSystem('inmemdb');
-    }
+            if (el) {
+                el.scrollIntoView({block: 'start'});
+                return;
+            }
+        }
+        const savedY = loadSystemScroll(targetSystem);
+        if (savedY > 0) window.scrollTo(0, savedY);
+    }, 80);
 })();
+
+window.addEventListener('scroll', scheduleSaveCurrentScroll, { passive: true });
+window.addEventListener('beforeunload', () => {
+    const sys = getActiveSystem();
+    if (sys) saveSystemScroll(sys);
+});
 
 // update hash when scrolling past sections
 const allSections = document.querySelectorAll('h2[id]');
 const hashObserver = new IntersectionObserver(entries => {
     entries.forEach(e => {
         if (e.isIntersecting) {
+            const sys = findSystemForHash(e.target.id);
+            if (sys) localStorage.setItem('pfm:active-system', sys);
             history.replaceState(null, '', '#' + e.target.id);
         }
     });
